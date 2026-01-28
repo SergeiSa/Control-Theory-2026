@@ -4,8 +4,7 @@ This repository contains regularly updated course materials. You can use lecture
 
 # Lecture slides (Russian)
 
-* Lecture 1 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides_RU/Introduction
-
+* Lecture 1 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides_RU/Introduction.pdf
 
 # Lecture slides (English)
 
