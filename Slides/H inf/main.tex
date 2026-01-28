@@ -1,0 +1,310 @@
+\documentclass{beamer}
+
+\input{settings.tex}
+
+
+\title{H-infinity control}
+\subtitle{Control Theory, Lecture ??}
+\author{by Sergei Savin}
+\centering
+\date{\mydate}
+
+
+
+\begin{document}
+	\maketitle
+	
+	
+	
+%	\begin{frame}{Content}
+%		\begin{itemize}
+%			\item LMI
+%			\item Control design
+%			\item Quadratic Stability
+%			\item Robustness
+%			\item S-procedure
+%			\item Appendix A
+%		\end{itemize}
+%	\end{frame}
+	
+	
+	
+	\begin{frame}{Singular values}
+		\begin{flushleft}
+			
+			Consider the system:
+			
+			\begin{equation}
+			\begin{cases}
+				\dot{\bo{x}} = \bo{A}\bo{x}+\bo{B}\bo{w}
+				\\
+				\bo{y} = \bo{C}\bo{x}
+			\end{cases}
+			\end{equation}
+			
+			Its trasnfer function is $G(s) = \bo{C} (s\bo{I} - \bo{A})^{-1} \bo{B}$. The frequency responce at $\omega = \omega_0$ is:
+			
+			\begin{equation}
+				G(j\omega_0) = \bo{C} (j\omega_0\bo{I} - \bo{A})^{-1} \bo{B}
+			\end{equation}
+			
+			The spectral norm of the frequency responce matrix (its largest singular value) represents the largest input amplification that is possible at the frequency $ \omega_0$:
+			
+			\begin{equation}
+				||G(j\omega_0)||_2 =\ \bar{\sigma} (G(j \omega_0))
+			\end{equation}
+			
+			
+		\end{flushleft}
+	\end{frame}
+	
+	
+		
+	\begin{frame}{What is H-infinity}
+		\begin{flushleft}
+			
+			
+			The term "H-infinity" is a reference to the H-infinity norm of the system - the largest input amplification the system can produce at any frequency:
+			
+			\begin{equation}
+				||G||_{\infty} = \underset{\omega}{\sup} \ \bar{\sigma} (G(j \omega))
+			\end{equation}
+			
+			H-infinity is a control design strategy that provides a guarantee that even in the worst-case scenario, the input (disturbance) will not be amplified by more than a given amount $\gamma$.
+			
+		\end{flushleft}
+	\end{frame}
+	
+	
+	
+	\begin{frame}{H-infinity conditions}
+		\begin{flushleft}
+			
+			For the system $G(s)$:
+
+			\begin{equation}
+				\begin{cases}
+					\dot{\bo{x}} = \bo{A}\bo{x}+\bo{B}\bo{w}
+					\\
+					\bo{y} = \bo{C}\bo{x}
+				\end{cases}
+			\end{equation}
+
+		The following conditions are equibalent (by definition of H-inf and singular values):
+		
+		\begin{equation}
+			||G||_\infty < \gamma \ \Longleftrightarrow \ G(j\omega)\T G(j\omega) \prec \gamma^2 I, \ \forall \omega
+		\end{equation}
+		
+		KYP (Kalman–Yakubovich–Popov) lemma:
+		
+		\begin{equation}
+			||G||_\infty < \gamma \ \Longleftrightarrow \ \int_0^\infty \left(\bo{y}\T \bo{y} - \gamma^2 \bo{w}\T \bo{w} \right) dt \leq 0
+		\end{equation}
+			
+		\end{flushleft}
+	\end{frame}
+	
+	
+	
+	
+	\begin{frame}{Storage function criterion}
+		\begin{flushleft}
+			
+			We can guarantee $||G||_\infty < \gamma$ if we find a \emph{storage function} $V( \bo{x}) > 0$ for all $\bo{x} \neq \bo{0}$ and $V(\bo{0}) = 0$, such that:
+			
+			\begin{equation}
+				\dot V(\bo{x}) + \bo{y}\T \bo{y} - \gamma^2 \bo{w}\T \bo{w} \leq 0
+			\end{equation}
+			
+			The quantity $\bo{y}\T \bo{y} - \gamma^2 \bo{w}\T \bo{w} $ is called \emph{supply rate}.
+			
+		\end{flushleft}
+	\end{frame}
+	
+	
+	\begin{frame}{Storage function criterion - proof}
+		\begin{flushleft}
+			
+			Integrate the criterion from $t=0$ to $t = T$:
+			
+			\begin{equation}
+				V(\bo{x}(T)) - V(\bo{x}(0)) + \int_{0}^{T} \bo{y}\T \bo{y} - \gamma^2 \bo{w}\T \bo{w} \leq 0
+			\end{equation}
+			
+			Assume zero initial conditions (we consider pure input-output behaviour), so $V(\bo{x}(0)) = 0$ and remember that $V > 0$:
+			
+			\begin{equation}
+				\int_{0}^{T} \bo{y}\T \bo{y} - \gamma^2 \bo{w}\T \bo{w}  \leq  -V(\bo{x}(T)) \leq 0
+			\end{equation}
+			
+			Since this is true for all $T$, taking $T \rightarrow \infty$ recovers the earlier time-domain KYP criterion.
+			
+		\end{flushleft}
+	\end{frame}
+	
+	
+	
+	
+	\begin{frame}{Derivation of LMI conditions, 1}
+		\begin{flushleft}
+			
+			Consider a storage function takes form $V( \bo{x}) =  \bo{x}\T  \bo{P}  \bo{x}$, where $ \bo{P} \succ 0$. Then the criterion takes the form:
+			
+			\begin{align}
+				\dot{\bo{x}}\T  \bo{P}  \bo{x} + \bo{x}\T  \bo{P}  \dot{\bo{x}} + \bo{y}\T \bo{y} - \gamma^2 \bo{w}\T \bo{w} \leq 0
+			\end{align}
+			
+			Substitute the dynamical equations:
+			%
+			\begin{align*}
+				(\bo{A}\bo{x}+\bo{B}\bo{w})\T  \bo{P}  \bo{x} + \bo{x}\T  \bo{P} (\bo{A}\bo{x}+\bo{B}\bo{w}) + \bo{x}\T  \bo{C}\T \bo{C}\bo{x} - \gamma^2 \bo{w}\T \bo{w} \leq 0
+			\end{align*}
+			
+			In matrix form:
+			%
+			\begin{align}
+				\begin{bmatrix}
+					\bo{x} \\ \bo{w}
+				\end{bmatrix}\T
+				\begin{bmatrix}
+					\bo{A}\T\bo{P}+\bo{P}\bo{A}+\bo{C}\T\bo{C} & \bo{P}\bo{B} \\
+					 \bo{B}\T\bo{P}  & -\gamma^2 \bo{I}
+				\end{bmatrix}
+				\begin{bmatrix}
+					\bo{x} \\ \bo{w}
+				\end{bmatrix}
+				\leq 0
+			\end{align}
+			
+			
+			
+		\end{flushleft}
+	\end{frame}
+	
+	
+	
+	
+	\begin{frame}{Derivation of LMI conditions, 2}
+		\begin{flushleft}
+			
+			The last inequality needs to hold for all $\bo{x}$, $\bo{w}$, so it can be rewritten as an LMI:
+			%
+			\begin{align}
+				\begin{bmatrix}
+					\bo{A}\T\bo{P}+\bo{P}\bo{A}+\bo{C}\T\bo{C} & \bo{P}\bo{B} \\
+					\bo{B}\T\bo{P}  & -\gamma^2 \bo{I}
+				\end{bmatrix}
+				\prec 0
+			\end{align}
+			
+			This is the standard LMI for checking the H-infinity norm of a system.
+			
+		\end{flushleft}
+	\end{frame}
+	
+	
+	\begin{frame}{H-infinity control design, 1}
+		\begin{flushleft}
+			
+			Consider the system:
+			
+			\begin{equation}
+				\begin{cases}
+					\dot{\bo{x}} = \bo{A}\bo{x}+\bo{B}_1\bo{u}+\bo{B}_2\bo{w}
+					\\
+					\bo{y} = \bo{C}\bo{x}
+				\end{cases}
+			\end{equation}
+			
+			Assume linear control $\bo{u} = \bo{K}\bo{x}$, the first equation then becomes $\dot{\bo{x}} = (\bo{A}+\bo{B}_1\bo{K})\bo{x}+\bo{B}_2\bo{w}$. We can plug it to the earlier derived conditions:
+			%
+			\begin{align}
+				\begin{bmatrix}
+					(\bo{A}+\bo{B}_1\bo{K})\T\bo{P}+\bo{P}(\bo{A}+\bo{B}_1\bo{K})+\bo{C}\T\bo{C} & \bo{P}\bo{B}_2 \\
+					\bo{B}_2\T\bo{P}  & -\gamma^2 \bo{I}
+				\end{bmatrix}
+				\prec 0
+			\end{align}
+			
+			Now we need to turn this into an LMI (linear in decision variables).
+			
+		\end{flushleft}
+	\end{frame}
+
+
+
+\begin{frame}{H-infinity control design, 2}
+	\begin{flushleft}
+		
+		We divide the inequality by $\gamma$ and define $\bar{\bo{P}} = \frac{1}{\gamma} \bo{P}$:
+		
+		\begin{align}
+			\begin{bmatrix}
+				(\bo{A}+\bo{B}_1\bo{K})\T\bar{\bo{P}}+\bar{\bo{P}}(\bo{A}+\bo{B}_1\bo{K})+\frac{1}{\gamma}\bo{C}\T\bo{C} & \bar{\bo{P}}\bo{B}_2 \\
+				\bo{B}_2\T\bar{\bo{P}}  & -\gamma \bo{I}
+			\end{bmatrix}
+			\prec 0
+		\end{align}
+		
+		Conjugate by $\begin{bmatrix}
+			\bo{Q} &\bo{0} \\
+			\bo{0}  &  \bo{I}
+		\end{bmatrix}$, where $\bo{Q} = \bar{\bo{P}}^{-1}$:
+		
+		\begin{align}
+			\begin{bmatrix}
+				\bo{Q}(\bo{A}+\bo{B}_1\bo{K})\T+(\bo{A}+\bo{B}_1\bo{K})\bo{Q}+\frac{1}{\gamma}\bo{Q}\bo{C}\T\bo{C}\bo{Q} & \bo{B}_2 \\
+				\bo{B}_2\T  & -\gamma \bo{I}
+			\end{bmatrix}
+			\prec 0
+		\end{align}
+		
+		Apply Schur and define $\bo{L} = \bo{K}\bo{Q}$ to get the LMI:
+		
+		\begin{align}
+			\begin{bmatrix}
+				\bo{Q}\bo{A}\T + \bo{A}\bo{Q} + \bo{L}\T \bo{B}_1\T +\bo{B}_1 \bo{L} & \bo{B}_2 & \bo{Q}\bo{C}\T \\
+				\bo{B}_2\T  & -\gamma \bo{I} & \bo{0} \\
+				\bo{C}\bo{Q} & \bo{0} & -\gamma \bo{I}
+			\end{bmatrix}
+			\prec 0
+		\end{align}
+		
+		
+	\end{flushleft}
+\end{frame}
+	
+	
+	
+	
+	
+\myqrframe
+	
+	
+	
+	
+	\begin{frame}{Appendix A}
+		\framesubtitle{Congruence transformation and definiteness}
+		\begin{flushleft}
+			
+			Consider matrices $\bo{P} \succ 0$, and $\bo{V} \in \R^{n, n}$, the latter is full rank. We can prove that:
+			
+			\begin{equation}
+				\bo{P} \succ 0 \implies \bo{V}^\top\bo{P}\bo{V} \succ 0
+			\end{equation}
+			
+			Proof: $\bo{x}^\top\bo{V}^\top\bo{P}\bo{V}\bo{x} = \bo{z}^\top\bo{P}\bo{z}$, where $\bo{z} = \bo{V}\bo{x}$. Since $\bo{P} \succ 0$, $\bo{z}^\top\bo{P}\bo{z} \geq 0$, hence $\bo{x}^\top\bo{V}^\top\bo{P}\bo{V}\bo{x} \geq 0$. 
+			
+			\begin{definition}
+				Congruence transformation preserves semi-definiteness: $\text{det}(\bo{V}) \neq 0, \ \bo{P} \succ 0 \implies \bo{V}^\top\bo{P}\bo{V} \succ 0$
+			\end{definition}
+			
+			
+		\end{flushleft}
+	\end{frame}
+	
+	
+	
+	
+\end{document}
