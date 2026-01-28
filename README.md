@@ -2,23 +2,27 @@
 
 This repository contains regularly updated course materials. You can use lecture slides for self-study (they are written as lecture notes). Lecture recordings are linked below. The links in the Self-study with Colab section are both for self-study and reviewing the practical sessions. Refer to the book and resource suggestions at the bottom of the page.
 
-# Lecture slides
+# Lecture slides (Russian)
+
+* Lecture 1 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides_RU/Introduction
 
 
-* Lecture 1 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/Introduction.pdf
-* Lecture 2 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/Stability.pdf
-* Lecture 3 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/Control.pdf
-* Lecture 4 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/Laplace.pdf
-* Lecture 5 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/Bode.pdf
-* Lecture 5 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/InputResponce.pdf
-* Lecture 6 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/Discrete.pdf
-* Lecture 7 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/HJB_LQR.pdf
-* Lecture 8 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/Observer.pdf
-* Lecture 8 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/Filters.pdf
-* Lecture 9 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/ControllabilityObservability.pdf
-* Lecture 10 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/Kalman.pdf
-* Lecture 11 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/LyapunovTheory.pdf
-* Lecture 12 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/Linearization.pdf
+# Lecture slides (English)
+
+* Lecture 1 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/Introduction.pdf
+* Lecture 2 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/Stability.pdf
+* Lecture 3 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/Control.pdf
+* Lecture 4 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/Laplace.pdf
+* Lecture 5 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/Bode.pdf
+* Lecture 5 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/InputResponce.pdf
+* Lecture 6 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/Discrete.pdf
+* Lecture 7 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/HJB_LQR.pdf
+* Lecture 8 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/Observer.pdf
+* Lecture 8 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/Filters.pdf
+* Lecture 9 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/ControllabilityObservability.pdf
+* Lecture 10 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/Kalman.pdf
+* Lecture 11 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/LyapunovTheory.pdf
+* Lecture 12 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/Linearization.pdf
 
 # How to use
 
