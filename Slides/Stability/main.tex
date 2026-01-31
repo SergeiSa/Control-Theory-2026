@@ -47,7 +47,7 @@ Let $\bo{x}_0$ be such a state that:
     \bo{f} (\bo{x}_0, t) = 0
 \end{equation}
 
-Then such state $\bo{x}_0$ is called a \emph{node} or a \emph{critical point}.
+Then such state $\bo{x}_0$ is called \emph{equilibrium point}, \emph{node} or a \emph{critical point}.
 
 \end{flushleft}
 \end{frame}
@@ -58,19 +58,15 @@ Then such state $\bo{x}_0$ is called a \emph{node} or a \emph{critical point}.
 % \framesubtitle{O}
 \begin{flushleft}
 
-Node $\bo{x}_0$ is called \emph{stable} iff for any constant $\delta$ there exists constant $\varepsilon$ such that:
+Equilibrium point $\bo{x}_0$ is called \emph{stable} (or \emph{Lyapunov stable}) iff for any constant $\varepsilon >0$ there exists constant $\delta >0$ such that:
 
 \begin{equation}
-    ||\bo{x}(0) - \bo{x}_0|| < \delta \ \longrightarrow \ ||\bo{x}(t) - \bo{x}_0|| < \varepsilon
-\end{equation}
+	\label{eq:stability_def}
+    ||\bo{x}(0) - \bo{x}_0|| < \delta \ \longrightarrow \ ||\bo{x}(t) - \bo{x}_0|| < \varepsilon, \ t \in [0, \infty) \end{equation}
 
 \bigskip
 
-Think of it as "for any initial point that lies at most $\delta$ away from $\bo{x}_0$, the rest of the trajectory $\bo{x}(t)$ will be at most $\varepsilon$ away from $\bo{x}_0$".
-
-\bigskip
-
-Equivalently we can say "the solutions starting from $\delta$-sized ball do not diverge".
+For a stable equilibrium, trajectories will not leave an $\varepsilon$-sized ball if they start form a sufficiently small $\delta$-sized neighbourhood. Pick any value of $\varepsilon$, there always is such $\delta$ that \eqref{eq:stability_def} holds.
 
 \end{flushleft}
 \end{frame}
@@ -81,7 +77,7 @@ Equivalently we can say "the solutions starting from $\delta$-sized ball do not 
 % \framesubtitle{O}
 \begin{flushleft}
 
-Node $\bo{x}_0$ is called \emph{asymptotically stable} iff for any constant $\delta$ it is true that:
+A Lyapunov stable equilibrium point $\bo{x}_0$ is called \emph{asymptotically stable} iff for some constant $\delta$ it is true that:
 
 \begin{equation}
     ||\bo{x}(0) - \bo{x}_0|| < \delta \ \longrightarrow \ 
@@ -90,11 +86,11 @@ Node $\bo{x}_0$ is called \emph{asymptotically stable} iff for any constant $\de
 
 \bigskip
 
-Think of it as "for any initial point that lies at most $\delta$ away from $\bo{x}_0$, the trajectory $\bo{x}(t)$ will asymptotically approach the point $\bo{x}_0$".
+Think of it as "for any initial point that lies at most $\delta$ away from $\bo{x}_0$, the trajectory $\bo{x}(t)$ will asymptotically approach $\bo{x}_0$".
 
 \bigskip
 
-Equivalently we can say "the solutions starting from $\delta$-sized ball converge to the node".
+Equivalently we can say "the solutions starting from $\delta$-sized ball around $\bo{x}_0$ converge to $\bo{x}_0$".
 
 \end{flushleft}
 \end{frame}

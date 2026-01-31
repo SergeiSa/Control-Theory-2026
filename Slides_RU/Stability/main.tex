@@ -1,0 +1,535 @@
+\documentclass{beamer}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+
+\input{settings.tex}
+
+
+\title{Устойчивость}
+\subtitle{Теория управления, лекция 2}
+\author{Сергей Савин}
+\centering
+\date{\mydate}
+
+
+
+\begin{document}
+\maketitle
+
+
+\begin{frame}{Точка равновесия}
+	% \framesubtitle{O}
+	\begin{flushleft}
+		
+		Рассмотрим следующее обыкновенное дифференциальное уравнение (ОДУ):
+		
+		\begin{equation}
+			\dot{\bo{x}} = \bo{f} (\bo{x}, t)
+		\end{equation}
+		
+		Пусть $\bo{x}_0$ — такое состояние, что:
+		
+		\begin{equation}
+			\bo{f} (\bo{x}_0, t) = 0
+		\end{equation}
+		
+		Тогда такое состояние $\bo{x}_0$ называется \emph{точкой равновесия}, \emph{положением равновесия} или \emph{критической точкой}.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Устойчивость}
+	% \framesubtitle{O}
+	\begin{flushleft}
+		
+		Точка равновесия $\bo{x}_0$ называется \emph{устойчивой} (или \emph{устойчивой по Ляпунову}) тогда и только тогда, когда для любой константы $\varepsilon >0$ существует константа $\delta >0$ такая, что:
+		
+		\begin{equation}
+			\label{eq:stability_def}
+			||\bo{x}(0) - \bo{x}_0|| < \delta \ \longrightarrow \ ||\bo{x}(t) - \bo{x}_0|| < \varepsilon, \ t \in [0, \infty) \end{equation}
+		
+		\bigskip
+		
+		Для устойчивой точки равновесия траектории не покинут шар размера $\varepsilon$, если они стартуют из достаточно малой $\delta$-окрестности. Выберите любое значение $\varepsilon$ — всегда найдётся такое $\delta$, что выполняется условие \eqref{eq:stability_def}.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Асимптотическая устойчивость}
+	% \framesubtitle{O}
+	\begin{flushleft}
+		
+		Устойчивая по Ляпунову точка равновесия $\bo{x}_0$ называется \emph{асимптотически устойчивой} тогда и только тогда, когда для некоторой константы $\delta$ верно:
+		
+		\begin{equation}
+			||\bo{x}(0) - \bo{x}_0|| < \delta \ \longrightarrow \
+			\lim_{t\to\infty} \bo{x}(t) = \bo{x}_0
+		\end{equation}
+		
+		\bigskip
+		
+		Можно думать об этом так: «для любой начальной точки, удалённой от $\bo{x}_0$ не более чем на $\delta$, траектория $\bo{x}(t)$ будет асимптотически приближаться к $\bo{x}_0$».
+		
+		\bigskip
+		
+		Эквивалентно можно сказать: «решения, начинающиеся в $\delta$-шаре вокруг $\bo{x}_0$, сходятся к $\bo{x}_0$».
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Устойчивость vs Асимптотическая устойчивость}
+	\begin{flushleft}
+		
+		\begin{example}
+			Рассмотрим динамическую систему $\dot{x} = 0$ и решение $x = 7$. Это решение устойчиво, но не асимптотически устойчиво (решение, соответствующее начальному условию $x(0) = 7+\delta$, не расходится, но и не сходится к $x = 7$).
+		\end{example}
+		
+		\begin{example}
+			Рассмотрим динамическую систему $\dot{x} = -x$ и решение $x = 0$. Это решение устойчиво и асимптотически устойчиво (все решения сходятся к $x = 0$).
+		\end{example}
+		
+		\begin{example}
+			Рассмотрим динамическую систему $\dot{x} = x$ и решение $x = 0$. Это решение неустойчиво (все остальные решения расходятся от $x = 0$).
+		\end{example}
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Линейные системы}
+	\begin{flushleft}
+		
+		Рассмотрим следующее линейное ОДУ:
+		
+		\begin{equation}
+			\dot{\bo{x}} = \bo{A} \bo{x} + \bo{B} \bo{u}
+		\end{equation}
+		
+		Оно называется \emph{линейной стационарной системой (LTI)} - матрицы $\bo{A}$ и $\bo{B}$ не зависят от времени.
+		
+		\bigskip
+		
+		Если убрать входное воздействие, получим более простое уравнение:
+		
+		\begin{equation}
+			\dot{\bo{x}} = \bo{A} \bo{x}
+		\end{equation}
+		
+		Такая LTI-система является \emph{автономной}, так как её эволюция зависит только от состояния системы.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Устойчивость автономной LTI}
+	\framesubtitle{Вещественные собственные значения}
+	\begin{flushleft}
+		
+		Рассмотрим автономную LTI-систему:
+		
+		\begin{equation}
+			\dot{\bo{x}} = \bo{D} \bo{x}
+		\end{equation}
+		
+		где $\bo{D} = \text{diag}(d_1, \ ..., \ d_n)$ — диагональная матрица. Это эквивалентно системе независимых уравнений: 
+		
+		\begin{equation}
+			\begin{cases}
+				\dot{x}_1 = d_1 x_1 \\
+				... \\
+				\dot{x}_n = d_n x_n
+			\end{cases}
+		\end{equation}		
+		
+		Каждое из этих уравнений имеет точное решение $ x_i = C_i e^{d_i t}$. Решение расходится от 0, если $d_i > 0$, не расходится, если $d_i \leq 0$, и сходится к 0, если $d_i < 0$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Устойчивость автономной LTI}
+	\framesubtitle{Вещественные собственные значения}
+	\begin{flushleft}
+		
+		Рассмотрим автономную LTI-систему:
+		%
+		\begin{equation}
+			\dot{\bo{x}} = \bo{A} \bo{x}
+		\end{equation}
+		%
+		где матрица $\bo{A}$ имеет собственное разложение $\bo{A} = \bo{V} \bo{D} \bo{V}^{-1}$, где $\bo{D}$ — диагональная матрица. 
+		%
+		\bigskip
+		%
+		\begin{equation}
+			\dot{\bo{x}} = \bo{V} \bo{D} \bo{V}^{-1} \bo{x}
+		\end{equation}
+		%
+		Умножив уравнение на $\bo{V}^{-1}$, получим:
+		$\bo{V}^{-1} \dot{\bo{x}} = \bo{V}^{-1} \bo{V} \bo{D} \bo{V}^{-1} \bo{x}$.
+		
+		Определив $\bo{z} = \bo{V}^{-1} \bo{x}$, преобразуем уравнение:
+		$\dot{\bo{z}} = \bo{D} \bo{z}$.
+		
+		\bigskip
+		
+		Поскольку элементы $\bo{D}$ вещественные, очевидно что система асимптотически устойчива тогда и только тогда, когда они \emph{все отрицательны}. Если они неположительны, система устойчива по Ляпунову. А эти элементы являются собственными значениями матрицы $\bo{A}$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Верхнетреугольные матрицы}
+	\begin{flushleft}
+		
+		\begin{block}{Собственные значения верхнетреугольных матриц}
+			Собственные значения верхнетреугольных матриц — это их диагональные элементы.
+		\end{block}
+		
+		\bigskip
+		
+		Примеры верхнетреугольных матриц:
+		
+		\begin{equation}
+			\begin{bmatrix}
+				1 & 5 & -2 \\
+				0 & 3 & 1 \\
+				0 & 0 & -2
+			\end{bmatrix},
+			\ \ \ 
+			\begin{bmatrix}
+				-2 & 0 & 8 \\
+				0 & -2 & 8 \\
+				0 & 0 & 7
+			\end{bmatrix},
+			\ \ \ 
+			\begin{bmatrix}
+				4 & 1 \\
+				0 & 3
+			\end{bmatrix}
+		\end{equation}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Верхнетреугольные матрицы}
+	\begin{flushleft}
+		
+		Рассмотрим автономную LTI-систему:
+		
+		\begin{equation}
+			\dot{\bo{x}} = \bo{M} \bo{x}
+		\end{equation}
+		
+		где $ \bo{M}$ — верхнетреугольная матрица с отрицательными собственными значениями $m_{1,1}$, ... $m_{n,n}$.
+		
+		\bigskip
+		
+		Последнее уравнение — $\dot x_n = m_{n,n} x_n$, и так как $m_{n,n} < 0$, то $\underset{t \rightarrow \infty}{\text{lim}} x_n(t) = 0$.
+		
+		\bigskip
+		
+		Уравнение № n-1: $\dot x_{n-1} = m_{n-1,n-1} x_{n-1} + m_{n-1,n} x_n$, и так как $m_{n-1,n-1} < 0$ и $\underset{t \rightarrow \infty}{\text{lim}} x_n(t) = 0$, мы можем наблюдать, что $\underset{t \rightarrow \infty}{\text{lim}} x_{n-1}(t) = 0$.
+		
+		Это можно повторить для всех уравнений, доказывая асимптотическую устойчивость системы.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Устойчивость автономной LTI}
+	\framesubtitle{Комплексные собственные значения, двумерный случай (1)}
+	\begin{flushleft}
+		
+		Рассмотрим следующую систему:
+		
+		\begin{equation}
+			\begin{bmatrix}
+				\dot{x}_1 \\ \dot{x}_2
+			\end{bmatrix}
+			= 
+			\begin{bmatrix}
+				\alpha & -\beta \\ \beta & \alpha
+			\end{bmatrix}     
+			\begin{bmatrix}
+				x_1 \\ x_2
+			\end{bmatrix}
+		\end{equation}
+		
+		Собственные значения системы: $\alpha \pm i \beta$. Обозначим $\begin{bmatrix}
+			x_1 \\ x_2
+		\end{bmatrix} = \bo{x}$.
+		
+		\bigskip
+		
+		Начнём с утверждения, что система будет устойчива тогда и только тогда, когда $\dot{\bo{x}}^\top \bo{x} < 0$. Действительно, вектор $\dot{\bo{x}}$ всегда можно разложить на две компоненты: $\dot{\bo{x}}_{||}$, параллельную $\bo{x}$, и $\dot{\bo{x}}_{\perp}$, перпендикулярную $\bo{x}$. По определению $\dot{\bo{x}}_{\perp}^\top \bo{x} = 0$, и она отвечает за изменение направления $\bo{x}$. Величина $\dot{\bo{x}}_{||}$ отвечает за изменение длины $\bo{x}$; длина будет уменьшаться тогда и только тогда, когда $\dot{\bo{x}}_{||}$ направлена противоположно $\bo{x}$, что даёт отрицательное значение скалярного произведения $\dot{\bo{x}}^\top \bo{x}$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Устойчивость автономной LTI}
+	\begin{flushleft}
+		
+		Вычислим $\dot{\bo{x}}^\top \bo{x}$:
+		%
+		\begin{equation}
+			\dot{\bo{x}}^\top \bo{x} =
+			\begin{bmatrix}
+				x_1 & x_2
+			\end{bmatrix}
+			\begin{bmatrix}
+				\alpha & -\beta \\ \beta & \alpha
+			\end{bmatrix}     
+			\begin{bmatrix}
+				x_1 \\ x_2
+			\end{bmatrix}
+		\end{equation}
+		%
+		\begin{equation}
+			\dot{\bo{x}}^\top \bo{x} =
+			\begin{bmatrix}
+				x_1 & x_2
+			\end{bmatrix}
+			\begin{bmatrix}
+				\alpha  x_1 - \beta x_2 \\ \beta x_1 +  \alpha x_2
+			\end{bmatrix}
+		\end{equation}
+		
+		\begin{equation}
+			\dot{\bo{x}}^\top \bo{x} =
+			\alpha (x_1^2 + x_2^2)
+		\end{equation}
+		
+		Произведение $\dot{\bo{x}}^\top \bo{x} < 0$ отрицательно тогда и только тогда, когда $\alpha < 0$.
+		
+		\begin{definition}
+			Если \emph{вещественные части собственных значений} системы \emph{строго отрицательны}, система является \emph{асимптотически устойчивой}. Если вещественные части собственных значений системы равны нулю, система является \emph{нейтрально (маргинально) устойчивой}.
+		\end{definition}
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Устойчивость автономной LTI}
+	\framesubtitle{Комплексные собственные значения, двумерный случай (3)}
+	\begin{flushleft}
+		
+		Векторное поле системы
+		$\begin{bmatrix}
+			\dot{x}_1 \\ \dot{x}_2
+		\end{bmatrix} 
+		=
+		\begin{bmatrix}
+			\alpha & -\beta \\ \beta & \alpha
+		\end{bmatrix}     
+		\begin{bmatrix}
+			x_1 \\ x_2
+		\end{bmatrix} $ 
+		показано ниже:
+		%
+		\begin{figure}
+			\centering
+			\includegraphics[width=7cm]{Figure_1.png}%, width=7cm
+			% \caption{Подпись}
+			\label{fig:my_label}
+		\end{figure}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Устойчивость автономной LTI}
+	\framesubtitle{Общий случай (1)}
+	\begin{flushleft}
+		
+		Дана система $\dot{\bo{x}} = \bo{A} \bo{x}$, где $\bo{A}$ имеет собственное разложение $\bo{A} = \bo{U} \bo{C} \bo{U}^{-1}$, где $\bo{C}$ — комплекснозначная диагональная матрица, а $\bo{U}$ — комплекснозначная обратимая матрица. 
+		%
+		\begin{equation}
+			\dot{\bo{x}} = \bo{U} \bo{C} \bo{U}^{-1} \bo{x}
+		\end{equation}
+		%
+		Умножаем обе стороны на $\bo{U}^{-1}$, затем определяем $\bo{z} = \bo{U}^{-1} \bo{x}$, чтобы получить:
+		%
+		\begin{equation}
+			\dot{\bo{z}} = \bo{C} \bo{z}
+		\end{equation}
+		%
+		Это сводится к набору независимых уравнений с комплексными коэффициентами $c_j$:
+		%
+		\begin{equation}
+			\dot{z}_j = c_j z_j
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Устойчивость автономной LTI}
+	\framesubtitle{Общий случай (2)}
+	\begin{flushleft}
+		
+		Раскрывая $c_j = \alpha + i \beta$ и $z_j = u + i v$ (для наглядности опускаем индексы), находим, что уравнение $\dot{z}_j = c_j z_j$ можно разложить как:
+		
+		\begin{equation}
+			\dot{u} + i \dot{v} = \dot{z}_j = c_j z_j = (\alpha + i \beta) (u + i v)
+		\end{equation}
+		%
+		\begin{equation}
+			\dot{u} + i \dot{v} = \alpha u + i \beta u + i \alpha v - \beta v
+		\end{equation}
+		%
+		\begin{equation}
+			\begin{bmatrix}
+				\dot{u} \\ \dot{v}
+			\end{bmatrix}
+			= 
+			\begin{bmatrix}
+				\alpha & -\beta \\ \beta & \alpha
+			\end{bmatrix}     
+			\begin{bmatrix}
+				u \\ v
+			\end{bmatrix}
+		\end{equation}
+		
+		Как мы видим, уравнение $\dot{z}_j = c_j z_j$ асимптотически устойчиво тогда и только тогда, когда $\text{Re}(c_j) < 0$, и нейтрально устойчиво, если $\alpha = \text{Re}(c_j) = 0$. То же верно для системы $\dot{\bo{z}} = \bo{C} \bo{z}$ и, следовательно, для $\dot{\bo{x}} = \bo{A} \bo{x}$, так как $\bo{U}$ обратима.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Устойчивость автономной LTI}
+	\framesubtitle{Условие}
+	\begin{flushleft}
+		
+		Рассмотрим автономную LTI-систему:
+		
+		\begin{equation}
+			\label{eq:LTI}
+			\dot{\bo{x}} = \bo{A} \bo{x}
+		\end{equation}
+		
+		\begin{definition}
+			Ур. \eqref{eq:LTI} асимптотически устойчиво тогда и только тогда, когда вещественные части собственных значений матрицы $\bo{A}$ отрицательны. Такая матрица $\bo{A}$ называется матрицей Гурвица.
+		\end{definition}
+		
+		
+		\begin{definition}
+			Ур. \eqref{eq:LTI} устойчиво тогда и только тогда, когда вещественные части собственных значений матрицы $\bo{A}$ неположительны, при условии, что $\bo{A}$ диагонализируема над $\mathbb{C}^n$.
+		\end{definition}
+		
+		\textcolor{mygray}{Подробнее в приложении}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Устойчивость автономной LTI}
+	\framesubtitle{Иллюстрация}
+	\begin{flushleft}
+		
+		Вот иллюстрация \emph{фазовых портретов} двумерных LTI-систем с различными типами устойчивости:
+		
+		\begin{figure}
+			\centering
+			\includegraphics[width=1.0\linewidth]{Stability.PNG}
+			\caption{Фазовые портреты для различных типов устойчивости}
+			\label{fig:Stability}
+		\end{figure}
+		
+		\bigskip
+		
+		\scriptsize{Источник: \bref{http://staff.uz.zgora.pl/wpaszke/materialy/spc/Lec13.pdf}{staff.uz.zgora.pl/wpaszke/materialy/spc/Lec13.pdf}}
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}
+	\hspace*{-2.5cm}
+	\includegraphics[height=\textheight,width=1.4\textwidth,keepaspectratio]{Figure_2.png}
+\end{frame}
+
+\begin{frame}{Литература}
+
+
+\begin{itemize}
+\item Control Systems Design, by Julio H. Braslavsky \bref{http://staff.uz.zgora.pl/wpaszke/materialy/spc/Lec13.pdf}{staff.uz.zgora.pl/wpaszke/materialy/spc/Lec13.pdf}
+
+\item Stability and Eigenvalues, Steve Brunton \bref{https://youtu.be/h7nJ6ZL4Lf0 }{youtu.be/h7nJ6ZL4Lf0}
+
+\item MAE509 (LMIs in Control): Lecture 4, part A - Stability and Eigenvalues  \bref{https://youtu.be/8zYOJbpiT38 }{youtu.be/8zYOJbpiT38}
+
+\end{itemize}
+
+\end{frame}
+
+
+
+\myqrframe
+
+
+\begin{frame}{Приложение A}
+	\framesubtitle{Жордановы клетки и устойчивость}
+	\begin{flushleft}
+		
+		До сих пор мы рассматривали системы $\dot{\bo{x}} = \bo{A} \bo{x}$, где матрицы диагонализируемы над $\mathbb{C}^n$. Мы не рассматривали матрицы с нетривиальными жордановыми клетками.
+		
+		\bigskip
+		
+		Рассмотрим контрпример — матрицу $ \bo{A} = \begin{bmatrix}
+			0 & 1 \\  0 & 0
+		\end{bmatrix}$ с двумя нулевыми собственными значениями, представляющую систему:
+		
+		\begin{equation}
+			\begin{cases}
+				\dot{x}_1 = x_2 \\
+				\dot{x}_2 = 0
+			\end{cases}
+		\end{equation}
+		
+		Решение этой системы: $x_1 (t) = x_2(0) t$ и $x_2(t) = x_2(0)$ — решение расходится, даже несмотря на нулевые собственные значения.
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Приложение A}
+	\framesubtitle{Жордановы клетки и устойчивость}
+	\begin{flushleft}
+		
+		Мы можем уточнить критерий нейтральной (по Ляпунову) устойчивости:
+		
+		\begin{definition}
+			Ур. \eqref{eq:LTI} устойчиво тогда и только тогда, когда вещественные части собственных значений матрицы $\bo{A}$ неположительны, и ни одно из собственных значений с нулевой вещественной частью не связано с нетривиальной жордановой клеткой.
+		\end{definition}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+\end{document}
