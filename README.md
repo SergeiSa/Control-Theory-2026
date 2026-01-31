@@ -5,47 +5,24 @@ This repository contains regularly updated course materials. You can use lecture
 # Lecture slides (Russian)
 
 * Lecture 1 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides_RU/Introduction.pdf
+* Lecture 2 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides_RU/Stability.pdf
 
 # Lecture slides (English)
 
-* Lecture 1 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/Introduction.pdf
-* Lecture 2 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/Stability.pdf
-* Lecture 3 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/Control.pdf
-* Lecture 4 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/Laplace.pdf
-* Lecture 5 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/Bode.pdf
-* Lecture 5 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/InputResponce.pdf
-* Lecture 6 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/Discrete.pdf
-* Lecture 7 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/HJB_LQR.pdf
-* Lecture 8 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/Observer.pdf
-* Lecture 8 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/Filters.pdf
-* Lecture 9 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/ControllabilityObservability.pdf
-* Lecture 10 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/Kalman.pdf
-* Lecture 11 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/LyapunovTheory.pdf
-* Lecture 12 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides/Linearization.pdf
+* Lecture 1 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides/Introduction
+* Lecture 2 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides/Stability
+* Lecture 3 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides/Control
+* Lecture 4 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides/Laplace
+* Lecture 5 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides/InputResponse
+* Lecture 5 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides/Discrete
+* Lecture 6 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides/HJB_LQR
+* Lecture 7 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides/Observer
+* Lecture 8 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides/Filters
+* Lecture 9 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides/ControllabilityObservability
 
 # How to use
 
 This repository contains regularly updated course materials. You can use lecture slides for self-study (they are written as lecture notes). Lecture recordings are linked below. The links in the Self-study with Colab section are both for self-study and reviewing the practical sessions. Refer to the book and resource suggestions at the bottom of the page.
-
-# Lecture slides
-
-
-* Lecture 1 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/Introduction.pdf
-* Lecture 2 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/Stability.pdf
-* Lecture 3 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/Control.pdf
-* Lecture 4 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/Laplace.pdf
-* Lecture 5 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/Bode.pdf
-* Lecture 5 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/InputResponce.pdf
-* Lecture 6 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/Discrete.pdf
-* Lecture 7 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/HJB_LQR.pdf
-* Lecture 8 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/Observer.pdf
-* Lecture 8 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/Filters.pdf
-* Lecture 9 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/ControllabilityObservability.pdf
-* Lecture 10 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/Kalman.pdf
-* Lecture 11 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/LyapunovTheory.pdf
-* Lecture 12 - https://github.com/SergeiSa/Control-Theory-2025/blob/main/Slides/Linearization.pdf
-
-
 
 
 # Assignments (labs)
@@ -65,12 +42,16 @@ This repository contains regularly updated course materials. You can use lecture
 
 ## Lecture 1. State-Space, ODE
 
-* Control Systems Engineering Norman S. Nise 
-  * Chapter 3.3: The General State-Space Representation 
-  * Chapter 3.4: Applying the State-Space Representation
-* 	State-Space Representation of LTI Systems - http://web.mit.edu/2.14/www/Handouts/StateSpace.pdf
-* 	Time-Domain Solution of LTI State Equations - http://web.mit.edu/2.14/www/Handouts/StateSpaceResponse.pdf
-* Systems of First Order Linear Differential Equations. [Download](http://www.personal.psu.edu/sxt104/class/Math251/Notes-LinearSystems.pdf)
+
+- **K. Ogata Modern Control Engineering** (Chapter 2.4)
+- **Nise, N.S. Control systems engineering.** John Wiley & Sons. (Chapter 3 Modeling in Time Domain)
+- **Dorf & Bishop, Modern Control Systems** (Chapter 3.3 State differential equation)
+- **2.14 Analysis and Design of Feedback Control Systems:**
+  - [State-Space Representation of LTI Systems](http://web.mit.edu/2.14/www/Handouts/StateSpace.pdf)
+  - [Time-Domain Solution of LTI State Equations](http://web.mit.edu/2.14/www/Handouts/StateSpaceResponse.pdf)
+- **[Linear Physical Systems Analysis](https://lpsa.swarthmore.edu/):**
+  - [State Space Representations of Linear Physical Systems](https://lpsa.swarthmore.edu/Representations/SysRepSS.html)
+  - [Transformation: Differential Equation to State Space](https://lpsa.swarthmore.edu/Representations/SysRepTransformations/DE2SS.html)
 
 
 ## Lecture 2. Stability
@@ -81,7 +62,7 @@ This repository contains regularly updated course materials. You can use lecture
 * Paul's Online Notes (systems of linear ODE, solutions for them): 
   * http://tutorial.math.lamar.edu/Classes/DE/SystemsDE.aspx
   * http://tutorial.math.lamar.edu/Classes/DE/SolutionsToSystems.aspx
-* Astolfi, A., 2006. Systems and Control Theory: An Introduction. Imperial College London lecture notes. - 2.3.1 Linear systems (on equilibrioum of linear systems):
+* Astolfi, A., 2006. Systems and Control Theory: An Introduction. Imperial College London lecture notes. - 2.3.1 Linear systems (on equilibria of linear systems):
 http://www3.imperial.ac.uk/pls/portallive/docs/1/31851696.PDF
 * Videos:
   * State Space Stability (Linear Systems Theory EECS 221a, Berkeley) - https://youtu.be/7GarcEQ0uk8
