@@ -1,0 +1,511 @@
+\documentclass{beamer}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\input{settings.tex}
+
+
+\title{Управление}
+\subtitle{Теория управления, лекция 3}
+\author{Сергей Савин}
+\centering
+\date{\mydate}
+
+
+
+\begin{document}
+\maketitle
+
+\begin{frame}{Изменение устойчивости}
+	% \framesubtitle{O}
+	\begin{flushleft}
+		
+		Рассмотрим две LTI (Линейные Стационарные Системы):
+		
+		\begin{equation}
+			\dot{x} = 2 x
+		\end{equation}
+		
+		\begin{equation}
+			\dot{x} = 2 x + u
+		\end{equation}
+		
+		Первая система автономна и неустойчива. Вторая — неавтономна, и мы не можем узнать, сходится ли её решение к нулю, пока не узнаем, что такое $u$.
+		
+		\bigskip
+		
+		Если мы выберем $u=0$, то получится неустойчивое уравнение. Но мы также можем выбрать $u$ таким образом, чтобы результирующая динамика стала устойчивой, например $u=-3x$:
+		
+		\begin{equation}
+			\dot{x} = 2 x + u = 2 x - 3x = -x
+		\end{equation}
+		
+		\begin{block}{ }
+			Таким образом, мы можем использовать \emph{управляющее воздействие} $u$, чтобы изменить устойчивость системы!
+		\end{block}
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Стабилизирующее управление}
+	% \framesubtitle{O}
+	\begin{flushleft}
+		
+		\begin{definition}
+			Задача нахождения закона управления $\bo{u}$, который делает определённое решение $\bo{x}^*$ динамической системы $\dot{\bo{x}} = \bo{f}(\bo{x}, \bo{u})$ устойчивым, называется \emph{задачей стабилизирующего управления}.
+		\end{definition}
+		
+		\bigskip
+		
+		Это верно как для линейных, так и для нелинейных систем. Но для линейных систем мы можем получить гораздо больше деталей о решении этой задачи, если ограничим выбор закона управления.
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Линейное управление}
+	\framesubtitle{Замкнутая система}
+	\begin{flushleft}
+		
+		Рассмотрим LTI:
+		
+		\begin{equation}
+			\dot{\bo{x}} = \bo{A}\bo{x} + \bo{B}\bo{u}
+		\end{equation}
+		
+		и выберем \emph{управление как линейную функцию состояния} $x$:
+		
+		\begin{equation}
+			\bo{u} = -\bo{K}\bo{x}
+		\end{equation}
+		
+		Матрицу $\bo{K}$ мы называем \emph{коэффициентом усиления (gain)}. Таким образом, мы знаем, как будет выглядеть система при приложенном управлении:
+		
+		\begin{equation}
+			\dot{\bo{x}} = \bo{A}\bo{x} - \bo{B}\bo{K}\bo{x}
+		\end{equation}
+		\begin{equation}
+			\label{eq:closed_loop}
+			\dot{\bo{x}} = (\bo{A} - \bo{B}\bo{K})\bo{x}
+		\end{equation}
+		
+		Заметим, что \eqref{eq:closed_loop} — это автономная система. Мы называем её \emph{замкнутой системой}.
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Линейное управление}
+	\begin{flushleft}
+		
+		Мы можем проанализировать устойчивость системы $\dot{\bo{x}} = (\bo{A} - \bo{B}\bo{K})\bo{x}$:
+		
+		\begin{block}{Условие устойчивости для замкнутой LTI}
+			Действительные части собственных значений матрицы $(\bo{A} - \bo{B}\bo{K})$ должны быть отрицательными для асимптотической устойчивости, или неположительными для устойчивости по Ляпунову.
+		\end{block}
+		
+		\begin{block}{Матрица Гурвица}
+			Если квадратная матрица $\bo{M}$ имеет собственные значения со строго отрицательными действительными частями, она называется матрицей Гурвица. Мы будем обозначать это как $\bo{M} \in \mathcal{H}$.
+		\end{block}
+		
+		%\bigskip
+		
+		Таким образом, всё, что нужно сделать, — это найти такую матрицу $\bo{K}$, чтобы $(\bo{A} - \bo{B}\bo{K})$ была матрицей Гурвица, и вы получили асимптотически устойчивую замкнутую систему!
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Скалярный случай}
+	\begin{flushleft}
+		
+			Рассмотрим следующую систему:
+		
+		\begin{equation}
+			\dot x = a x + b u
+		\end{equation}
+		
+		мы можем выбрать следующий линейный закон управления: $u = - k x$. Замкнутая система для этого примера имеет вид:
+		
+		\begin{equation}
+			\dot x = (a- bk) x
+		\end{equation}		
+		
+		Решение для замкнутой системы:
+		
+		\begin{equation}
+			x(t) =  x_0 e^{(a- bk)t}
+		\end{equation}		
+		
+		Пока выполняется $a- bk < 0$, решение сходится к нулю. Поскольку мы можем выбирать $k$, мы можем подобрать его так, чтобы $a- bk = -q$, где $q$ — положительное число. Тогда мы выбираем $k = \frac{q+a}{b}$, получая устойчивую систему с собственным значением $-q$.
+		
+		\end{flushleft}
+	\end{frame}
+
+
+
+\begin{frame}{Многомерный случай}
+	\begin{flushleft}
+		
+		Рассмотрим следующую систему:
+		%
+		\begin{equation}
+			\begin{bmatrix}
+				\dot x_1 \\ \dot x_2
+			\end{bmatrix} 
+			= 
+			\begin{bmatrix}
+				a_{11} & a_{12} \\ 0 & a_{22}
+			\end{bmatrix}
+			\begin{bmatrix}
+				x_1 \\ x_2
+			\end{bmatrix} 
+			+ 
+			\begin{bmatrix}
+				b \\ 0
+			\end{bmatrix}
+			u
+		\end{equation}
+		
+		С законом управления:
+		%
+		\begin{equation}
+			u
+			= 
+			-
+			\begin{bmatrix}
+				k_1 & k_2
+			\end{bmatrix}
+			\begin{bmatrix}
+				x_1 \\ x_2
+			\end{bmatrix} 
+		\end{equation}
+		
+		Замкнутая система имеет вид:
+		%
+		\begin{equation}
+			\begin{bmatrix}
+				\dot x_1 \\ \dot x_2
+			\end{bmatrix} 
+			= 
+			\begin{bmatrix}
+				a_{11}-b k_1 & a_{12}-b k_2 \\ 0 & a_{22}
+			\end{bmatrix}
+			\begin{bmatrix}
+				x_1 \\ x_2
+			\end{bmatrix} 
+		\end{equation}
+		
+		Собственные значения замкнутой системы — это $a_{11}-b k_1$ и $a_{22}$. Второе собственное значение не может быть изменено выбором коэффициентов управления. Если $a_{22} < 0$, нам нужно выбрать $k_1$ так, чтобы $a_{11}-b k_1 = -q$, где $q$ — положительное число: $k_1 = \frac{q + a_{11}}{b}$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Пружина-масса-демпфер, 1}
+	%\framesubtitle{Stability of the closed-loop system}
+	\begin{flushleft}
+		
+		Рассмотрим систему пружина-масса-демпфер:
+		%
+		\begin{equation}
+			\ddot y + \mu \dot y + c y = 0
+		\end{equation}
+		
+		Уравнение может быть переписано в форме пространства состояний с заменой переменных $x_1 = y$ и $x_2 = \dot y$:
+		%
+		\begin{equation}
+			\begin{bmatrix}
+				\dot x_1 \\ \dot x_2
+			\end{bmatrix} 
+			= 
+			\begin{bmatrix}
+				0 & 1 \\ - c & -\mu
+			\end{bmatrix}
+			\begin{bmatrix}
+				x_1 \\ x_2
+			\end{bmatrix}
+		\end{equation}
+		
+		
+		Собственные значения матрицы 2x2 легко вычислить, используя её определитель $\text{det}$ и след $\text{tr}$:
+		%
+		\begin{equation}
+			\lambda = \frac{\text{tr} \pm \sqrt{\text{tr}^2 - 4 \text{det}}}{2} 
+		\end{equation}
+		
+		Здесь $\text{det} = c$ и $\text{tr} = -\mu$:
+		%
+		\begin{equation}
+			\lambda = \frac{-\mu \pm \sqrt{\mu^2 - 4 c}}{2} 
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Пружина-масса-демпфер, 2}
+	% \framesubtitle{O}
+	\begin{flushleft}
+		
+		Проанализируем собственные значения $\lambda = \frac{-\mu \pm \sqrt{\mu^2 - 4 c} }{2}$. Мы видим, что если \textcolor{mydarkgreen}{$\mu > 0$} и \textcolor{mydarkgreen}{$ c > 0$}, возможны только два сценария: 
+		
+		\begin{enumerate}
+			\item $\mu^2 - 4c \geq 0$, в этом случае $\sqrt{\mu^2 - 4c} \leq \mu$, собственные значения вещественные и \textcolor{mydarkgreen}{отрицательные}.
+			\item $\mu^2 - 4c < 0$, в этом случае $\sqrt{\mu^2 - 4c}$ — чисто мнимое число, собственные значения комплексные с \textcolor{mydarkgreen}{отрицательными вещественными частями}.
+		\end{enumerate}
+		
+		Если $\mu > 0$ и \textcolor{myblue}{$c = 0$}, то $\lambda_1 = -\mu$, $\lambda_2 = 0$, следовательно, система \textcolor{myblue}{нейтрально (маргинально) устойчива}.
+		
+		Если \textcolor{myblue}{$\mu = 0$} и $c > 0$, то $\lambda = \pm i \sqrt{c}$, следовательно, система \textcolor{myblue}{нейтрально (маргинально) устойчива}.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Пружина-масса-демпфер, 3}
+	\begin{flushleft}
+		
+		
+		Если $\mu \geq 0$ и \textcolor{red}{$c < 0$}, то $\sqrt{\mu^2 - 4c} \geq \mu$, и собственные значения вещественные, причём одно из них \textcolor{red}{положительное}, система неустойчива. Если \textcolor{red}{$\mu < 0$} и \textcolor{red}{$c < 0$}, по крайней мере одно из собственных значений всё равно \textcolor{red}{положительное}.
+		
+		\bigskip
+		
+		Если \textcolor{red}{$\mu < 0$} и $c \geq 0$, то снова возможны только два сценария: 
+		
+		\begin{enumerate}
+			\item $\mu^2 - 4c \geq 0$, в этом случае $\sqrt{\mu^2 - 4c} \leq \mu$, собственные значения вещественные и \textcolor{red}{положительные}.
+			\item $\mu^2 - 4c < 0$, в этом случае $\sqrt{\mu^2 - 4c}$ — чисто мнимое число, собственные значения комплексные с \textcolor{red}{положительными вещественными частями}.
+		\end{enumerate}
+		
+		\begin{definition}
+			Система $\ddot y + \mu \dot y + c y = 0$ устойчива тогда и только тогда, когда $\mu \geq 0$ и $c \geq 0$.
+		\end{definition}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{ПД-регулятор, 1}
+	\begin{flushleft}
+		
+		Рассмотрим систему пружина-масса-демпфер:
+		%
+		\begin{equation}
+			\ddot y + \mu \dot y + c y = u
+		\end{equation}
+		
+		Мы можем предложить обратную связь в виде:
+		%
+		\begin{equation}
+			u = -k_d \dot y  -k_p y 
+		\end{equation}
+		%
+		Это называется \emph{пропорционально-дифференциальным регулятором}, часто сокращаемым как \emph{ПД-регулятор}; $k_d$ — дифференциальный коэффициент, а $k_p$ — пропорциональный коэффициент. Замкнутая система имеет вид:
+		%
+		\begin{align}
+			\ddot y + (\mu + k_d) \dot y + (c+k_p) y = 0
+		\end{align}
+		
+		Собственные значения:
+		%
+		\begin{align}
+			\lambda &= \frac{-(\mu + k_d) \pm d}{2} 
+			\\
+			d &= \sqrt{(\mu + k_d)^2 - 4 (c+k_p)}
+		\end{align}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{ПД-регулятор, 2}
+	\begin{flushleft}
+		
+		Дано $c = 40$ и $\mu = 8$. Предположим, что мы хотим, чтобы замкнутая система имела собственные значения $\lambda_1 = -4$ и $\lambda_2 = -20$.
+		%
+		\begin{align}
+			16 = \lambda_1 - \lambda_2= \frac{-(\mu + k_d) +d}{2} - \frac{-(\mu + k_d) - d}{2}  = d
+		\end{align}
+		%
+		Отсюда следует:
+		%
+		\begin{align}
+			-4 = \lambda_1 = \frac{-(\mu + k_d) + 16}{2}
+			\\
+			-(\mu + k_d) + 16 = -8
+			\\
+			k_d  = 16
+		\end{align}
+		
+		
+		Также мы можем записать:
+		%
+		\begin{align}
+			d = \sqrt{(\mu + k_d)^2 - 4 (c+k_p)}
+			\\
+			16^2 = 24^2 - 4 (40 + k_p)
+			\\
+			k_p = 320 / 4 - 40 = 40
+		\end{align}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Размещение полюсов (Pole-placement)}
+	\begin{flushleft}
+		
+		Метод поиска коэффициентов управления таким образом, чтобы замкнутая система имела желаемые собственные значения, называется \emph{размещением полюсов}.
+		
+		\bigskip
+		
+		Как показал предыдущий пример, вручную это делать нелегко. Однако существуют программы, которые находят такие коэффициенты управления автоматически.
+		
+		\bigskip
+		
+		В MATLAB есть функция \texttt{K = place(A,B,p)}, где \texttt{p} — желаемые собственные значения матрицы \texttt{(A-B*K)}.
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+\begin{frame}{Слежение за траекторией, 1}
+	\begin{flushleft}
+		
+		Пусть функция $\bo{x}^* = \bo{x}^*(t)$ и управление $\bo{u}^* = \bo{u}^*(t)$ являются решением системы $\dot{\bo{x}} = \bo{A}\bo{x} + \bo{B}\bo{u}$, то есть:
+		%
+		\begin{equation}
+			\dot{\bo{x}}^* = \bo{A}\bo{x}^* + \bo{B}\bo{u}^*
+		\end{equation}
+		
+		Мы называем $\bo{x}^*(t)$ \emph{задающим воздействием (reference)} или \emph{опорным сигналом}, а $\bo{u}^*(t)$ — \emph{компенсирующим управлением (feed-forward control)}.
+		
+		\bigskip
+		
+		Мы можем попытаться найти закон управления, который стабилизирует эту опорную траекторию. Начнём с нахождения разности между $\dot{\bo{x}}^*$ и $\dot{\bo{x}}$:
+		%
+		\begin{equation}
+			\dot{\bo{x}}^* - \dot{\bo{x}}= \bo{A}(\bo{x}^*-\bo{x}) + \bo{B}(\bo{u}^*-\bo{u})
+		\end{equation}
+		
+		Введём новые переменные: $\bo{e} = \bo{x}^* - \bo{x}$ и $\bo{v} = \bo{u}^* - \bo{u}$:
+		%
+		\begin{equation}
+			\dot{\bo{e}} = \bo{A}\bo{e} + \bo{B}\bo{v}
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Слежение за траекторией, 2}
+	%\framesubtitle{Stability of the closed-loop system}
+	\begin{flushleft}
+		
+		Мы называем $\bo{e}$ \emph{ошибкой управления}, а уравнение $\dot{\bo{e}} = \bo{A}\bo{e} + \bo{B}\bo{v}$ — \emph{динамикой ошибки}.
+		
+		\bigskip
+		
+		Таким образом, мы вернулись к знакомой задаче: найти закон управления $\bo{v} = -\bo{K}\bo{e}$, который делает замкнутую систему устойчивой:
+		%
+		\begin{equation}
+			\dot{\bo{e}} = (\bo{A} - \bo{B}\bo{K}) \bo{e}
+		\end{equation}
+		
+		В исходных переменных закон управления принимает вид:
+		%
+		\begin{equation}
+			\bo{u} = \bo{K}(\bo{x}^* - \bo{x}) + \bo{u}^*
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Слежение за траекторией, 3}
+	%\framesubtitle{Stability of the closed-loop system}
+	\begin{flushleft}
+		
+		Если для заданного опорного сигнала $\bo{x}^*$ существует компенсирующее управление $\bo{u}^*$, удовлетворяющее $\dot{\bo{x}}^* = \bo{A}\bo{x}^* + \bo{B}\bo{u}^*$, то мы можем легко найти такое $\bo{u}^*$ с помощью псевдообратной матрицы:
+		
+		\begin{equation}
+			\bo{u}^* = \bo{B}^+(\dot{\bo{x}}^*  - \bo{A}\bo{x}^*)
+		\end{equation}				
+		
+		Если желаемая траектория постоянна $\bo{x}^*(t) = \bo{x}_d$ (мы пытаемся переместить систему в новую позицию в пространстве состояний), то компенсирующее управление принимает вид:
+		
+		\begin{equation}
+			\bo{u}^* = -\bo{B}^+\bo{A}\bo{x}_d
+		\end{equation}	
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Новое входное воздействие}
+	%\framesubtitle{Stability of the closed-loop system}
+	\begin{flushleft}
+		
+		Рассмотрим систему $\dot{\bo{x}} = \bo{A}\bo{x} + \bo{B}\bo{u}$ и закон управления $\bo{u} = \bo{K}(\bo{x}^*(t) - \bo{x}) + \bo{u}^*(t)$. Мы можем найти выражение для результирующей системы:
+		
+		\begin{align}
+			\dot{\bo{x}} = \bo{A}\bo{x} + \bo{B}\bo{K}(\bo{x}^*(t) - \bo{x}) + \bo{B}\bo{u}^*(t) \\
+			\dot{\bo{x}} = (\bo{A}- \bo{B}\bo{K})\bo{x} +\bo{B}\bo{K}\bo{x}^*(t) + \bo{B}\bo{u}^*(t)
+		\end{align}		
+		
+		В предположении, что $\bo{u}^*(t) = 0$, получаем упрощённую систему:
+		
+		\begin{align}
+			\dot{\bo{x}} =  (\bo{A}- \bo{B}\bo{K})\bo{x} +\bo{B}\bo{K}\bo{x}^*(t)
+		\end{align}				
+		
+		Здесь видно, что $\bo{x}^*(t)$ действует как новый вход системы. Мы можем проанализировать реакцию этой системы на входное воздействие.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+
+\begin{frame}{Литература}
+	
+	\begin{itemize}
+		
+		
+		\item Nise, N.S. Control systems engineering. John Wiley \& Sons. (4.5 The General Second-Order System)	
+		
+		\item \bref{https://apmonitor.com/pdc/index.php/Main/ModelSimulation}{Dynamic Simulation in Python}
+	\end{itemize}
+\end{frame}
+
+
+
+
+
+
+
+\myqrframe
+
+\end{document}
