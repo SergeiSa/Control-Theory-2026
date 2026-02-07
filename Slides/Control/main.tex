@@ -405,7 +405,13 @@ So, all you need to do is to find such $\bo{K}$ that $(\bo{A} - \bo{B}\bo{K})$ i
 		
 		\bigskip
 		
-		In MATLAB there is a function \texttt{K = place(A,B,p)}, where \texttt{p} are the desired eigenvalues of \texttt{(A-B*K)}.
+		\begin{itemize}
+			\item  In MATLAB there is a function \texttt{K = place(A,B,p)}, where \texttt{p} are the desired eigenvalues of \texttt{(A-B*K)}.
+			
+			\item In Python there is a function \texttt{scipy.signal.place\_poles(A, B, poles)}.
+		\end{itemize}
+		
+
 		
 		
 	\end{flushleft}

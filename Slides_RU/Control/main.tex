@@ -373,7 +373,12 @@
 		
 		\bigskip
 		
-		В MATLAB есть функция \texttt{K = place(A,B,p)}, где \texttt{p} — желаемые собственные значения матрицы \texttt{(A-B*K)}.
+		\begin{itemize}
+			\item В MATLAB это функция \texttt{K = place(A,B,p)}, где \texttt{p} — желаемые собственные значения матрицы \texttt{(A-B*K)}.
+			
+			\item В Python это функция \texttt{scipy.signal.place\_poles(A, B, poles)}.
+		\end{itemize}
+		
 		
 		
 	\end{flushleft}
@@ -451,13 +456,13 @@
 		Если для заданного опорного сигнала $\bo{x}^*$ существует компенсирующее управление $\bo{u}^*$, удовлетворяющее $\dot{\bo{x}}^* = \bo{A}\bo{x}^* + \bo{B}\bo{u}^*$, то мы можем легко найти такое $\bo{u}^*$ с помощью псевдообратной матрицы:
 		
 		\begin{equation}
-			\bo{u}^* = \bo{B}^+(\dot{\bo{x}}^*  - \bo{A}\bo{x}^*)
+			\bo{u}^* = \bo{B}^\dagger(\dot{\bo{x}}^*  - \bo{A}\bo{x}^*)
 		\end{equation}				
 		
 		Если желаемая траектория постоянна $\bo{x}^*(t) = \bo{x}_d$ (мы пытаемся переместить систему в новую позицию в пространстве состояний), то компенсирующее управление принимает вид:
 		
 		\begin{equation}
-			\bo{u}^* = -\bo{B}^+\bo{A}\bo{x}_d
+			\bo{u}^* = -\bo{B}^\dagger\bo{A}\bo{x}_d
 		\end{equation}	
 		
 		
