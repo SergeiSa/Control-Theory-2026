@@ -1,0 +1,520 @@
+\documentclass{beamer}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\input{settings.tex}
+
+
+\title{Преобразование Лапласа, передаточные функции}
+\subtitle{Теория управления, лекция 4}
+\author{Сергей Савин}
+\centering
+\date{\mydate}
+
+
+
+\begin{document}
+\maketitle
+
+
+%\begin{frame}{Content}
+%
+%\begin{itemize}
+%\item Laplace Transform
+%\item Laplace Transform of a derivative
+%\item Transfer Functions
+%\item State-Space to Transfer Function conversion
+%\item Closed-loop
+%\item Partial-fraction expansion
+%\end{itemize}
+%
+%\end{frame}
+
+
+
+\begin{frame}{Преобразование Лапласа}
+	\begin{flushleft}
+		
+		По определению, преобразование Лапласа функции $f(t)$ задается как:
+		
+		\begin{equation}
+			F(s) = \int_0^\infty f(t) e^{-st}dt
+		\end{equation}
+		
+		где $F(s)$ называется \emph{изображением} функции.
+		
+		\bigskip
+		
+		Изучение преобразования Лапласа представляет собой отдельную математическую область с приложениями в решении ОДУ, которую мы не будем рассматривать. Однако мы рассмотрим преобразование одного интересующего нас случая - преобразование производной.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Преобразование Лапласа производной}
+	\begin{flushleft}
+		
+		Рассмотрим производную $\frac{dx}{dt}$ и её преобразование:
+		
+		\begin{equation}
+			\mathcal{L}\left(\frac{dx}{dt}\right) = \int_0^\infty \frac{dx}{dt} e^{-st}dt
+		\end{equation}
+		
+		мы воспользуемся формулой интегрирования по частям:
+		
+		\begin{block}{Интегрирование по частям}
+			\begin{equation}
+				\int v \frac{du}{dt} dt = vu - 
+				\int \frac{dv}{dt} u dt    
+			\end{equation}
+		\end{block}
+		
+		В нашем случае $\frac{du}{dt} = \frac{dx}{dt}$, $u = x$, $v = e^{-st}$, $\frac{dv}{dt} = -se^{-st}$:
+		
+		\begin{equation}
+			\mathcal{L}\left(\frac{dx}{dt}\right) = \left[x e^{-st} \right]_0^\infty - 
+			\int_0^\infty -se^{-st} x dt  
+		\end{equation}
+		
+		\begin{equation}
+			\mathcal{L}\left(\frac{dx}{dt}\right) = -x(0) + s\mathcal{L}(x)  
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Оператор производной}
+	\begin{flushleft}
+		
+		Таким образом, предполагая, что $x(0) = 0$, и обозначая $\mathcal{L}\left( x \right) = X(s)$, мы можем получить \emph{оператор производной}:
+		
+		\begin{equation}
+			\label{eq:NoIC_laplace}
+			\mathcal{L}\left(\frac{dx}{dt}\right) = s \mathcal{L}\left(x\right) = s X(s)
+		\end{equation}
+		
+		\bigskip
+		
+		Эта форма оператора производной очень проста в использовании на практике.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Передаточная функция}
+	\begin{flushleft}
+		
+		Рассмотрим следующее ОДУ, где $u$ - это входной сигнал (функция времени, влияющая на решение ОДУ):
+		
+		\begin{equation}
+			\ddot y + a \dot y + b y = u
+		\end{equation}
+		
+		Мы можем переписать его, используя оператор производной:
+		
+		\begin{equation}
+			s^2 Y(s) + a s Y(s) + b Y(s) = U(s)
+		\end{equation}
+		
+		а затем собрать $Y(s)$ в левой части:
+		
+		\begin{equation}
+			Y(s) = \frac{1}{s^2 + a s + b} U(s)
+		\end{equation}
+		
+		где выражение $\frac{1}{s^2 + a s + b}$ называется \emph{передаточной функцией}. Передаточная функция отображает входной сигнал в выходной сигнал.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Передаточная функция}
+	\framesubtitle{Примеры}
+	\begin{flushleft}
+		
+		\begin{example}
+			Дано ОДУ: $2 \dddot y + 5\dot y - 40 y = 10 u$
+			
+			Его представление в виде передаточной функции: 
+			$Y(s)  = \frac{10}{2 s^3 + 5 s - 40} U(s)$
+		\end{example}
+		
+		
+		\begin{example}
+			Дано ОДУ: $2 \dot y - 4 y = u$
+			
+			Его представление в виде передаточной функции:  $Y(s) = \frac{1}{2 s - 4} U(s)$
+		\end{example}
+		
+		
+		\begin{example}
+			Дано ОДУ: $3 \dddot y + 4y = u$
+			
+			Его представление в виде передаточной функции: $Y(s) = \frac{1}{2 s^3 + 4} U(s)$
+		\end{example}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Передаточные функции, 1}
+	\begin{flushleft}
+		
+		Рассмотрим следующее ОДУ:
+		
+		\begin{equation}
+			2 \ddot y + 3 \dot y + 2 y = 10 \dot u - u
+		\end{equation}
+		
+		В области Лапласа оно принимает форму:
+		
+		\begin{equation}
+			2 s^2 Y(s) + 3s Y(s) + 2Y(s) = 10s U(s) - U(s)
+		\end{equation}
+		%
+		\begin{equation}
+			(2s^2 + 3s + 2) Y(s) = (10s - 1)U(s)
+		\end{equation}
+		
+		Представление в виде передаточной функции: 
+		
+		\begin{equation}
+			Y(s) = \frac{10s - 1}{2s^2 + 3s + 2} U(s)
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Передаточные функции, 2}
+	\begin{flushleft}
+		
+		Рассмотрим закон управления:
+		
+		\begin{equation}
+			u = -k_p y - k_d \dot y
+		\end{equation}
+		
+		Представление этого закона управления в виде передаточной функции:
+		%
+		\begin{equation}
+			U(s) = -(k_d s + k_p) Y(s)
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Преобразование пространства состояний в передаточную функцию}
+	\begin{flushleft}
+		
+		Передаточные функции используются для изучения связи между входом и выходом динамической системы. Рассмотрим динамическую систему в стандартной форме пространства состояний:
+		%
+		\begin{equation}
+			\begin{cases}
+				\dot{\bo{x}} = \bo{A}\bo{x} + \bo{B}\bo{u} \\
+				\bo{y}  = \bo{C}\bo{x} + \bo{D}\bo{u}
+			\end{cases}
+		\end{equation}
+		%
+		Мы можем переписать её, используя оператор производной:
+		%
+		\begin{equation}
+			\begin{cases}
+				s\bo{I}\bo{x} -\bo{A}\bo{x} = \bo{B}\bo{u} \\
+				\bo{y}  = \bo{C}\bo{x} + \bo{D}\bo{u}
+			\end{cases}
+		\end{equation}
+		%
+		а затем собрать $\bo{x}$ в левой части: $\bo{x} = (s\bo{I} -\bo{A})^{-1} \bo{B}\bo{u}$ и выразить $\bo{y}$:
+		%
+		\begin{equation}
+			\bo{y}  = \left( \bo{C}(s\bo{I} -\bo{A})^{-1} \bo{B} + \bo{D} \right) \bo{u}
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+
+\begin{frame}{Система - разомкнутый контур}
+	\begin{flushleft}
+		
+		Рассмотрим линейное ОДУ и его эквивалентные представления в виде уравнения пространства состояний и передаточной функции:
+		
+		\begin{align}
+			&a_n y^{(n)} + ... + a_1 \dot y + a_0 y = b_m u^{(m )}+ ... + b_1 \dot u + b_0 u
+		\end{align}
+		%
+		\begin{align}
+			&\begin{cases}
+				\dot{\bo{x}} = \bo{A}\bo{x} + \bo{B}\bo{u} \\
+				\bo{y}  = \bo{C}\bo{x} + \bo{D}\bo{u}
+			\end{cases}
+		\end{align}
+		%
+		\begin{align}
+			&Y(s)  = G(s) U(s)
+		\end{align}
+		
+		Мы можем назвать это \emph{системой} $\mathcal{G}$, чтобы избежать указания на конкретное представление.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Замкнутый контур, 1}
+	\begin{flushleft}
+		
+		Представление системы в разомкнутом контуре: $Y(s)  = G(s) U(s)$. Предложим закон управления (в домене времени):
+		%
+		\begin{equation}
+			u(t) = k_p (v(t) - y(t)) + k_d (\dot v(t) - \dot y(t))
+		\end{equation}
+		%
+		где $v(t)$ — задающее воздействие (референс). Преобразование Лапласа этого закона управления принимает форму:
+		%
+		\begin{equation}
+			U(s) = (k_p + k_d s) (V(s) - Y(s))
+		\end{equation}
+		%
+		Определяя $H(s) = k_p + k_d s$, система с замкнутым контуром принимает вид:
+		%
+		\begin{align}
+			Y(s)  &= G(s) H(s) (V(s) - Y(s)) \\
+			Y(s)  &= -G(s) H(s) Y(s) + G(s) H(s)V(s) \\
+			(1 + G(s) H(s)) Y(s) &=  G(s) H(s)V(s) \\
+			Y(s) &= \frac{G(s) H(s)}{1 + G(s) H(s)} V(s)
+		\end{align}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Замкнутый контур, 2}
+	\begin{flushleft}
+		
+		В качестве альтернативы мы можем определить новый сигнал задания $r(t)$:
+		%
+		\begin{equation}
+			r(t) = k_p v(t) + k_d \dot v(t)
+		\end{equation}
+		
+		Предыдущий закон управления принимает форму:
+		%
+		\begin{equation}
+			u(t) = -k_p y(t) - k_d \dot y(t) + r(t)
+		\end{equation}
+		
+		Преобразование Лапласа этого закона управления:
+		%
+		\begin{equation}
+			U(s) = -H(s)Y(s) + R(s)
+		\end{equation}
+		
+		Система с замкнутым контуром:
+		%
+		\begin{align}
+			Y(s)  &= -G(s) H(s)Y(s) + G(s)R(s) \\
+			Y(s) + G(s) H(s)Y(s)  &=  G(s)R(s)\\
+			Y(s)  &= \frac{G(s)}{1 + G(s) H(s)} R(s) 
+		\end{align}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Преобразование Лапласа простых функций}
+	\begin{flushleft}
+		
+		Ниже приведены несколько функций и их преобразования Лапласа:
+		
+		\begin{align*}
+			f(t) &= e^{at}  &F(s) = \frac{1}{s - a} \\
+			f(t) &= \cos(\omega t) &F(s) = \frac{s}{s^2 + \omega^2} \\
+			f(t) &= \sin(\omega t)  &F(s) = \frac{\omega}{s^2 + \omega^2}\\
+			f(t) &= e^{at}(A \cos(\omega t) + B \sin(\omega t))  &F(s) = \frac{A (s- a) +  B\omega}{(s- a)^2 + \omega^2}
+		\end{align*}
+		
+		Преобразование Лапласа — это линейная операция. Если $F(s) = \mathcal{L}(f(t))$ и $G(s) = \mathcal{L}(g(t))$, то:
+		
+		\begin{align}
+			\mathcal{L}\left(a f(t) + b g(t)\right) = a F(s) + b G(s)
+		\end{align}
+		
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Разложение на элементарные дроби, 1}
+	\begin{flushleft}
+		
+		Рассмотрим передаточную функцию $G(s)$, которая представляет собой рациональную дробь:
+		
+		\begin{equation}
+			G(s) = \frac{N(s)}{D(s)} = \frac{b_m s^m + ... + b_1 s + b_0}{a_n s^n + ... + a_1 s + a_0}
+		\end{equation}		
+		
+		Если полином знаменателя $D(s)$ имеет чисто вещественные неповторяющиеся корни $p_i$ (называемые \emph{полюсами}), мы можем переписать его как:
+		
+		\begin{equation}
+			G(s) = \frac{N(s)}{(s - p_1)(s - p_2) \ ... \ (s - p_n)}
+		\end{equation}		
+		
+		
+		Если степень $D(s)$ выше степени $N(s)$, то мы можем выполнить разложение на элементарные дроби:
+		
+		\begin{equation*}
+			G(s) = \frac{N(s)}{(s - p_1)(s - p_2) \ ... \ (s - p_n)} = \frac{r_1}{s - p_1} + \frac{r_2}{s - p_2} + ... + \frac{r_n}{s - p_n}
+		\end{equation*}		
+		%
+		где константы $r_i$ называются \emph{вычетами}.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Разложение на элементарные дроби, 2}
+	\begin{flushleft}
+		
+		Рассмотрим $G(s)$ после разложения:
+		
+		\begin{equation*}
+			G(s) =\frac{r_1}{s - p_1} + \frac{r_2}{s - p_2} + ... + \frac{r_n}{s - p_n}
+		\end{equation*}		
+		
+		Мы знаем, что $F(s) = \frac{r_i}{s - p_i} $ является изображением по Лапласу функции временной области $f(t) = r_i e^{p_i t}$. Следовательно, \emph{обратное преобразование Лапласа} от $G(s)$ задается как:
+		
+		\begin{equation*}
+			y(t) =r_1 e^{p_1 t} + ... + r_n e^{p_n t},
+		\end{equation*}		
+		
+		Как мы видим, преобразование Лапласа и обратное к нему в сочетании с разложением на элементарные дроби позволяют нам решать обыкновенные дифференциальные уравнения.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Разложение на элементарные дроби, 3}
+	\begin{flushleft}
+		
+		Если полином знаменателя $D(s)$ имеет как вещественные, так и мнимые корни, мы можем переписать его как:
+		
+		\begin{equation}
+			G(s) = \frac{N(s)}{(s - p_1) \ ... \ (s - p_k)(s^2 + \alpha_1 s + \beta_1) \ ... \ (s^2 + \alpha_l s + \beta_l)}
+		\end{equation}		
+		
+		Если степень $D(s)$ меньше или равна степени $N(s)$, мы можем разделить числитель на знаменатель:
+		
+		\begin{equation*}
+			G(s) = R(s) + \frac{M(s)}{(s - p_1) \ ... \ (s^2 + \alpha_l s + \beta_l)}
+		\end{equation*}		
+		%
+		где степень $M(s)$ меньше степени $D(s)$. Затем мы можем выполнить разложение на элементарные дроби:
+		
+		\begin{equation*}
+			G(s) = R(s) + 
+			\frac{r_1}{s - p_1} +  ... + \frac{r_k}{s - p_k} +  \frac{q_1 s+ h_1}{s^2 + \alpha_1 s + \beta_1} +  ... + \frac{q_l s+ h_l}{s^2 + \alpha_l s + \beta_l}
+		\end{equation*}		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Разложение на элементарные дроби, 4}
+	\begin{flushleft}
+		
+		Обратите внимание, что функция в области Лапласа $F(s) = \frac{q s+ h}{s^2 + \alpha s + \beta}$ является изображением функции времени:
+		
+		\begin{equation*}
+			e^{at}(A \cos(\omega t) + B \sin(\omega t)) 
+			= \mathcal{L}^{-1}\left( \frac{q s+ h}{s^2 + \alpha s + \beta}\right)
+		\end{equation*}		
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Разложение на элементарные дроби, 5}
+	\begin{flushleft}
+		
+		Разложение на элементарные дроби может быть выполнено с использованием MATLAB или Python:
+		
+		\bigskip
+		
+		\begin{itemize}
+			\item В MATLAB: \texttt{[r,p,k] = residue(b,a)}
+			
+			\item В Python: \texttt{r,p,k = scipy.signal.residue(b,a)}
+		\end{itemize}
+		
+		\bigskip
+		
+		В обоих случаях $\texttt{a}$ — это коэффициенты знаменателя, а $\texttt{b}$ — коэффициенты числителя. 
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Литература}
+
+\begin{itemize}
+	
+	\item K. Ogata Modern Control Engineering (Chapter 2.2, 2.3, 2.4)
+	
+	\item Nise, N.S. Control systems engineering. John Wiley \& Sons. (Chapter 2 Modeling in the Frequency Domain)	
+	
+	\item Dorf \& Bishop, Modern Control Systems (Chapter 2.4 Laplace Transform; Chapter 3.6 The Transfer Function from State Equation)	
+	
+	\item \bref{https://control.asu.edu/Classes/MAE318/318Lecture07.pdf}{Matthew M. Peet; Systems Analysis and Control - Lecture 7: The Partial Fraction Expansion}	
+	
+\item \bref{https://www.cds.caltech.edu/~murray/courses/cds101/fa04/caltech/am04_ch6-3nov04.pdf}{Chapter 6 Transfer Functions}
+
+\item \bref{https://youtu.be/RJleGwXorUk}{Control Systems Lectures - Transfer Functions, by Brian Douglas}
+
+\item \bref{https://youtu.be/ZGPtPkTft8g}{The Laplace Transform - A Graphical Approach, by Brian Douglas}
+
+\end{itemize}
+
+\end{frame}
+
+
+
+\myqrframe
+
+
+
+
+\end{document}
