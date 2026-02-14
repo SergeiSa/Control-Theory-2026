@@ -6,6 +6,8 @@ This repository contains regularly updated course materials. You can use lecture
 
 * Lecture 1 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides_RU/Introduction.pdf
 * Lecture 2 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides_RU/Stability.pdf
+* Lecture 3 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides_RU/Control.pdf
+* Lecture 4 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides_RU/Laplace.pdf
 
 # Lecture slides (English)
 
@@ -80,19 +82,15 @@ https://ocw.mit.edu/courses/aeronautics-and-astronautics/16-30-feedback-control-
 
 ## Lecture 4. Laplace Transform, Transfer functions
 
-* Control System Design, An Introduction to State-Space Methods Bernard Friedland https://books.google.co.in/books/about/Control_System_Design.html?id=9WRKZlaCnF8C&redir_esc=y
-  * 3.4 SOLUTION BY THE LAPLACE TRANSFORM: THE RESOLVENT
-  * 3.5 INPUT-OUTPUT RELATIONS: TRANSFER FUNCTIONS
-* Control Systems Engineering, by Norman S. Nise 
-  * chapter 2.2 Laplace Transform Review
-  * chapter 2.3 The Transfer Function (optional)
-* Cho W. S. To, Introduction to Dynamics and Control in Mechanical Engineering Systems. 
-  * 2 Review of Laplace Transforms 
-  * 8.3 Transfer Functions
-* Control theory by S. Simrock - sections 2, 3 and 4: https://cds.cern.ch/record/1100534/files/p73.pdf
+* K. Ogata Modern Control Engineering (Chapter 2.2, 2.3, 2.4)
+* Nise, N.S. Control systems engineering. John Wiley & Sons. (Chapter 2 Modeling in the Frequency Domain)
+* Dorf & Bishop, Modern Control Systems (Chapter 2.4 Laplace Transform; Chapter 3.6 The Transfer Function from State Equation)
+* [Matthew M. Peet; Systems Analysis and Control - Lecture 7: The Partial Fraction Expansion](https://control.asu.edu/Classes/MAE318/318Lecture07.pdf)
+* [Chapter 6 Transfer Functions](https://www.cds.caltech.edu/~murray/courses/cds101/fa04/caltech/am04_ch6-3nov04.pdf)
 * Videos:
-  * Control Systems Lectures - Transfer Functions, Brian Douglas: https://youtu.be/RJleGwXorUk
-  * The Laplace Transform - A Graphical Approach, Brian Douglas: https://youtu.be/ZGPtPkTft8g
+  * [Control Systems Lectures - Transfer Functions, by Brian Douglas](https://youtu.be/RJleGwXorUk)
+  * [The Laplace Transform - A Graphical Approach, by Brian Douglas](https://youtu.be/ZGPtPkTft8g)
+
 
 ## Lecture 5. Frequency response, Bode plot
 
