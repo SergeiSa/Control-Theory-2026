@@ -49,19 +49,19 @@ jobs:
         with:
           name: Introduction.pdf
           path: Slides_RU/Introduction/main.pdf
-          
+
       - name: Save Stability artifact
         uses: actions/upload-artifact@v4
         with:
           name: Stability.pdf
           path: Slides_RU/Stability/main.pdf
-          
+
       - name: Save Control artifact
         uses: actions/upload-artifact@v4
         with:
           name: Control.pdf
           path: Slides_RU/Control/main.pdf
-          
+
       - name: Save Laplace artifact
         uses: actions/upload-artifact@v4
         with:
