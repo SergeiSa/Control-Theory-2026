@@ -77,7 +77,7 @@ jobs:
           mv Slides_RU/Introduction/main.pdf Slides_RU/Introduction.pdf
           mv Slides_RU/Stability/main.pdf Slides_RU/Stability.pdf
           mv Slides_RU/Control/main.pdf Slides_RU/Control.pdf
-          mv Slides_RU/Control/main.pdf Slides_RU/Laplace.pdf
+          mv Slides_RU/Laplace/main.pdf Slides_RU/Laplace.pdf
           
           git config --global user.name 'CI PDF compiler'
           git config --global user.email '<>'
