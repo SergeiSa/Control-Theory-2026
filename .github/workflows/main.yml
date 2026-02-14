@@ -18,25 +18,25 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Compile LaTeX document Introduction
-        uses: xu-cheng/latex-action@master
+        uses: xu-cheng/latex-action@v4
         with:
           root_file: main.tex
           working_directory: Slides_RU/Introduction/
 
       - name: Compile LaTeX document Stability
-        uses: xu-cheng/latex-action@master
+        uses: xu-cheng/latex-action@v4
         with:
           root_file: main.tex
           working_directory: Slides_RU/Stability/
 
       - name: Compile LaTeX document Control
-        uses: xu-cheng/latex-action@master
+        uses: xu-cheng/latex-action@v4
         with:
           root_file: main.tex
           working_directory: Slides_RU/Control/
 
       - name: Compile LaTeX document Laplace
-        uses: xu-cheng/latex-action@master
+        uses: xu-cheng/latex-action@v4
         with:
           root_file: main.tex
           working_directory: Slides_RU/Laplace/
