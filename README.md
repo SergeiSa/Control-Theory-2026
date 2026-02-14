@@ -62,11 +62,10 @@ This repository contains regularly updated course materials. You can use lecture
 * Paul's Online Notes (systems of linear ODE, solutions for them): 
   * http://tutorial.math.lamar.edu/Classes/DE/SystemsDE.aspx
   * http://tutorial.math.lamar.edu/Classes/DE/SolutionsToSystems.aspx
-* Astolfi, A., 2006. Systems and Control Theory: An Introduction. Imperial College London lecture notes. - 2.3.1 Linear systems (on equilibria of linear systems):
-http://www3.imperial.ac.uk/pls/portallive/docs/1/31851696.PDF
 * Videos:
   * State Space Stability (Linear Systems Theory EECS 221a, Berkeley) - https://youtu.be/7GarcEQ0uk8
-
+* Astolfi, A., 2006. Systems and Control Theory: An Introduction. Imperial College London lecture notes. - 2.3.1 Linear systems (on equilibria of linear systems):
+https://dl.icdst.org/pdfs/files/871756a3b628bc425300c3369bfcdeff.pdf
 
 ## Lecture 3. Stabilizing control
 * Nise, N.S. Control systems engineering. John Wiley and Sons. (4.5 The General Second-Order System)	
@@ -77,6 +76,7 @@ https://nptel.ac.in/content/storage2/courses/108103008/PDF/module9/m9_lec1.pdf
 * 16.31 Feedback Control Systems
 https://ocw.mit.edu/courses/aeronautics-and-astronautics/16-30-feedback-control-systems-fall-2010/lecture-notes/MIT16_30F10_lec11.pdf
 * Chapter 6 State Feedback - http://www.cds.caltech.edu/~murray/books/AM05/pdf/am06-statefbk_16Sep06.pdf
+
 
 ## Lecture 4. Laplace Transform, Transfer functions
 
@@ -109,9 +109,11 @@ https://ocw.mit.edu/courses/aeronautics-and-astronautics/16-30-feedback-control-
 * Astolfi, A., 2006. Systems and Control Theory: An Introduction. Imperial College London lecture notes:
   * 1.2.9 Approximate discrete-time models;
   * Proposition 2.3 (Trajectories of linear, discrete-time, systems) - on Controllability:
-http://www3.imperial.ac.uk/pls/portallive/docs/1/31851696.PDF
+https://dl.icdst.org/pdfs/files/871756a3b628bc425300c3369bfcdeff.pdf
 * Dahleh, M., Dahleh, M.A. and Verghese, G., 2004. Lectures on dynamic systems and control. A+ A, 4(100), pp.1-100. (goes to z-transform, which is outside the scope of our course):
 https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-241j-dynamic-systems-and-control-spring-2011/readings/MIT6_241JS11_chap10.pdf
+
+
 
 ## Lecture 7 LQR
 * Underactuated robotics. Linear Quadratic Regulators - http://underactuated.mit.edu/lqr.html
