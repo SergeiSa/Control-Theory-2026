@@ -32,7 +32,6 @@
 
 
 \begin{frame}{Sine wave input}
-	% \framesubtitle{O}
 	\begin{flushleft}
 		
 		Consider a sine wave with a phase shift. It can be presented in these two forms:
@@ -66,7 +65,6 @@
 
 
 \begin{frame}{ODE with a sine wave input}
-	% \framesubtitle{O}
 	\begin{flushleft}
 		
 		Given an ODE with a sine input:
@@ -99,7 +97,6 @@
 
 
 \begin{frame}{Frequency response}
-	% \framesubtitle{O}
 	\begin{flushleft}
 		
 		\begin{block}{Frequency response}
@@ -122,13 +119,12 @@
 
 
 \begin{frame}{Fraction expansion, 1}
-	% \framesubtitle{O}
 	\begin{flushleft}
 		
 		Assuming negative real non-repeating poles we can expand the function $Y(s) = G(s)\frac{A \omega}{\omega^2 + s^2}$:
 		
 		\begin{equation*}
-			G(s)\frac{A \omega}{\omega^2 + s^2} = \frac{r_1}{s + p_1} + \frac{r_2}{s + p_2} + ... + \frac{r_n}{s + p_n} + \frac{\alpha(s)}{s + j\omega} + \frac{\beta(s)}{s - j\omega}
+			G(s)\frac{A \omega}{\omega^2 + s^2} = \frac{r_1}{s + p_1} + \frac{r_2}{s + p_2} + ... + \frac{r_n}{s + p_n} + \frac{\alpha}{s + j\omega} + \frac{\beta}{s - j\omega}
 		\end{equation*}		
 	
 		Laplace function of the form $\frac{r_i}{s + p_i}$ corresponds to the following time function:
@@ -137,7 +133,7 @@
 			y(t) = r_i e^{-p_i t}
 		\end{align} 
 	
-		So, for a stable transfer function $G(s)$ as time goes to infinity, $r_i e^{-p_i t}$ goes to zero. The only components of the function $Y(s)$ that do not disappear are the last two: $\frac{\alpha(s)}{s + j\omega} + \frac{\beta(s)}{s - j\omega}$.
+		So, for a stable transfer function $G(s)$ as time goes to infinity, $r_i e^{-p_i t}$ goes to zero. The only components of the function $Y(s)$ that do not disappear are the last two: $\frac{\alpha}{s + j\omega} + \frac{\beta}{s - j\omega}$.
 		
 		
 	\end{flushleft}
@@ -146,18 +142,18 @@
 
 
 \begin{frame}{Fraction expansion, 2}
-	% \framesubtitle{O}
 	\begin{flushleft}
 		
-		To find $\alpha(s)$ we miltiply the equation by $s + j\omega$:
+		To find $\alpha$ we miltiply the equation by $s + j\omega$:
 		
 		\begin{align*}
-			&G(s)\frac{A \omega (s + j\omega)}{(s + j\omega)(s - j\omega)} 
+			&G(s)\frac{A \omega \cancel{(s + j\omega)}}{ \cancel{(s + j\omega)}(s - j\omega)} 
 			= \\
 			&=
-			\left( \frac{r_1}{s + p_1} + ... + \frac{r_n}{s + p_n} \right) (s + j\omega) 
+			\left( \frac{r_1}{s + p_1} + ... + \frac{r_n}{s + p_n} \right) 
+			\textcolor{myred}{(s + j\omega) }
 			+ 
-			\alpha(s) + \frac{\beta(s)(s + j\omega)}{s - j\omega}
+			\alpha \frac{\cancel{(s + j\omega)}}{ \cancel{(s + j\omega)}}  + \frac{\beta \textcolor{myred}{(s + j\omega) }}{s - j\omega}
 		\end{align*}		
 		
 		Considering $s = -j\omega$ we get:
@@ -166,7 +162,7 @@
 			\alpha = G(-j\omega)\frac{A }{-2j} 
 		\end{align}
 		
-		To find $\beta(s)$ we multiply the decomposition equation by  $s - j\omega$ and then consider $s = j\omega$:
+		To find $\beta$ we multiply the decomposition equation by  $s - j\omega$ and then consider $s = j\omega$:
 		%
 		\begin{align}
 			\beta = G(j\omega)\frac{A}{2j} 
@@ -179,15 +175,14 @@
 
 
 \begin{frame}{Inverse Laplace Transform}
-	% \framesubtitle{O}
 	\begin{flushleft}
 		
 		Laplace image of the steady-state solution is:
 		
 		\begin{align}
-			 Y_{ss}(s) &= \frac{\alpha(s)}{s + j\omega} + \frac{\beta(s)}{s - j\omega}
+			 Y_{ss}(s) &= \frac{\alpha}{s + j\omega} + \frac{\beta}{s - j\omega} =
 			 \\
-			 Y_{ss}(s)  &=
+			  &=
 			 \frac{A}{2j}
 			 \left(
 			 G(j\omega)\frac{1}{s - j\omega} -G(-j\omega) \frac{1}{s + j\omega}
@@ -212,7 +207,6 @@
 
 
 \begin{frame}{Function of Complex Variables}
-	% \framesubtitle{O}
 	\begin{flushleft}
 		
 		A complex function $W(x)$ can be represented in a polar form:
@@ -242,7 +236,7 @@
 		Finally, we can represent a sine function as a difference of exponentials:
 		%
 		\begin{align}
-			\sin(x) = \frac{e^{ix}-e^{-ix}}{2i}
+			\sin(x) = \frac{e^{jx}-e^{-jx}}{2j}
 		\end{align}
 		
 	\end{flushleft}
@@ -253,7 +247,6 @@
 
 
 \begin{frame}{Amplitude and phase, 1}
-	% \framesubtitle{O}
 	\begin{flushleft}
 		
 		We can define polar coordinates representation:
@@ -300,7 +293,6 @@
 
 
 \begin{frame}{Amplitude and phase, 2}
-	% \framesubtitle{O}
 	\begin{flushleft}
 		
 		Thus we found the steady-state output for the system:
@@ -310,22 +302,23 @@
 			A r(\omega) \sin (\omega t + \theta(\omega))
 		\end{align}
 		
-		Let us find the ratio between amplitude of the input and the output systems:
+		Let us find the ratio between amplitude of the input and the output:
 		
 		\begin{align}
-			\text{amplification}(\omega)
+			\text{gain}(\omega)
 			=
 			\frac{A r(\omega)}{A} = r(\omega) = |G(j\omega)|
 		\end{align}
 		
-		Let us find the phase shift between the input and the output systems:
+		Let us find the phase shift between the input and the output:
 		
 		\begin{align}
 			\text{phase}(\omega)
 			=
 			\theta(\omega) 
 			=
-			\text{atan2}( \text{Im}(G(j\omega)), \ \text{Re}(G(j\omega))  )
+			\angle G(j\omega)
+			%\text{atan2}( \text{Im}(G(j\omega)), \ \text{Re}(G(j\omega))  )
 		\end{align}
 		
 	\end{flushleft}
@@ -334,26 +327,19 @@
 
 
 
-
-
-
-
-
-
 \begin{frame}{Bode plot}
-% \framesubtitle{O}
 \begin{flushleft}
 
-The first key idea of a Bode plot is substitution of purely complex variable $j \omega$ in place of Laplace variable $s$, which can have non-zero real part.
+The first key idea of a Bode plot is substitution of purely complex variable $j \omega$ in place of Laplace variable $s$.
 
 \bigskip
 
 Given a transfer function $W(s)$, $s = \sigma + j \omega$ we can analyse its behaviour when $\sigma = 0$. We can plot:
 
 \begin{itemize}
-	\item  its amplitude $a(\omega) = \left| W(j \omega) \right|$,
+	\item  gain (magnitude) response $a(\omega) = \left| W(j \omega) \right|$,
 	
-	\item its phase $\varphi(\omega) = \text{atan2}( \text{im}(W(j \omega)), \ \text{real}(W(j \omega))  )$.
+	\item phase response $\varphi(\omega) = \angle W(j\omega)$.
 \end{itemize}
 
 
@@ -362,9 +348,9 @@ Given a transfer function $W(s)$, $s = \sigma + j \omega$ we can analyse its beh
 Bode plot is actually two plots: 
 
 \begin{enumerate}
-	\item  $20 \cdot \text{log}(a(\omega))$,
+	\item  $20 \cdot \text{log}_{10}\left| W(j \omega) \right|$,
 	
-	\item $\frac{180}{\pi} \varphi(\omega)$.
+	\item $\frac{180}{\pi} \angle W(j\omega)$.
 \end{enumerate}
 
 The 20 and log() has to do with the vertical axis being in decibels. 
@@ -376,29 +362,18 @@ The 20 and log() has to do with the vertical axis being in decibels.
 
 
 \begin{frame}{Bode plot - example}
-% \framesubtitle{O}
 \begin{flushleft}
 
-Consider $W(s) = \frac{1}{1 + s}$. Then $W(j \omega) = \frac{1}{1 + j \omega}$. We can transform it as:
+Consider $W(s) = \frac{1}{1 + s}$. Then $W(j \omega) = \frac{1}{1 + j \omega}$. Bode plot is given as:
 
-\begin{equation}
-    W(j \omega) = \frac{1 - j \omega}{(1 + j \omega)(1 - j \omega)} = 
-    \frac{1 - j \omega}{1 + \omega^2}
-\end{equation}
-
-Thus we have $\text{real}(W(j \omega)) = \frac{1}{1 + \omega^2}$ and $\text{im}(W(j \omega)) = - \frac{\omega}{1 + \omega^2}$.
-
-\bigskip
- 
-Bode plot is then given as:
-
-\begin{equation}
-   a(\omega) = \sqrt{\frac{1 + \omega^2}{(1 + \omega^2)^2}} = 
-   \frac{1}{\sqrt{(1 + \omega^2)}}
-\end{equation}
-\begin{equation}
-   \varphi(\omega) = \text{atan2} \left(-\frac{\omega}{1 + \omega^2}, \ \frac{1}{1 + \omega^2} \right)
-\end{equation}
+\begin{align}
+    \text{gain:}& \ \ 
+    \left|  \frac{1}{1 + j \omega} \right| =  \frac{1}{|1 + j \omega|} = 
+   \frac{1}{\sqrt{1 + \omega^2}}
+\\
+	\text{phase:}& \ \ 
+   \angle \frac{1}{1 + j \omega} = \angle 1 - \angle (1 + j \omega) = \\ &= 0 - \tan^{-1} \left( \frac{\omega}{1} \right) = -\tan^{-1}(\omega)
+\end{align}
 
 \end{flushleft}
 \end{frame}
@@ -408,22 +383,21 @@ Bode plot is then given as:
 
 
 \begin{frame}{Bode plot - stability margins}
-% \framesubtitle{O}
 \begin{flushleft}
 
-Before we discuss the use of Bode plot, let us remember that closed-loop transfer function has form (when simple feedback is used):
+Before we discuss the use of Bode plot, let us remember that closed-loop transfer function has form:
 
 \begin{equation}
-    W(s) = \frac{G(s)}{1 + G(s)}
+    W(s) = \frac{H(s)G(s)}{1 + H(s)G(s)}
 \end{equation}
 
-Substituting $s \longrightarrow j \omega$ we get:
+Defining \emph{loop} transfer function $L(s) = H(s)G(s)$ we get:
 
 \begin{equation}
-    W(\omega) = \frac{G(j \omega)}{1 + G(j \omega)}
+    W(j\omega) = \frac{L(j \omega)}{1 + L(j \omega)}
 \end{equation}
 
-From this we can see that $W(\omega)$ becomes ill-defined if $G(j \omega) = -1$. Meaning, we want to avoid two things happening simultaneously: the amplitude of $G(j \omega)$ being equal to 1, and its phase (argument) being equal to $180\degree$ (remember, phase of $0\degree$ is pure positive real number, phase of $90\degree$ is pure positive imaginary number, $180\degree$ is pure negative real number, etc.).
+From this, we can see that $W(\omega)$ becomes unbounded at $L(j \omega) = -1$. Meaning, we want to avoid two things happening simultaneously: the gain $|L(j \omega)|$ being equal to 1, and its phase (argument) being equal to $180\degree$ (remember, phase of $0\degree$ is pure positive real number, phase of $90\degree$ is pure positive imaginary number, $180\degree$ is pure negative real number, etc.).
 
 \end{flushleft}
 \end{frame}
@@ -433,7 +407,6 @@ From this we can see that $W(\omega)$ becomes ill-defined if $G(j \omega) = -1$.
 
 
 \begin{frame}{Stability margins - example}
-% \framesubtitle{O}
 
 % credit: https://www.electrical4u.com/bode-plot-gain-margin-phase-margin/
 \begin{figure}
@@ -478,11 +451,12 @@ Consider a system with resonance:
 	\end{cases}
 \end{equation}
 
-The state matrix of this system has eigenvalues $\lambda_i = \pm j$ with resonance frequency $\omega = 1$.
+
+The magnitude responce for this system is $\frac{1}{|1-\omega^2|}$.
 
 \bigskip
 
-The eigenvalues of the closed-loop system $\bo{A} - \bo{B} \bo{C}$ are $\lambda_i = \pm \sqrt{2} j$ with resonance frequency $\omega = \sqrt{2}$.
+The state matrix of this system has eigenvalues $\lambda_i = \pm j$, the resonance frequency $\omega = 1$.
 
 \end{flushleft}
 \end{frame}
@@ -490,7 +464,6 @@ The eigenvalues of the closed-loop system $\bo{A} - \bo{B} \bo{C}$ are $\lambda_
 
 
 \begin{frame}{Bode plot with resonance, 2}
-	% \framesubtitle{O}
 	
 	% credit: https://www.electrical4u.com/bode-plot-gain-margin-phase-margin/
 	\begin{figure}
@@ -503,6 +476,53 @@ The eigenvalues of the closed-loop system $\bo{A} - \bo{B} \bo{C}$ are $\lambda_
 	
 \end{frame}
 
+
+
+\begin{frame}{Nyquist plot}
+	\begin{flushleft}
+	
+\emph{Nyquist plot} for a transfer function $L(s)$ is a graph of $L(j\omega)$ plotted for $\omega \in (-\infty, \  \infty )$ on the complex plane.
+
+\bigskip
+	
+	As discussed before, closed-loop system is unbounded for the loop transfer function $L(s) = -1$. For Nyquist plot: 
+	
+	\begin{itemize}
+		\item phase margin is the angle by which you can rotate the plot before it intersects -1;
+		
+		\item the gain margin is the scaling (zooming in \ out) of the plot before it intersects -1.
+	\end{itemize}
+	
+	However, with Nyquist we can directly see the distance between the plot and the point -1 in \textbf{both coordinates} at once.
+	
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Nyquist plot example}
+	
+% TODO: \usepackage{graphicx} required
+\begin{figure}
+	\centering
+	\includegraphics[width=0.8\linewidth]{Nyquist}
+	\caption{Nyquist plot}
+	\label{fig:nyquist}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{Bode plot for the same system}
+	
+% TODO: \usepackage{graphicx} required
+\begin{figure}
+	\centering
+	\includegraphics[width=0.9\linewidth]{Bode}
+	\caption{Bode plot for the same system as on the last slide}
+	\label{fig:bode}
+\end{figure}
+
+\end{frame}
 
 
 \begin{frame}{Further reading}
@@ -534,15 +554,14 @@ The eigenvalues of the closed-loop system $\bo{A} - \bo{B} \bo{C}$ are $\lambda_
 
 
 \begin{frame}{Laplace and Fourier transforms}
-	% \framesubtitle{O}
 	\begin{flushleft}
 		
 		\begin{itemize}
 			\item \emph{Fourier series} can be seen as representing a periodic function as a sum of harmonics (sines and cosines). These sines and cosines can be thought of as forming a basis in a linear space. The coefficients of the series can be thought of as a discrete spectrum of the function.
 			
-			\item \emph{Fourier transform} gives a continuous spectrum of the function. The "basis" is still made of harmonic functions.
+			\item \emph{Fourier transform} gives a continuous spectrum of the function. The "basis" is made of sine and cosine functions of all frequencies (continuous superposition of complex exponentials $e^{j \omega t}$).
 			
-			\item \emph{Laplace transform} also gives a continuous spectrum of the function, but in a different basis: the basis is given by complex exponentials. I like to think of this basis as solutions of second order ODEs.
+			\item \emph{Laplace transform} also gives a continuous spectrum, but in a basis is given by complex exponentials.
 		\end{itemize}
 		
 	\end{flushleft}
@@ -551,13 +570,12 @@ The eigenvalues of the closed-loop system $\bo{A} - \bo{B} \bo{C}$ are $\lambda_
 
 
 \begin{frame}{Laplace and Fourier transforms}
-	% \framesubtitle{O}
 	\begin{flushleft}
 		
 		Let's compare. Fourier transform:
 		
 		\begin{equation}
-			F(\omega) = \int_{-\infty}^\infty f(t) e^{-2\pi j t \omega} dt, \ \ \omega \in \mathbb{R}
+			F(\omega) = \int_{-\infty}^\infty f(t) e^{-j t \omega} dt, \ \ \omega \in \mathbb{R}
 		\end{equation}
 		
 		Laplace transform:
@@ -574,14 +592,13 @@ The eigenvalues of the closed-loop system $\bo{A} - \bo{B} \bo{C}$ are $\lambda_
 
 
 \begin{frame}{Laplace and steady state solution}
-	% \framesubtitle{O}
 	\begin{flushleft}
 		
 		From analysing solutions of linear ODEs we know that, given harmonic input (sine, cosine, their combination) "after the transient process is over, the solution approaches a harmonic with the same frequency", but possibly different amplitude and phase.
 		
 		\bigskip
 		
-		Intuitively we can think of the imaginary part of $s$ as having to do with this frequency response. 
+		Intuitively we can think of the imaginary part of $s$ is about oscillations, real part - about decay/growth. 
 		
 		\bigskip
 		The kernel function of the Laplace transform is $e^{-st}$ with $s = \sigma + j \omega$ being a complex variable. If $\sigma = 0$, the kernel becomes $e^{-j \omega t} = \text{cos}(\omega t) - j \text{sin}(\omega t)$. You can see the similarity with Fourier transform kernel.

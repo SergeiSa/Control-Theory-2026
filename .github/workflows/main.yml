@@ -41,6 +41,12 @@ jobs:
           root_file: main.tex
           working_directory: Slides_RU/Laplace/
 
+      - name: Compile LaTeX document Bode
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: main.tex
+          working_directory: Slides_RU/Bode/
+
 
 
 
@@ -68,6 +74,12 @@ jobs:
           name: Laplace.pdf
           path: Slides_RU/Laplace/main.pdf
 
+      - name: Save Bode artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Bode.pdf
+          path: Slides_RU/Bode/main.pdf
+
 
 
 
@@ -78,6 +90,7 @@ jobs:
           mv Slides_RU/Stability/main.pdf Slides_RU/Stability.pdf
           mv Slides_RU/Control/main.pdf Slides_RU/Control.pdf
           mv Slides_RU/Laplace/main.pdf Slides_RU/Laplace.pdf
+          mv Slides_RU/Bode/main.pdf Slides_RU/Bode.pdf
           
           git config --global user.name 'CI PDF compiler'
           git config --global user.email '<>'
@@ -85,6 +98,7 @@ jobs:
           git add Slides_RU/Stability.pdf
           git add Slides_RU/Control.pdf
           git add Slides_RU/Laplace.pdf
+          git add Slides_RU/Bode.pdf
 
 
           git commit -m "Update compiled PDFs"
