@@ -1,0 +1,526 @@
+\documentclass{beamer}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\input{settings.tex}
+
+
+\title{Дискретные системы}
+\subtitle{Теория Управления, лекция 6}
+\author{Сергей Савин}
+\centering
+\date{\mydate}
+
+
+
+\begin{document}
+\maketitle
+
+
+%\begin{frame}{Content}
+%
+%\begin{itemize}
+%\item Discrete Dynamics
+%\item Stability of the Discrete Dynamics
+%\item CT-LTI: Analytical solution
+%\begin{itemize}
+%    \item Matrix exponential
+%    \item Analytical solution
+%    \item Forced response
+%\end{itemize}
+%\item Discretization
+%\begin{itemize}
+%	\item Exact
+%	\item Zero-order hold
+%\end{itemize}
+%\item Read more
+%\end{itemize}
+%
+%\end{frame}
+
+
+
+
+\begin{frame}{Дискретная динамика}
+	\begin{flushleft}
+		
+		Следующая динамическая система называется \emph{дискретной}:
+		
+		\begin{equation}
+			\bo{x}_{i+1} = \bo{A}\bo{x}_i + \bo{B}\bo{u}_i
+		\end{equation}
+		
+		\begin{itemize}
+			\item В уравнении нет производных; система описывается конечно-разностным уравнением, а не ОДУ;
+			\item Время изменяется дискретными шагами $i = 0,1,2,\dots$;
+			\item Такую систему легко моделировать.
+		\end{itemize}
+		
+		\bigskip
+		
+		Аффинное управление для этой системы можно записать как:
+		
+		\begin{equation}
+			\bo{u}_i = -\bo{K}\bo{x}_i + \bo{u}_i^*
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Устойчивость дискретной динамики}
+	\begin{flushleft}
+		
+		Рассмотрим устойчивость дискретной динамической системы, где матрица $\bo{A}$ имеет чисто вещественные собственные значения:
+		
+		\begin{equation}
+			\bo{x}_{i+1} = \bo{A}\bo{x}_i
+		\end{equation}		
+		
+		При собственном разложении $\bo{A} = \bo{V} \bo{D} \bo{V}^{-1}$ (где $\bo{D}$ — диагональная матрица с собственными значениями $\lambda_j$ матрицы $\bo{A}$ на диагонали) и введя обозначение $\bo{z}_i = \bo{V}^{-1}\bo{x}_i$, получаем:
+		
+		\begin{equation}
+			\bo{x}_{i+1} = \bo{V} \bo{D} \bo{V}^{-1}\bo{x}_i
+		\end{equation}
+		\begin{equation}
+			\bo{z}_{i+1} =  \bo{D} \bo{z}_i
+		\end{equation}
+		
+		Это означает, что динамика превратилась в систему независимых скалярных уравнений $z_{j, i+1} =  \lambda_j z_{j, i}$. 
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Устойчивость дискретной динамики}
+	\framesubtitle{Вещественные собственные значения}
+	\begin{flushleft}
+		
+		Рассматривая отдельные уравнения $z_{j, i+1} =  \lambda_j z_{j, i}$, находим, что абсолютное значение скаляров $z_{j}$ сходится к нулю тогда и только тогда, когда $|\lambda_j| < 1$:
+		
+		\begin{equation}
+			\left| \frac{z_{j, i+1}}{z_{j, i}} \right | =   | \lambda_j |
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Устойчивость дискретной динамики}
+	\framesubtitle{Пара комплексных собственных значений}
+	\begin{flushleft}
+		
+		Рассмотрим устойчивость дискретной динамической системы с матрицей $\bo{A}$ размера 2 на 2:
+		
+		\begin{equation}
+			\begin{bmatrix}
+				x_{1, i+1} \\ x_{2, i+1}
+			\end{bmatrix}
+			= 
+			\begin{bmatrix}
+				\alpha & -\beta \\ \beta & \alpha
+			\end{bmatrix}     
+			\begin{bmatrix}
+				x_{1, i} \\ x_{2, i}
+			\end{bmatrix}
+		\end{equation}	
+		
+		Найдем нормы $\begin{bmatrix}
+			x_{1, i+1} \\ x_{2, i+1}
+		\end{bmatrix}$ и $\begin{bmatrix}
+			x_{1, i} \\ x_{2, i}
+		\end{bmatrix}$:
+		
+		\begin{equation}
+			\left | \left|
+			\begin{bmatrix}
+				x_{1, i} \\ x_{2, i}
+			\end{bmatrix}
+			\right | \right|^2
+			= 
+			x_{1, i}^2 + x_{2, i}^2
+		\end{equation}
+		
+		\begin{equation}
+			\left | \left|
+			\begin{bmatrix}
+				x_{1, i+1} \\ x_{2, i+1}
+			\end{bmatrix}
+			\right | \right|^2
+			= 
+			(\alpha^2 + \beta^2) (x_{1, i}^2 + x_{2, i}^2)
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Устойчивость дискретной динамики}
+	\framesubtitle{Пара комплексных собственных значений}
+	\begin{flushleft}
+		
+		Мы можем найти отношение норм $\begin{bmatrix}
+			x_{1, i+1} \\ x_{2, i+1}
+		\end{bmatrix}$ и $\begin{bmatrix}
+			x_{1, i} \\ x_{2, i}
+		\end{bmatrix}$: 
+		
+		\begin{equation}
+			\left | \left|
+			\begin{bmatrix}
+				x_{1, i+1} \\ x_{2, i+1}
+			\end{bmatrix}
+			\right | \right|^2 
+			/ 
+			\left | \left|
+			\begin{bmatrix}
+				x_{1, i} \\ x_{2, i}
+			\end{bmatrix}
+			\right | \right|^2
+			=
+			\frac{(\alpha^2 + \beta^2) (x_{1, i}^2 + x_{2, i}^2)}{x_{1, i}^2 + x_{2, i}^2}
+			= 
+			\alpha^2 + \beta^2
+		\end{equation}
+		
+		Вспоминая, что собственные значения системы равны $\lambda  = \alpha \pm j\beta$, мы можем переписать выражение выше как:
+		
+		\begin{equation}
+			\left | \left|
+			\begin{bmatrix}
+				x_{1, i+1} \\ x_{2, i+1}
+			\end{bmatrix}
+			\right | \right|^2 
+			/ 
+			\left | \left|
+			\begin{bmatrix}
+				x_{1, i} \\ x_{2, i}
+			\end{bmatrix}
+			\right | \right|^2
+			= 
+			| \lambda |^2
+		\end{equation}		
+		
+		Мы видим, что $\bo{x}$ сходится к нулю тогда и только тогда, когда $|\lambda| < 1$.
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Устойчивость дискретной динамики}
+	\begin{flushleft}
+		
+		Общий критерий устойчивости приведен ниже:
+		
+		\bigskip
+		
+		\begin{block}{Асимптотическая устойчивость}
+			Дискретная система $\bo{x}_{i+1} = \bo{A}\bo{x}_i$ асимптотически устойчива до тех пор, пока собственные значения матрицы $\bo{A}$ меньше 1 по абсолютной величине: $|\lambda_i(\bo{A})| < 1, \; \forall i$.
+		\end{block}
+		
+		\begin{block}{Маргинальная устойчивость}
+			Дискретная система $\bo{x}_{i+1} = \bo{A}\bo{x}_i$ маргинально устойчива до тех пор, пока $|\lambda_i(\bo{A})| \leq 1, \; \forall i$ \textcolor{mynormalgray}{и ни одно собственное значение на единичной окружности не связано с нетривиальным жордановым блоком}.
+		\end{block}
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}
+	
+	\centering{\huge Непрерывные LTI-системы: Аналитическое решение}
+	
+\end{frame}
+
+\begin{frame}{Матричная экспонента}
+	\begin{flushleft}
+		
+		Экспонента $e^a$ определяется как ряд:
+		
+		\begin{equation}
+			e^a =1+a+\frac{1}{2} a^2
+			+\frac{1}{6} a^3 + ... = \sum_{n=0}^{\infty} \frac{1}{n!} a^n
+		\end{equation}
+		
+		Матричная экспонента $e^\bo{A}$ определяется как ряд:
+		
+		\begin{equation}
+			e^\bo{A} = \bo{I}+\bo{A}+\frac{1}{2} \bo{A}\bo{A}
+			+\frac{1}{6} \bo{A}\bo{A}\bo{A} + ... = \sum_{n=0}^{\infty} \frac{1}{n!} \bo{A}^n
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Аналитическое решение ОДУ}
+	\begin{flushleft}
+		
+		ОДУ вида $\dot x = a x$ имеет аналитическое решение $x(t) = e^{at} x(0)$.
+		
+		\bigskip
+		
+		ОДУ вида $\dot{\bo{x}} = \bo{A}  \bo{x}$ имеет аналитическое решение $\bo{x}(t) = e^{\bo{A}t}  \bo{x}(0)$.
+		
+		\bigskip
+		
+		Проверим, что это действительно решение:
+		
+		\begin{align}
+			\bo{x}(t) &= \left( \bo{I}+\bo{A}t+\frac{1}{2} \bo{A}\bo{A}t^2
+			+\frac{1}{6} \bo{A}\bo{A}\bo{A}t^3 + ... \right)  \bo{x}(0) &
+			\\
+			\dot{\bo{x}}(t) &= \left( \bo{A}+\bo{A}\bo{A}t
+			+\frac{1}{2}\bo{A}\bo{A}\bo{A}t^2 + ... \right)  \bo{x}(0) 	&		
+			\\
+			\dot{\bo{x}}(t) &= \bo{A} \left(\bo{I} +\bo{A}t
+			+\frac{1}{2}\bo{A}\bo{A}t^2 + ... \right)  \bo{x}(0) 	&		
+			\\
+			\dot{\bo{x}}(t) &= \bo{A} e^{\bo{A}t}  \bo{x}(0) 	&		 			
+			\\
+			\dot{\bo{x}}(t) &= \bo{A} \bo{x}(t)  &\ \ \qed
+		\end{align}
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Вынужденное движение, 1}
+	\begin{flushleft}
+		
+		ОДУ вида $\dot x = a x + bu(t)$ также имеет аналитическое решение. Чтобы его найти, сначала вычислим следующую производную:
+		%
+		\begin{equation}
+			\frac{d}{dt} \left( e^{-at} x(t) \right) = e^{-at} \dot x(t) - a e^{-at} x(t)
+		\end{equation}
+		
+		Умножая $\dot x = a x + bu(t)$ на $e^{-at}$, получаем:
+		
+		\begin{align}
+			e^{-at} \dot x = e^{-at} a x + e^{-at} bu(t)
+			\\
+			e^{-at} \dot x -  e^{-at} a x = e^{-at} bu(t)
+			\\
+			\frac{d}{dt} \left( e^{-at} x(t) \right) = e^{-at} bu(t)
+			\\
+			\int_{0}^{t} \frac{d}{d\tau} \left( e^{-a\tau} x(\tau) \right)  d\tau = 	\int_{0}^{t}  e^{-a\tau} bu(\tau) \ d\tau
+		\end{align}
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Вынужденное движение, 2}
+	\begin{flushleft}
+		
+		Продолжая вывод:
+		
+		\begin{align}
+			\int_{0}^{t} \frac{d}{d\tau} \left( e^{-a\tau} x(\tau) \right) d\tau = 	\int_{0}^{t}  e^{-a\tau} bu(\tau) \ d\tau
+			\\
+			e^{-at} x(t) - x(0) = \int_{0}^{t}  e^{-a\tau} bu(\tau) \ d\tau
+			\\
+			x(t) = e^{at} x(0) + e^{at} \int_{0}^{t}  e^{-a\tau} bu(\tau) \ d\tau
+			\\
+			x(t) = e^{at} x(0) + \int_{0}^{t}  e^{a(t-\tau)} bu(\tau) \ d\tau
+		\end{align}
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Вынужденное движение, 3}
+	\begin{flushleft}
+		
+		Уравнение в пространстве состояний $\dot{\bo{x}} = \bo{A}  \bo{x} + \bo{B}  \bo{u}(t)$ также имеет аналитическое решение:
+		
+		\begin{equation}
+			\bo{x}(t) = e^{\bo{A}t}  \bo{x}(0) + 
+			\int_{0}^{t} e^{\bo{A}(t-\tau)} \bo{B}  \bo{u}(\tau) \ d\tau
+		\end{equation}
+		
+		Его можно переписать как:
+		
+		\begin{equation}
+			\bo{x}(t) = e^{\bo{A}t}  \bo{x}(0) + 
+			e^{\bo{A}t} \int_{0}^{t} e^{-\bo{A}\tau} \bo{B}  \bo{u}(\tau) \ d\tau
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}
+	
+	\centering{\huge Дискретизация}
+	
+\end{frame}
+
+\begin{frame}{От аналитического решения к дискретной динамике}
+	\begin{flushleft}
+		
+		Имея решение $\bo{x}(t)$, мы можем изучить, как система эволюционирует от $t=0$ до $t=\Delta t$, предполагая, что $\bo{u}(t) = \bo{u}_0 = \text{const}$ на $\ t \in [ 0, \ \Delta t ]$, и обозначая $\bo{x}(0) = \bo{x}_0$ и $\bo{x}(\Delta t) = \bo{x}_1$:
+		
+		\begin{equation}
+			\bo{x}_1 = e^{\bo{A}\Delta t}  \bo{x}_0 + 
+			e^{\bo{A} \Delta t} \int_{0}^{\Delta t} e^{-\bo{A}\tau} \bo{B}  \bo{u}_0 \ d \tau
+		\end{equation}
+		
+		Теперь обозначим:
+		%
+		\begin{align}
+			\bar{\bo{A}} = e^{\bo{A}\Delta t}, \ \ \
+			\bar{\bo{B}} = e^{\bo{A} \Delta t} \int_{0}^{\Delta t} e^{-\bo{A}\tau} \bo{B} \ d\tau
+		\end{align}
+		
+		Получаем:
+		%
+		\begin{equation}
+			\bo{x}_1 = \bar{\bo{A}}  \bo{x}_0 + \bar{\bo{B}}  \bo{u}_0
+		\end{equation}		
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Собственные значения непрерывных и дискретных систем}
+	\begin{flushleft}
+		
+		Рассмотрим систему $\dot{x} = \lambda x$ с решением $x(t) = e^{ \lambda t} x(0)$. Дискретизация будет выглядеть так:
+		
+		\begin{equation}
+			x_1 =e^{ \lambda \Delta t}   x_0 
+		\end{equation}
+		
+		Следовательно, собственное значение дискретной системы равно $\lambda_d = e^{ \lambda \Delta t} $. Полагая $\lambda < 0$, получаем:
+		
+		\begin{itemize}
+			\item При $\Delta t \rightarrow 0$ собственное значение дискретной системы $|\lambda_d| \rightarrow 1$;
+			
+			\item При $\Delta t \gg 0$ собственное значение дискретной системы $|\lambda_d| \rightarrow 0$;
+		\end{itemize}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Приближенная дискретизация, 1}
+	\begin{flushleft}
+		
+		Мы можем разложить точное решение $\bar{\bo{A}} = e^{\bo{A}\Delta t}$ через определение матричной экспоненты:
+		%
+		\begin{equation}
+			\bar{\bo{A}} = e^{\bo{A}\Delta t} =  \sum_{n=0}^{\infty} \frac{1}{n!} \bo{A}^n \Delta t^n
+		\end{equation}
+		
+		Отбрасывая члены высшего порядка, получаем:
+		%
+		\begin{equation}
+			\bo{x}_{i + 1} = ( \bo{I} + \bo{A} \Delta t) \bo{x}_i
+		\end{equation}
+		
+		При уменьшении $\Delta t$ члены высшего порядка (квадратичные и выше по $\Delta t$) стремятся к нулю, что повышает точность приближения.
+		
+		\bigskip
+		
+		\textcolor{mynormalgray}
+		{
+			Тот же результат можно получить, заменив производную в $\dot{\bo{x}} = \bo{A}  \bo{x}$ конечно-разностной аппроксимацией:}
+		%
+		\begin{equation*}
+			\textcolor{mynormalgray}
+			{\dot {\bo{x}} \approx \frac{1}{\Delta t}(\bo{x}_{i+1} - \bo{x}_i)}
+		\end{equation*}
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Приближенная дискретизация, 2}
+	\begin{flushleft}
+		
+		Аппроксимируя \emph{дискретную матрицу состояния} $\bar{\bo{A}}$ и \emph{дискретную матрицу управления} $\bar{\bo{B}}$ следующим образом:
+		
+		\begin{equation}
+			\bar{\bo{A}} = \bo{A} \Delta t + \bo{I}
+		\end{equation}
+		\begin{equation}
+			\bar{\bo{B}} = \bo{B} \Delta t
+		\end{equation}
+		%
+		Получаем дискретную динамику:
+		
+		\begin{equation}
+			\bo{x}_{i+1} = \bar{\bo{A}} \bo{x}_i + \bar{\bo{B}} \bo{u}_i
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Литература}
+
+\begin{itemize}
+	
+	\item K. Ogata Modern Control Engineering (Chapter 9.4)
+	
+	\item Dorf \& Bishop, Modern Control Systems (Chapter 3.3 State differential equation)		
+	
+\item  \bref{http://cse.lab.imtlucca.it/~bemporad/teaching/ac/pdf/04a-TD_sys.pdf}{Automatic Control 1 Discrete-time linear systems}, Prof. Alberto Bemporad, University of Trento
+
+\item \bref{https://web.mit.edu/2.14/www/Handouts/StateSpaceResponse.pdf}{MIT 2.14, State Space Response}
+
+\end{itemize}
+
+\end{frame}
+
+
+
+\myqrframe
+
+
+
+
+\begin{frame}{Жордановы блоки и устойчивость, 1}
+	\begin{flushleft}
+		
+		Рассмотрим матрицу $\bo{A} \in \R^{n \times n}$ с одним жордановым блоком размера $n$ (вся матрица представляет собой жорданов блок). Любой жорданов блок можно записать как:
+		%
+		\begin{equation}
+			\bo{A} = \lambda \bo{I} +\bo{N} 
+		\end{equation}
+		%
+		где $\lambda$ — собственное значение, а $\bo{N} $ — нильпотентная матрица, $\bo{N}^n = \bo{0}$.
+		
+		\bigskip
+		
+		Решим уравнение $\dot{\bo{x}} = \bo{A}\bo{x}$ с помощью матричной экспоненты:
+		%
+		\begin{align}
+			\bo{x} (t)= e^{(\lambda \bo{I} +\bo{N})t  }= e^{\lambda t} e^{\bo{N}t} \bo{x} (0)=
+			\\
+			=  e^{\lambda t} \sum_{k=0}^{n-1} \frac{1}{k!} \bo{N}^k t^k \bo{x} (0)
+		\end{align}
+		
+		Если $\lambda = 0$, то решение является полиномиальным:
+		%
+		\begin{align}
+			\bo{x} (t)=  \sum_{k=0}^{n-1} \frac{1}{k!} \bo{N}^k t^k \bo{x} (0)
+		\end{align}
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Жордановы блоки и устойчивость, 2}
+	\begin{flushleft}
+		
+		\begin{align}
+			\bo{x} (t)=  \sum_{k=0}^{n-1} \frac{1}{k!} \bo{N}^k t^k \bo{x} (0)
+		\end{align}
+		
+		Анализируя решение, замечаем:
+		
+		\begin{itemize}
+			\item Если $\lambda < 0$: экспоненциальное затухание доминирует, система устойчива;
+			\item Если $\lambda = 0$: полиномиальный рост, система неустойчива;
+			\item Если $\lambda > 0$: экспоненциальный рост, неустойчива.
+		\end{itemize}
+		
+	\end{flushleft}
+\end{frame}
+
+
+\end{document}
