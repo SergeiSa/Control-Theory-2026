@@ -4,7 +4,7 @@
 
 
 \title{Luenberger Observer}
-\subtitle{Control Theory, Lecture 9}
+\subtitle{Control Theory, Lecture 8}
 \author{by Sergei Savin}
 \centering
 \date{\mydate}
@@ -16,21 +16,20 @@
 
 
 
-\begin{frame}{Content}
-\begin{itemize}
-\item Measurement
-\item State Estimation
-\item Observer
-\item Observation and Control
-\item Separation principle
-\end{itemize}
-\end{frame}
+%\begin{frame}{Content}
+%\begin{itemize}
+%\item Measurement
+%\item State Estimation
+%\item Observer
+%\item Observation and Control
+%\item Separation principle
+%\end{itemize}
+%\end{frame}
 
 
 
 
 \begin{frame}{Measurement and control}
-%\framesubtitle{How do we know the state?}
 \begin{flushleft}
 
 Before we considered systems and control laws of the following type:
@@ -38,11 +37,11 @@ Before we considered systems and control laws of the following type:
 \begin{equation}
 \begin{cases}
 \dot {\bo{x}} = \bo{A} \bo{x} + \bo{B} \bo{u}\\
-\bo{u} = \bo{K} \bo{x}
+\bo{u} = -\bo{K} \bo{x}
 \end{cases}
 \end{equation}
 
-But when we implement that control law, how do we know the current value of $\bo{x}$?
+But when implementing this control law, how do we know the current value of $\bo{x}$?
 
 \bigskip
 
@@ -52,16 +51,15 @@ In practice, we can \emph{estimate} it using \emph{measurement}.
 \end{frame}
 
 \begin{frame}{Why information is imperfect?}
-%\framesubtitle{Why information is imperfect?}
 \begin{flushleft}
 
 There are a number of reasons why we can not directly measure the state of the system. Here are some:
 
 \begin{itemize}
 \item \textbf{Lack of sensors.}
-\item Digital measurements are done in discrete time intervals.
-\item Disruption of measurements.
-\item Un-modelled kinematics or dynamics (links bending, gear box backlash, friction, etc.) making the very definition of the state disconnected from the reality we want to represent.
+\item Digital measurements are discrete (available only at discrete sampling times).
+\item Measurements may be noisy, delayed, or temporarily unavailable.
+\item Model inaccuracies (flexibility, backlash, friction, etc.) may cause the true physical state to differ from the model state.
 \item Imprecise, nonlinear and biased sensors.
 \item Other physical effects.
 \end{itemize}
@@ -70,10 +68,9 @@ There are a number of reasons why we can not directly measure the state of the s
 \end{frame}
 
 \begin{frame}{Measurement and estimation}
-%\framesubtitle{Definition}
 \begin{flushleft}
 
-Let us introduce new notation. We have an LTI system of the following form:
+Let us introduce an \emph{observer}. A linear system with an observer takes the following form:
 
 \begin{equation}
 \begin{cases}
@@ -84,7 +81,7 @@ Let us introduce new notation. We have an LTI system of the following form:
 \end{cases}
 \end{equation}
 
-Then:
+where:
 
 \begin{itemize}
 \item $\bo{x}$ and $\bo{y}$ are the state and output (actual, true)
@@ -92,7 +89,7 @@ Then:
 and output.
 \end{itemize}
 
-Notice that we never know true state $\bo{x}$, and therefore for the control purposes we have to use the estimated state $\hat{\bo{x}}$.
+Notice that the controller does not know the true state $\bo{x}$, and therefore, for the control purposes, we have to use the estimated state $\hat{\bo{x}}$.
 
 \end{flushleft}
 \end{frame}
@@ -101,19 +98,18 @@ Notice that we never know true state $\bo{x}$, and therefore for the control pur
 
 
 \begin{frame}{Estimation error}
-	%\framesubtitle{Observer}
 	\begin{flushleft}
 		
 		We define state estimation error:
 		
 		\begin{equation}
-			\varepsilon = \hat{\bo{x}} - \bo{x}
+		\bo{e} = \bo{x} - \hat{\bo{x}}
 		\end{equation}
 		
-		But this is impossible to compute, since we do not know $\bo{x}$. However, we can compare measured output $\bo{y}$ with estimated output $\hat{\bo{y}} =\bo{C} \hat{\bo{x}}$:
+		Note that a controller cannot compute it, since it does not know $\bo{x}$. However, it can compare the measured output $\bo{y}$ with the estimated output $\hat{\bo{y}} =\bo{C} \hat{\bo{x}}$:
 		
 		\begin{equation}
-			\Tilde{\bo{y}} = \bo{C} \hat{\bo{x}} - \bo{y} 
+		\Tilde{\bo{y}} = \bo{y} -  \bo{C} \hat{\bo{x}}  
 		\end{equation}		
 		
 		This can always be computed.
@@ -124,7 +120,6 @@ Notice that we never know true state $\bo{x}$, and therefore for the control pur
 
 
 \begin{frame}{Estimation - dynamics}
-%\framesubtitle{Using the knowledge about dynamics}
 \begin{flushleft}
 
 Let us consider autonomous dynamical system
@@ -156,10 +151,9 @@ If we knew the initial conditions exactly, we could find the exact state of the 
 
 
 \begin{frame}{Estimation - observer}
-%\framesubtitle{Observer}
 \begin{flushleft}
 
-We propose \emph{observer} that takes into account measurements in a linear way; similar to linear control $-\bo{K}\bo{x}$, here we propose a linear correction law $-\bo{L}\Tilde{\bo{y}}$. Remembering that $\Tilde{\bo{y}} = \bo{C} \hat{\bo{x}} - \bo{y}$ we get:
+We propose \emph{observer} that takes into account measurements in a linear way; similar to linear control $-\bo{K}\bo{x}$, here we propose a linear correction law $\bo{L}\Tilde{\bo{y}}$. Remembering that $\Tilde{\bo{y}} = \bo{y} -  \bo{C} \hat{\bo{x}} $ we get:
 
 \begin{equation}
 \label{eq:Observer}
@@ -170,22 +164,22 @@ This is called \emph{Luenberger observer}. The next task is to find suitable obs
 
 \bigskip
 
-We subtract $\dot {\bo{x}} = \bo{A} \bo{x} + \bo{B} \bo{u}$ from \eqref{eq:Observer}, to get \emph{observer error dynamics}:
+
+We subtract from $\dot {\bo{x}} = \bo{A} \bo{x} + \bo{B} \bo{u}$ the observer \eqref{eq:Observer}, to get the \emph{observer error dynamics}:
 
 \begin{align}
-\dot{\hat{\bo{x}}} - \dot {\bo{x}}= 
-\bo{A} \hat{\bo{x}} - \bo{A} \bo{x} + 
-\bo{L}(\mathbf y - \bo{C} \hat{\bo{x}})
-\\
-\dot{\hat{\bo{x}}} - \dot {\bo{x}}
-= 
-\bo{A} (\hat{\bo{x}} -  \bo{x} ) - 
-\bo{L}(\bo{C} \hat{\bo{x}} -  \bo{C} \bo{x} ) 
+	\dot {\bo{x}} - \dot{\hat{\bo{x}}} = 
+	\bo{A} \bo{x} - \bo{A} \hat{\bo{x}} - 
+	\bo{L}(\mathbf y - \bo{C} \hat{\bo{x}})
+	\\
+	\dot {\bo{x}} - \dot{\hat{\bo{x}}}
+	= 
+	\bo{A} (\bo{x} -   \hat{\bo{x}} ) - 
+	\bo{L}(\bo{C} \bo{x} -  \bo{C}\hat{\bo{x}}  ) 
 \end{align}
 %
 \begin{equation}
-\dot {\varepsilon}= 
-(\bo{A} - \bo{L} \bo{C}) \varepsilon
+\dot {\bo{e} }= (\bo{A} - \bo{L} \bo{C})\bo{e} 
 \end{equation}
 
 \end{flushleft}
@@ -194,11 +188,9 @@ We subtract $\dot {\bo{x}} = \bo{A} \bo{x} + \bo{B} \bo{u}$ from \eqref{eq:Obser
 
 
 \begin{frame}{Observer gains, 1}
-%\framesubtitle{Observer gains}
 \begin{flushleft}
 
-The observer $\dot {\varepsilon}= 
-(\bo{A} - \bo{L} \bo{C}) \varepsilon$ is \emph{stable} (i.e., the state estimation error tends to zero), as long as the following matrix has eigenvalues with negative real parts:
+The observer $\dot {\bo{e} }= (\bo{A} - \bo{L} \bo{C})\bo{e} $ is \emph{stable} (i.e., the state estimation error tends to zero), as long as the following matrix has eigenvalues with negative real parts:
 
 \begin{equation}
 \bo{A} - 
@@ -216,7 +208,7 @@ We need to find $\bo{L}$. Let us observe a slight difference between observer de
 
 \bigskip
 
-The gain is on the left side for the observer, preventing us from using any of our tools (pole placement, LQR) to tune it.
+The gain is on the left side for the observer, preventing the direct application of our design tools (pole placement, LQR) to tune it.
 
 \end{flushleft}
 \end{frame}
@@ -239,13 +231,17 @@ Therefore, we can solve the following \emph{dual problem}:
 
 \bigskip
 
-The dual problem is \emph{equivalent} to the control design problem. We can solve it by producing and solving algebraic Riccati equation, as in the LQR formulation. In pseudo-code it can be represented the following way:
+This dual problem is \emph{equivalent} to a standard control design problem. We can solve it via pole placement or through the algebraic Riccati equation (LQR). In pseudo-code it can be represented the following way:
+%
+\begin{align*}
+	\bo{L}^{\top} \texttt{= lqr}(\bo{A}^{\top}, \bo{C}^{\top}, \mathbf Q, \mathbf R)
+	\ \ \ \text{or} \ \ \
+	\bo{L}^{\top} \texttt{= place}(\bo{A}^{\top}, \bo{C}^{\top}, \mathbf p)
+\end{align*}
 
-\bigskip
 
-$\bo{L}^{\top}$ \texttt{= lqr}($\bo{A}^{\top}$, $\bo{C}^{\top}$, $\mathbf Q$, $\mathbf R$).
 
-where $\mathbf Q$ and $\mathbf R$ are weight  matrices, determining the "sensitivity" or "aggressiveness" of the observer.
+where $\mathbf Q$ and $\mathbf R$ determine the speed and noise sensitivity of the observer.
 
 
 \end{flushleft}
@@ -255,7 +251,6 @@ where $\mathbf Q$ and $\mathbf R$ are weight  matrices, determining the "sensiti
 
 
 \begin{frame}{Observer + Controller, 1}
-%\framesubtitle{LTI}
 \begin{flushleft}
 
 Thus we get dynamics+observer combination:
@@ -273,7 +268,7 @@ Thus we get dynamics+observer combination:
 
 where $\bo{A} - \bo{B} \bo{K} \in \mathbb{H}$ and $\bo{A}^{\top} - 
 \bo{C}^{\top} \bo{L}^{\top} \in \mathbb{H}$.
-9
+
 Let us re-write the dynamics:
 
 \begin{equation}
@@ -291,7 +286,7 @@ Let us re-write the dynamics:
 
 
 
-\begin{frame}{Observer + Controller, 1}
+\begin{frame}{Observer + Controller, 2}
 \framesubtitle{Stability analysis}
 \begin{flushleft}
 
@@ -301,7 +296,7 @@ Let us re-write the dynamics
 \begin{cases}
 \dot {\bo{x}} = \textcolor{mydarkblue}{\bo{A}} \bo{x} \textcolor{mydarkpink}{- \bo{B} \bo{K}} \hat{\bo{x}} 
 \\
-\dot{\hat{\bo{x}}} = \textcolor{mydarkgray}{\bo{A}} \hat{\bo{x}} \textcolor{mydarkgray}{- \bo{B} \bo{K}} \hat{\bo{x}} + \textcolor{mydarkgreen}{\bo{L}\bo{C}} \bo{x} \textcolor{mydarkgray}{- \bo{L}\bo{C}} \hat{\bo{x}}
+\dot{\hat{\bo{x}}} = \textcolor{myyellow}{\bo{A}} \hat{\bo{x}} \textcolor{myyellow}{- \bo{B} \bo{K}} \hat{\bo{x}} + \textcolor{mydarkgreen}{\bo{L}\bo{C}} \bo{x} \textcolor{myyellow}{- \bo{L}\bo{C}} \hat{\bo{x}}
 \end{cases}
 \end{equation}
 
@@ -315,7 +310,7 @@ in a matrix form:
 =
 \begin{bmatrix}
 \textcolor{mydarkblue}{\bo{A}} & \textcolor{mydarkpink}{-\bo{B}\bo{K}}\\
-\textcolor{mydarkgreen}{\bo{L}\bo{C}} & (\textcolor{mydarkgray}{\bo{A} - \bo{B}\bo{K}-\bo{L}\bo{C}})
+\textcolor{mydarkgreen}{\bo{L}\bo{C}} & (\textcolor{myyellow}{\bo{A} - \bo{B}\bo{K}-\bo{L}\bo{C}})
 \end{bmatrix}
 \begin{bmatrix}
 \bo{x} \\
@@ -325,7 +320,7 @@ in a matrix form:
 
 \bigskip
 
-We can't directly reason about eigenvalues of this matrix. But it can be simplified with a change of variables.
+The eigenvalues of this matrix are not immediately obvious. But the problem can be simplified with a change of variables.
 
 \end{flushleft}
 \end{frame}
@@ -333,7 +328,7 @@ We can't directly reason about eigenvalues of this matrix. But it can be simplif
 
 
 
-\begin{frame}{Observation and Control}
+\begin{frame}{Closed-loop system}
 \framesubtitle{Change of variables}
 \begin{flushleft}
 
@@ -348,7 +343,7 @@ Our system had form:
 \end{cases}
 \end{equation}
 
-Since $\dot{\bo{e}} = \textcolor{mydarkblue}{\dot{\bo{x}}} - \textcolor{mydarkpink}{\hat{\dot{\bo{x}}}}$, we get:
+Since $\dot{\bo{e}} = \textcolor{mydarkblue}{\dot{\bo{x}}} - \textcolor{mydarkpink}{\dot{\hat{\bo{x}}}}$, we get:
 %
 \[
 \dot{\bo{e}} = 
@@ -379,7 +374,7 @@ Equation $\dot {\bo{x}} = \bo{A} \bo{x} - \bo{B}\bo{K} \hat{\bo{x}}$ takes form:
 
 
 
-\begin{frame}{Observation and Control}
+\begin{frame}{Closed-loop system}
 \framesubtitle{Upper triangular form}
 \begin{flushleft}
 
@@ -411,15 +406,14 @@ In matrix form it becomes:
 \end{bmatrix}
 \end{equation}
 
-Eigenvalues of a upper block-triangular matrices equal to the union of the eigenvalues of the blocks on the main diagonal (see Appendix B). Hence here, the eigenvalues of the system are equal to the union of eigenvalues of $(\bo{A}-\bo{B}\bo{K})$ and $(\bo{A}  - \bo{L}\bo{C})$. 
+Eigenvalues of an upper block-triangular matrix equal to the union of the eigenvalues of the blocks on the main diagonal (see Appendix B). Hence here, the eigenvalues of the system are equal to the union of eigenvalues of $(\bo{A}-\bo{B}\bo{K})$ and $(\bo{A}  - \bo{L}\bo{C})$. 
 
 \end{flushleft}
 \end{frame}
 
 
 
-\begin{frame}{Observation and Control}
-\framesubtitle{Separation principle}
+\begin{frame}{Separation principle}
 \begin{flushleft}
  
 Since the eigenvalues of the system are equal to the union of eigenvalues of $(\bo{A}-\bo{B}\bo{K})$ and $(\bo{A}  - \bo{L}\bo{C})$, we can make the following observation:
@@ -430,36 +424,15 @@ Since the eigenvalues of the system are equal to the union of eigenvalues of $(\
 As long as the observer and the controller are stable independently, the overall system is stable too.
 \end{alertblock}
 
+\bigskip
+
+Therefore, the controller gain $\bo{K}$ and the observer gain $\bo{L}$  can be designed independently.
+
 \end{flushleft}
 \end{frame}
 
 
 
-
-% \begin{frame}{Observation and Control}
-% \framesubtitle{Affine case}
-% \begin{flushleft}
-
-
-% Affine case is almost the same:
-
-% \begin{equation}
-% \begin{cases}
-% \dot {\bo{x}} = \bo{A} \bo{x} + \bo{B} \bo{u} + \bo{c}\\
-% \hat{\dot {\bo{x}}} = \bo{A} \hat{\bo{x}} + \bo{B} \mathbf u + \bo{L}(\mathbf y - \bo{C} \hat{\bo{x}})  + \bo{c} \\
-% \bo{y} = \bo{C} \bo{x} \\
-% \bo{u} = -\bo{K} (\hat{\bo{x}} - \bo{x}^*(t)) + \bo{u}^*(t)
-% \end{cases}
-% \end{equation}
-
-% \bigskip
-
-% where $\bo{A} - \bo{B} \bo{K} < 0$ and $\bo{A}^{\top} - 
-% \bo{c}^{\top} \bo{L}^{\top} < 0$.
-
-
-% \end{flushleft}
-% \end{frame}
 
 
 
@@ -480,26 +453,25 @@ As long as the observer and the controller are stable independently, the overall
 
 
 \begin{frame}{Appendix A. Eigenvalues of transpose}
-%	\framesubtitle{General case: design via Riccati eq.}
 	\begin{flushleft}
 		
-		Given matrix $\bo{M}$ and its eigenvalue $\lambda$ and eigenvector $\bo{v}$. we can prove that $\lambda$ is an eigenvector of $\bo{M}\T$:
+		Given matrix $\bo{M}$ and its eigenvalue $\lambda$ and eigenvector $\bo{v}$. we can prove that $\lambda$ is an eigenvalue of $\bo{M}\T$.
 		
 		\begin{align}
 			\bo{M}\bo{v} = \lambda \bo{v} \\
 			\text{det}\ (\bo{M}- \bo{I} \lambda) = 0 \\
 			\text{det}\ (\bo{M}\T- \bo{I} \lambda) = 0 \\
-			\bo{M}\T\bo{u} = \lambda \bo{u}
+			\exists \bo{u} \ \text{s.t.} \ \bo{M}\T\bo{u} = \lambda \bo{u}
 		\end{align}
 		
-		We used the fact that determinant of a matrix is equal to the determinant of its transpose: $\text{det}\ (\bo{A}) = \text{det}\ (\bo{A}\T)$.
+		We used the fact that determinant of a matrix is equal to the determinant of its transpose: $\text{det}(\bo{A}) = \text{det}(\bo{A}\T)$.
 		
 	\end{flushleft}
 \end{frame}
 
 
 \begin{frame}{Appendix B, 1}
-		\framesubtitle{Eig. values of block-diagonal matrices}
+		\framesubtitle{Eigenvalues of block-triangular matrices}
 	\begin{flushleft}
 		
 		Given matrix $\bo{M}$:
@@ -539,7 +511,7 @@ As long as the observer and the controller are stable independently, the overall
 
 
 \begin{frame}{Appendix B, 2}
-	\framesubtitle{Eig. values of block-diagonal matrices}
+	\framesubtitle{Eigenvalues of block-triangular matrices}
 	\begin{flushleft}
 		
 		If $\mu$ is not an eigenvalue of $\bo{A}$, we can prove that $\mu$, $\bo{u}_M = \textcolor{mydarkpink}{\begin{bmatrix}
@@ -592,7 +564,7 @@ As long as the observer and the controller are stable independently, the overall
 	
 	
 	
-	Counting the number of eigenvalues we observe that eigenvalues of $\bo{M}$ include only eigenvalues of $\bo{A}$ and $\bo{B}$.
+	Counting the number of eigenvalues, we observe that eigenvalues of $\bo{M}$ include only eigenvalues of $\bo{A}$ and $\bo{C}$.
 		
 	\end{flushleft}
 \end{frame}

@@ -1,0 +1,538 @@
+\documentclass{beamer}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\input{settings.tex}
+
+
+\title{Наблюдатель Люенбергера}
+\subtitle{Теория Управления, лекция 8}
+\author{Сергей Савин}
+\centering
+\date{\mydate}
+
+
+
+\begin{document}
+\maketitle
+
+
+
+%\begin{frame}{Content}
+%\begin{itemize}
+%\item Measurement
+%\item State Estimation
+%\item Observer
+%\item Observation and Control
+%\item Separation principle
+%\end{itemize}
+%\end{frame}
+
+
+
+\begin{frame}{Измерение и управление}
+	\begin{flushleft}
+		
+		Ранее мы рассматривали системы и законы управления следующего типа:
+		
+		\begin{equation}
+			\begin{cases}
+				\dot {\bo{x}} = \bo{A} \bo{x} + \bo{B} \bo{u}\\
+				\bo{u} = -\bo{K} \bo{x}
+			\end{cases}
+		\end{equation}
+		
+		Но при реализации этого закона управления, как нам узнать текущее значение $\bo{x}$?
+		
+		\bigskip
+		
+		На практике мы можем \emph{оценить} его с помощью \emph{измерений}.
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Почему информация несовершенна?}
+	\begin{flushleft}
+		
+		Существует ряд причин, по которым мы не можем непосредственно измерить состояние системы. Вот некоторые из них:
+		
+		\begin{itemize}
+			\item \textbf{Отсутствие датчиков.}
+			\item Цифровые измерения являются дискретными (доступны только в дискретные моменты времени).
+			\item Измерения могут быть зашумленными, запаздывающими или временно недоступными.
+			\item Неточности модели (гибкость, люфт, трение и т.д.) могут привести к тому, что истинное физическое состояние будет отличаться от модельного.
+			\item Неточные, нелинейные и имеющие смещение датчики.
+			\item Другие физические эффекты.
+		\end{itemize}
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Измерение и оценивание}
+	\begin{flushleft}
+		
+		Введем понятие \emph{наблюдателя}. Линейная система с наблюдателем принимает следующую форму:
+		
+		\begin{equation}
+			\begin{cases}
+				\dot {\bo{x}} = \bo{A} \bo{x} + \bo{B} \bo{u} \\
+				\bo{y} = \bo{C} \bo{x} \\
+				\dot{\hat{\bo{x}}} = \text{Наблюдатель} \ (\hat{\bo{x}}, \bo{u}, \bo{y}) \\
+				\bo{u} = -\bo{K}\hat{\bo{x}}
+			\end{cases}
+		\end{equation}
+		
+		где:
+		
+		\begin{itemize}
+			\item $\bo{x}$ и $\bo{y}$ — это состояние и выход (фактические, истинные)
+			\item $\hat{\bo{x}}$ и $\hat{\bo{y}} =\bo{C} \hat{\bo{x}}$ — это оцененное (наблюдаемое) состояние и выход.
+		\end{itemize}
+		
+		Обратите внимание, что регулятор не знает истинного состояния $\bo{x}$, и поэтому для целей управления мы должны использовать оцененное состояние $\hat{\bo{x}}$.
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Ошибка оценивания}
+	\begin{flushleft}
+		
+		Определим ошибку оценивания состояния:
+		
+		\begin{equation}
+			\bo{e} = \bo{x} - \hat{\bo{x}}
+		\end{equation}
+		
+		Отметим, что регулятор не может ее вычислить, так как ему неизвестно $\bo{x}$. Однако он может сравнить измеренный выход $\bo{y}$ с оцененным выходом $\hat{\bo{y}} =\bo{C} \hat{\bo{x}}$:
+		
+		\begin{equation}
+			\Tilde{\bo{y}} = \bo{y} -  \bo{C} \hat{\bo{x}}  
+		\end{equation}		
+		
+		Эта величина всегда может быть вычислена.
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Оценивание - динамика}
+	\begin{flushleft}
+		
+		Рассмотрим автономную динамическую систему
+		\begin{equation}
+			\label{eq:LTI}
+			\begin{cases}
+				\dot {\bo{x}} = \bo{A} \bo{x} + \bo{B} \bo{u} \\
+				\bo{y} = \bo{C} \bo{x}
+			\end{cases}
+		\end{equation}
+		%
+		с измерениями $\bo{y}$. Мы хотим получить как можно более качественную оценку состояния $\hat{\bo{x}}$.
+		
+		\bigskip
+		
+		Предложение: динамика также должна выполняться для наблюдаемого состояния:
+		\begin{equation}
+			\dot{\hat{\bo{x}}} = \bo{A} \hat{\bo{x}} + \bo{B} \bo{u}
+		\end{equation}
+		%
+		Если бы мы точно знали начальные условия, мы могли бы найти точное состояние системы без использования измерений $\bo{y}$. Это можно назвать наблюдением в разомкнутом контуре. К сожалению, мы не знаем начальные условия точно.
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Оценивание - наблюдатель}
+	\begin{flushleft}
+		
+		Мы предлагаем \emph{наблюдатель}, который учитывает измерения линейным образом; подобно линейному управлению $-\bo{K}\bo{x}$, здесь мы предлагаем закон линейной коррекции $\bo{L}\Tilde{\bo{y}}$. Помня, что $\Tilde{\bo{y}} = \bo{y} - \bo{C} \hat{\bo{x}}$, получаем:
+		
+		\begin{equation}
+			\label{eq:Observer}
+			\dot{\hat{\bo{x}}} = \bo{A} \hat{\bo{x}} + \bo{B} \bo{u} + \bo{L}(\bo{y} - \bo{C} \hat{\bo{x}})
+		\end{equation}
+		%
+		Это называется \emph{наблюдателем Люенбергера}. Следующая задача - найти подходящий коэффициент наблюдателя $ \bo{L}$.
+		
+		\bigskip
+		
+		Вычтем из $\dot {\bo{x}} = \bo{A} \bo{x} + \bo{B} \bo{u}$ уравнение наблюдателя \eqref{eq:Observer}, чтобы получить \emph{динамику ошибки наблюдателя}:
+		
+		\begin{align}
+			\dot {\bo{x}} - \dot{\hat{\bo{x}}} = 
+			\bo{A} \bo{x} - \bo{A} \hat{\bo{x}} - 
+			\bo{L}(\mathbf y - \bo{C} \hat{\bo{x}})
+			\\
+			\dot {\bo{x}} - \dot{\hat{\bo{x}}}
+			= 
+			\bo{A} (\bo{x} - \hat{\bo{x}} ) - 
+			\bo{L}(\bo{C} \bo{x} - \bo{C}\hat{\bo{x}} ) 
+		\end{align}
+		%
+		\begin{equation}
+			\dot {\bo{e} }= (\bo{A} - \bo{L} \bo{C})\bo{e} 
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Коэффициенты наблюдателя, часть 1}
+	\begin{flushleft}
+		
+		Наблюдатель $\dot {\bo{e} }= (\bo{A} - \bo{L} \bo{C})\bo{e} $ является \emph{устойчивым} (т.е. ошибка оценивания состояния стремится к нулю) до тех пор, пока следующая матрица имеет собственные значения с отрицательными вещественными частями:
+		
+		\begin{equation}
+			\bo{A} - 
+			\bo{L} \bo{C} \in \mathbb{H}
+		\end{equation}
+		
+		Нам нужно найти $\bo{L}$. Обратим внимание на небольшое различие между синтезом регулятора и синтезом наблюдателя:
+		
+		\bigskip
+		
+		\begin{itemize}
+			\item Синтез регулятора: найти такой $\bo{K}$, что $\bo{A} - \bo{B} \bo{K} \in \mathbb{H}$.
+			\item Синтез наблюдателя: найти такой $\bo{L}$, что: $\bo{A} - \bo{L} \bo{C} \in \mathbb{H}$
+		\end{itemize}
+		
+		\bigskip
+		
+		Коэффициент в случае наблюдателя находится слева, что препятствует прямому применению наших инструментов синтеза (метод размещения полюсов, LQR) для его настройки.
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Коэффициенты наблюдателя, часть 2}
+	\begin{flushleft}
+		
+		Если $\bo{A} - \bo{L} \bo{C}\in \mathbb{H}$, то $(\bo{A} - 
+		\bo{L} \bo{C})^{\top}\in \mathbb{H}$ (собственные значения матрицы и ее транспонированной версии одинаковы, см. Приложение). 
+		
+		\bigskip
+		
+		Следовательно, мы можем решить следующую \emph{двойственную задачу}:
+		
+		\begin{itemize}
+			\item найти такой $\bo{L}$, чтобы $\bo{A}^{\top} - 
+			\bo{C}^{\top} \bo{L}^{\top} \in \mathbb{H}$.
+		\end{itemize}
+		
+		\bigskip
+		
+		Эта двойственная задача \emph{эквивалентна} стандартной задаче синтеза управления. Мы можем решить ее с помощью метода размещения полюсов или через алгебраическое уравнение Риккати (LQR). В псевдокоде это можно представить следующим образом:
+		%
+		\begin{align*}
+			\bo{L}^{\top} \texttt{= lqr}(\bo{A}^{\top}, \bo{C}^{\top}, \mathbf Q, \mathbf R)
+			\ \ \ \text{или} \ \ \
+			\bo{L}^{\top} \texttt{= place}(\bo{A}^{\top}, \bo{C}^{\top}, \mathbf p)
+		\end{align*}
+		
+		где $\mathbf Q$ и $\mathbf R$ определяют скорость и чувствительность наблюдателя к шумам.
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Наблюдатель + Регулятор, часть 1}
+	\begin{flushleft}
+		
+		Таким образом, мы получаем комбинацию динамики + наблюдателя:
+		
+		\begin{equation}
+			\begin{cases}
+				\dot {\bo{x}} = \bo{A} \bo{x} + \bo{B} \bo{u} \\
+				\dot{\hat{\bo{x}}} = \bo{A} \hat{\bo{x}} + \bo{B} \mathbf u + \bo{L}(\mathbf y - \bo{C} \hat{\bo{x}})\\
+				\bo{y} = \bo{C} \bo{x} \\
+				\bo{u} = -\bo{K} \hat{\bo{x}}
+			\end{cases}
+		\end{equation}
+		
+		\bigskip
+		
+		где $\bo{A} - \bo{B} \bo{K} \in \mathbb{H}$ и $\bo{A}^{\top} - 
+		\bo{C}^{\top} \bo{L}^{\top} \in \mathbb{H}$.
+		
+		Перепишем динамику:
+		
+		\begin{equation}
+			\begin{cases}
+				\dot {\bo{x}} =\bo{A} \bo{x} - \bo{B} \bo{K} \hat{\bo{x}} 
+				\\
+				\dot{\hat{\bo{x}}} = \bo{A} \hat{\bo{x}} - \bo{B} \bo{K}\hat{\bo{x}} +\bo{L}\bo{C} \bo{x} - \bo{L}\bo{C} \hat{\bo{x}}
+			\end{cases}
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Наблюдатель + Регулятор, часть 2}
+	\framesubtitle{Анализ устойчивости}
+	\begin{flushleft}
+		
+		Перепишем динамику
+		
+		\begin{equation}
+			\begin{cases}
+				\dot {\bo{x}} = \textcolor{mydarkblue}{\bo{A}} \bo{x} \textcolor{mydarkpink}{- \bo{B} \bo{K}} \hat{\bo{x}} 
+				\\
+				\dot{\hat{\bo{x}}} = \textcolor{myyellow}{\bo{A}} \hat{\bo{x}} \textcolor{myyellow}{- \bo{B} \bo{K}} \hat{\bo{x}} + \textcolor{mydarkgreen}{\bo{L}\bo{C}} \bo{x} \textcolor{myyellow}{- \bo{L}\bo{C}} \hat{\bo{x}}
+			\end{cases}
+		\end{equation}
+		
+		в матричной форме:
+		
+		\begin{equation}
+			\begin{bmatrix}
+				\dot {\bo{x}} \\
+				\dot{\hat{\bo{x}}} 
+			\end{bmatrix}
+			=
+			\begin{bmatrix}
+				\textcolor{mydarkblue}{\bo{A}} & \textcolor{mydarkpink}{-\bo{B}\bo{K}}\\
+				\textcolor{mydarkgreen}{\bo{L}\bo{C}} & (\textcolor{myyellow}{\bo{A} - \bo{B}\bo{K}-\bo{L}\bo{C}})
+			\end{bmatrix}
+			\begin{bmatrix}
+				\bo{x} \\
+				\hat{\bo{x}}
+			\end{bmatrix}
+		\end{equation}
+		
+		\bigskip
+		
+		Собственные значения этой матрицы не очевидны. Но задача может быть упрощена с помощью замены переменных.
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Замкнутая система}
+	\framesubtitle{Замена переменных}
+	\begin{flushleft}
+		
+		Используем следующую подстановку: $\bo{e} = \bo{x} - \hat{\bo{x}}$, откуда следует $\hat{\bo{x}} = \bo{x} - \bo{e}$:
+		
+		Наша система имела вид:
+		
+		\begin{equation}
+			\begin{cases}
+				\dot {\bo{x}} = \textcolor{mydarkblue}{\bo{A} \bo{x} - \bo{B}\bo{K} \hat{\bo{x}}} \\
+				\dot{\hat{\bo{x}}} = \textcolor{mydarkpink}{\bo{A} \hat{\bo{x}} - \bo{B}\bo{K} \hat{\bo{x}} + \bo{L}\bo{C} \bo{x} - \bo{L}\bo{C} \hat{\bo{x}}}
+			\end{cases}
+		\end{equation}
+		
+		Поскольку $\dot{\bo{e}} = \textcolor{mydarkblue}{\dot{\bo{x}}} - \textcolor{mydarkpink}{\dot{\hat{\bo{x}}}}$, получаем:
+		%
+		\[
+		\dot{\bo{e}} = 
+		\textcolor{mydarkblue}{\bo{A} \bo{x} - \bo{B}\bo{K} \hat{\bo{x}}} - 
+		\textcolor{mydarkpink}{(\bo{A} \hat{\bo{x}} - \bo{B}\bo{K} \hat{\bo{x}} + \bo{L}\bo{C} \bo{x} - \bo{L}\bo{C} \hat{\bo{x}})}
+		\]
+		%
+		\[
+		\dot{\bo{e}} = 
+		\bo{A} (\bo{x} - \hat{\bo{x}}) - \bo{L}\bo{C}(\bo{x} - \hat{\bo{x}})
+		\]
+		%
+		\[
+		\dot{\bo{e}} = 
+		(\bo{A} - \bo{L}\bo{C})\bo{e}
+		\]
+		
+		Уравнение $\dot {\bo{x}} = \bo{A} \bo{x} - \bo{B}\bo{K} \hat{\bo{x}}$ принимает вид:
+		
+		\[
+		\dot {\bo{x}} = (\bo{A}-\bo{B}\bo{K}) \bo{x} + \bo{B}\bo{K}\bo{e}
+		\]
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Замкнутая система}
+	\framesubtitle{Верхнетреугольная форма}
+	\begin{flushleft}
+		
+		Собирая $\dot {\bo{x}}$ и $\dot{\bo{e}}$, получаем:
+		
+		\begin{equation}
+			\begin{cases}
+				\dot {\bo{x}} = (\bo{A}-\bo{B}\bo{K}) \bo{x} + \bo{B}\bo{K}\bo{e} \\
+				\dot{\bo{e}} = 
+				(\bo{A} - \bo{L}\bo{C})\bo{e}
+			\end{cases}
+		\end{equation}
+		
+		В матричной форме это принимает вид:
+		
+		\begin{equation}
+			\begin{bmatrix}
+				\dot {\bo{x}} \\
+				\dot{\bo{e}}
+			\end{bmatrix}
+			=
+			\begin{bmatrix}
+				(\bo{A}-\bo{B}\bo{K}) & \bo{B}\bo{K} \\
+				0 & (\bo{A} - \bo{L}\bo{C})
+			\end{bmatrix}
+			\begin{bmatrix}
+				\bo{x} \\
+				\bo{e}
+			\end{bmatrix}
+		\end{equation}
+		
+		Собственные значения верхней блочно-треугольной матрицы равны объединению собственных значений блоков на главной диагонали (см. Приложение B). Следовательно, в данном случае собственные значения системы равны объединению собственных значений $(\bo{A}-\bo{B}\bo{K})$ и $(\bo{A} - \bo{L}\bo{C})$.
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Принцип разделения}
+	\begin{flushleft}
+		
+		Поскольку собственные значения системы равны объединению собственных значений $(\bo{A}-\bo{B}\bo{K})$ и $(\bo{A} - \bo{L}\bo{C})$, мы можем сделать следующее наблюдение:
+		
+		\bigskip
+		
+		\begin{alertblock}{Принцип разделения}
+			До тех пор, пока наблюдатель и регулятор устойчивы по отдельности, вся система в целом также устойчива.
+		\end{alertblock}
+		
+		\bigskip
+		
+		Следовательно, коэффициент регулятора $\bo{K}$ и коэффициент наблюдателя $\bo{L}$ могут быть синтезированы независимо.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+
+
+\begin{frame}{Литература}
+	
+	\begin{itemize}
+		
+		
+		\item Dorf \& Bishop, Modern Control Systems (Chapter 11.4 Observer Design; Chapter 11.5 Integrated Full-State Feedback and Observer)		
+		
+		
+	\end{itemize}
+	
+\end{frame}
+
+\myqrframe
+
+
+\begin{frame}{Приложение A. Собственные значения транспонированной матрицы}
+	\begin{flushleft}
+		
+		Даны матрица $\bo{M}$, её собственное значение $\lambda$ и собственный вектор $\bo{v}$. Можно доказать, что $\lambda$ также является собственным значением $\bo{M}\T$.
+		
+		\begin{align}
+			\bo{M}\bo{v} = \lambda \bo{v} \\
+			\text{det}\ (\bo{M}- \bo{I} \lambda) = 0 \\
+			\text{det}\ (\bo{M}\T- \bo{I} \lambda) = 0 \\
+			\exists \bo{u} \ \text{такой, что} \ \bo{M}\T\bo{u} = \lambda \bo{u}
+		\end{align}
+		
+		Мы использовали тот факт, что определитель матрицы равен определителю её транспонированной версии: $\text{det}(\bo{A}) = \text{det}(\bo{A}\T)$.
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Приложение B, часть 1}
+	\framesubtitle{Собственные значения блочно-треугольных матриц}
+	\begin{flushleft}
+		
+		Дана матрица $\bo{M}$:
+		%
+		\begin{align}
+			\bo{M} = 
+			\begin{bmatrix}
+				\bo{A} & \bo{B} \\ \bo{0} & \bo{C}
+			\end{bmatrix}
+		\end{align}
+		
+		Пусть $\lambda$, $\bo{v}$ — собственное значение и собственный вектор $\bo{A}$, а $\mu$, $\bo{u}$ — собственное значение и собственный вектор $\bo{C}$. Можно доказать, что $\lambda$, $\bo{v}_M = \begin{bmatrix}
+			\bo{v} \\ 0
+		\end{bmatrix}$ являются собственным значением и собственным вектором $\bo{M}$:
+		
+		\begin{align}
+			\begin{bmatrix}
+				\bo{A} & \bo{B} \\ \bo{0} & \bo{C}
+			\end{bmatrix}
+			\begin{bmatrix}
+				\bo{v} \\ \bo{0}
+			\end{bmatrix}
+			=
+			\begin{bmatrix}
+				\bo{A}\bo{v} \\ \bo{0}
+			\end{bmatrix}
+			=
+			\lambda
+			\begin{bmatrix}
+				\bo{v} \\ \bo{0}
+			\end{bmatrix}.
+		\end{align}
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Приложение B, часть 2}
+	\framesubtitle{Собственные значения блочно-треугольных матриц}
+	\begin{flushleft}
+		
+		Если $\mu$ не является собственным значением $\bo{A}$, можно доказать, что $\mu$, $\bo{u}_M = \textcolor{mydarkpink}{\begin{bmatrix}
+				(\bo{I}\mu - \bo{A})^{-1} \bo{B} \bo{u}  \\  \bo{u} 
+		\end{bmatrix}}$ являются собственным значением и собственным вектором $\bo{M}$:
+		
+		\begin{align*}
+			\begin{bmatrix}
+				\bo{A} & \bo{B} \\ \bo{0} & \bo{C}
+			\end{bmatrix}
+			\begin{bmatrix}
+				(\bo{I}\mu - \bo{A})^{-1}\bo{B} \bo{u}  \\  \bo{u} 
+			\end{bmatrix}
+			=
+			\begin{bmatrix}
+				\bo{A}(\bo{I}\mu - \bo{A})^{-1}\bo{B} \bo{u} + \bo{B} \bo{u}
+				\\ 
+				\bo{C}\bo{u}
+			\end{bmatrix}
+			= \\
+			=
+			\begin{bmatrix}
+				(\bo{I}+\bo{A}(\bo{I}\mu - \bo{A})^{-1}) \bo{B} \bo{u}
+				\\ 
+				\mu \bo{u}
+			\end{bmatrix} 
+			=
+			\begin{bmatrix}
+				(\bo{I}\mu - \bo{A}+\bo{A})(\bo{I}\mu - \bo{A})^{-1} \bo{B} \bo{u}
+				\\ 
+				\mu \bo{u}
+			\end{bmatrix} 
+			= \\
+			=
+			\begin{bmatrix}
+				\mu(\bo{I}\mu - \bo{A})^{-1} \bo{B} \bo{u}
+				\\ 
+				\mu \bo{u}
+			\end{bmatrix} 
+			=
+			\mu 
+			\textcolor{mydarkpink}{
+				\begin{bmatrix}
+					(\bo{I}\mu - \bo{A})^{-1} \bo{B} \bo{u}
+					\\ 
+					\bo{u}
+				\end{bmatrix} 
+			}.
+		\end{align*}	
+		
+		Подсчитывая количество собственных значений, мы замечаем, что собственные значения $\bo{M}$ включают только собственные значения $\bo{A}$ и $\bo{C}$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+\end{document}

@@ -1,0 +1,855 @@
+\documentclass{beamer}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\input{settings.tex}
+
+
+\title{Линейный квадратичный регулятор}
+\subtitle{Теория Управления, лекция 7}
+\author{Сергей Савин}
+\centering
+\date{\mydate}
+
+
+
+\begin{document}
+\maketitle
+
+
+
+
+\begin{frame}{Размещение полюсов - проблемы, 1}
+	\begin{flushleft}
+		
+		Рассмотрим простой пример:
+		
+		\begin{equation}
+			\begin{bmatrix}
+				\dot {x}_1 \\ 
+				\dot {x}_2 \\ 
+				\dot {x}_3 \\ 
+				\dot {x}_4 
+			\end{bmatrix}
+			=
+			\begin{bmatrix}
+				1 &1 &0 &0\\
+				0 &2 &1 &0\\
+				0 &0 &3 &1\\
+				0 &0 &0 &-1
+			\end{bmatrix}
+			\begin{bmatrix}
+				x_1 \\ 
+				x_2 \\ 
+				x_3 \\ 
+				x_4 
+			\end{bmatrix}
+			+
+			\begin{bmatrix}
+				0 \\ 
+				0 \\ 
+				1 \\ 
+				0 
+			\end{bmatrix}
+			u
+		\end{equation}
+		
+		Мы можем найти такой закон управления $u = - k_1 x_1- k_2 x_2- k_3 x_3- k_4x_4$, который сделает систему устойчивой. Однако размещение полюсов столкнется с трудностями при выполнении этой задачи из-за собственного значения -1, на которое невозможно повлиять.
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Размещение полюсов - проблемы, 1}
+	\begin{flushleft}
+		
+		В общем случае размещение полюсов требует от вас:
+		
+		\begin{itemize}
+			\item знать, какие собственные значения запрашивать;
+			
+			\item испытывает трудности при работе с системами, где на некоторые собственные значения невозможно повлиять;
+			
+			\item испытывает трудности со специфическими задачами, например, установкой нескольких собственных значений на одно и то же значение;
+			
+			\item может приводить к необоснованно высоким коэффициентам усиления.
+		\end{itemize}
+		
+		Существует более совершенный метод, который находит "хорошие собственные значения" на основе того, насколько точной и экономичной (с точки зрения затрат на управление) вы хотите видеть вашу систему - \emph{линейный квадратичный регулятор (LQR)}.
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Политика управления}
+	\begin{flushleft}
+		
+		Определим динамику:
+		
+		\begin{equation}
+			\dot {\bo{x}} = \bo{f} (\bo{x}, \bo{u})
+		\end{equation}
+		%
+		с начальными условиями $\bo{x}(0)=\bo{x}_0$. 
+		
+		\bigskip
+		
+		Дополнительно определим \emph{политику управления} как:
+		
+		\begin{equation}
+			\bo{u} = \pi (\bo{x}, t)
+		\end{equation}
+		
+		Чтобы связать это с ранее рассмотренными способами описания управления, можно сказать, что выбор различных коэффициентов усиления обратной связи и различных значений предварительного управления соответствует выбору другой политики управления.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Стоимость, оптимальная стоимость}
+	\begin{flushleft}
+		
+		Пусть $J$ - аддитивная функция стоимости:
+		
+		\begin{equation}
+			J (\bo{x}_0, \pi (\bo{x}, t)) = \int_0^\infty g(\bo{x}, \bo{u}) dt
+		\end{equation}
+		%
+		где $g(\bo{x}, \bo{u})$ - мгновенная стоимость, а $\bo{x}_0 = \bo{x}(0)$ - начальные условия. Обратите внимание, что $J$ зависит от $\bo{x}_0$, а не от $\bo{x}(t)$, поскольку начальные условия и политика управления полностью определяют траекторию системы $\bo{x}(t)$.
+		
+		\bigskip
+		
+		Пусть $J^*$ - оптимальная (наименьшая возможная) стоимость. Другими словами:
+		
+		\begin{equation}
+			J^*(\bo{x}_0) = \underset{\pi}{\inf{}} J(\bo{x}_0, \pi (\bo{x}, t))
+		\end{equation}
+		
+		Оптимальная стоимость достигается при оптимальной политике: $\pi = \pi^*(\bo{x}, t)$
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Принцип динамического программирования в непрерывном времени (DPP)}
+	\begin{flushleft}
+		
+		Рассмотрим оптимальную траекторию $\bo{x}^*$ и два момента времени $t_1$ и $t_2 > t_1$, где $|t_2 - t_1| \rightarrow 0$. Соотношение между $J^*(\bo{x}^*(t_1))$ и $J^*(\bo{x}^*(t_2))$ описывается следующим выражением:
+		%
+		\begin{equation}
+			J^*(\bo{x}^*(t_1)) = \inf_\pi \left(  \underbrace{\int_{t_1}^{t_2} g(\bo{x}, \bo{u}) dt }_{\Delta J} +  J^*(\bo{x}^*(t_2))  \right)
+		\end{equation}
+		%
+		Оно подразумевает, что $J^*(\bo{x}^*(t_2))$, которая ``ближе к цели'', меньше, чем $J^*(\bo{x}^*(t_1))$ на величину $\Delta J$; где $\Delta J$ представляет собой дополнительные затраты, необходимые для перехода из $\bo{x}^*(t_1)$ в $\bo{x}^*(t_2)$. Это и есть \emph{Принцип динамического программирования(DPP)}  в непрерывном времени.
+		
+		\bigskip
+		
+		\textcolor{mygray}{подробнее в приложении}
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{DPP $\rightarrow$ HJB}
+	\begin{flushleft}
+		
+		Мы можем положить $t_1 = 0$ и $t_2 = h$ и разложить нелинейные функции $\Delta J$ и $J^*(\bo{x}^*(h))$ в окрестности $t = 0$:
+		%
+		\begin{align}
+			\Delta J &= h g(\bo{x}, \bo{u}) + o(h)
+			\\
+			J^*(\bo{x}^*(h)) &= J^*(\bo{x}^*(0)) + h \frac{\partial J}{\partial \bo{x}} \bo{f} (\bo{x}, \bo{u}) + o(h)
+		\end{align}
+		
+		Тогда DPP принимает вид:
+		%
+		\begin{equation}
+			J^*(\bo{x}^*(0)) = \inf_\pi \left(  h g(\bo{x}, \bo{u})  +  J^*(\bo{x}^*(0)) + h \frac{\partial J}{\partial \bo{x}} \bo{f} (\bo{x}, \bo{u}) + o(h)  \right)
+		\end{equation}
+		
+		Сокращаем $J^*(\bo{x}^*(0))$ в обеих частях, делим на $h$ и переходим к пределу $h \rightarrow 0$:
+		%
+		\begin{equation}
+			0 = \inf_\pi \left( g(\bo{x}, \bo{u})  +  \frac{\partial J}{\partial \bo{x}} \bo{f} (\bo{x}, \bo{u})  \right)
+		\end{equation}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Уравнение Гамильтона-Якоби-Беллмана, 1}
+	\begin{flushleft}
+		
+		С учетом этого мы можем сформулировать \emph{уравнение Гамильтона-Якоби-Беллмана} (HJB):
+		
+		\begin{equation}
+			\label{eq:HJB_0}
+			\underset{\bo{u}}{\inf} \ 
+			\left[ 
+			g(\bo{x}, \bo{u}) + 
+			\frac{\partial J^*}{\partial \bo{x}} \bo{f} (\bo{x}, \bo{u}) 
+			\right] = 0
+		\end{equation}
+		
+		\bigskip
+		
+		
+		Если минимизатор $\bo{u}$ существует, мы можем описать его как:
+		
+		\begin{equation}
+			\bo{u}^* = \underset{\bo{u}}{\text{argmin}} \ 
+			\left[ 
+			g(\bo{x}, \bo{u}) + 
+			\frac{\partial J^*}{\partial \bo{x}} \bo{f} (\bo{x}, \bo{u}) \right] 
+		\end{equation}
+		
+		Член $\frac{\partial J^*}{\partial \bo{x}} \bo{f} (\bo{x}, \bo{u})$ представляет собой производную $J^*$ по направлению векторного поля $\bo{f} (\bo{x}, \bo{u})$. 
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+
+\begin{frame}{Уравнение Гамильтона-Якоби-Беллмана, 2}
+	\begin{flushleft}
+		
+		Основная идея HJB заключается в том, что для любого субоптимального закона управления скорость накопления стоимости $g(\bo{x}, \bo{u})$ превышает скорость уменьшения $\frac{\partial J^*}{\partial \bo{x}} \bo{f} (\bo{x}, \bo{u})$ "оптимальной оставшейся стоимости от текущего положения до цели": 
+		
+		\begin{equation}
+			g(\bo{x}, \bo{u}) + 
+			\frac{\partial J^*}{\partial \bo{x}} \bo{f} (\bo{x}, \bo{u}) > 0
+		\end{equation}
+		
+		и только для оптимальной политики управления выполняется равенство HJB:
+		
+		\begin{equation}
+			g(\bo{x}, \bo{u}^*) + 
+			\frac{\partial J^*}{\partial \bo{x}} \bo{f} (\bo{x}, \bo{u}^*) 
+			= 0
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Алгебраическое ур-е Риккати (для ЛНС), 1}
+	\begin{flushleft}
+		
+		Для ЛНС (линейных непрерывных систем) динамика имеет вид:
+		\begin{equation}
+			\dot {\bo{x}} = \bo{A}  \bo{x} + \bo{B} \bo{u}
+		\end{equation}
+		
+		Мы можем выбрать квадратичную стоимость:
+		\begin{equation}
+			g(\bo{x}, \bo{u} ) = 
+			\bo{x}^\top \bo{Q} \bo{x} +
+			\bo{u} ^\top \bo{R} \bo{u} 
+		\end{equation}
+		%
+		где $\bo{Q} = \bo{Q}^\top \geq 0$ - положительно полуопределенная матрица, а $\bo{R} = \bo{R}^\top > 0$ - положительно определенная матрица.
+		
+		\bigskip
+		
+		Существует теорема, утверждающая, что для ЛНС с квадратичной стоимостью $J^*$ имеет вид:
+		
+		\begin{equation}
+			J^* = \bo{x}^\top \bo{S} \bo{x}
+		\end{equation}
+		%
+		где $\bo{S} = \bo{S}^\top \geq 0$.
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Алгебраическое ур-е Риккати (для ЛНС), 2}
+	\begin{flushleft}
+		
+		Вычислим член $\frac{\partial J^*}{\partial \bo{x}} \bo{f} (\bo{x}, \bo{u})$, фигурирующий в HJB. Используя тот факт, что $J^* =\bo{x}^\top \bo{S} \bo{x}$, перепишем его как:
+		
+		\begin{equation}
+			\frac{\partial J^*}{\partial \bo{x}} \bo{f} (\bo{x}, \bo{u}) = \frac{d}{dt}(\bo{x}^\top \bo{S}\bo{x})
+			=
+			\dot{\bo{x}}^\top \bo{S}\bo{x} + \bo{x}^\top \bo{S}\dot{\bo{x}} 
+		\end{equation}
+		
+		Поскольку $\dot {\bo{x}} = \bo{A}  \bo{x} + \bo{B} \bo{u}$, мы можем продолжить вывод:
+		
+		\begin{equation}
+			... =
+			(\bo{A}  \bo{x} + \bo{B} \bo{u})^\top \bo{S}\bo{x} + \bo{x}^\top \bo{S}(\bo{A}  \bo{x} + \bo{B} \bo{u})
+		\end{equation}
+		
+		
+		\bigskip
+		
+		Помня, что $g(\bo{x}, \bo{u} ) = 
+		\bo{x}^\top \bo{Q} \bo{x} +
+		\bo{u} ^\top \bo{R} \bo{u}$, запишем HJB $\underset{\bo{u}}{\min} \ 
+		\left[ 
+		g(\bo{x}, \bo{u}) + 
+		\frac{\partial J^*}{\partial \bo{x}} \bo{f} (\bo{x}, \bo{u}) 
+		\right] = 0$ в виде:
+		
+		\[
+		\underset{\bo{u}}{\min} \ 
+		\left [ 
+		\mathbf  x^\top \bo{Q} \bo{x} +
+		\mathbf  u^\top \bo{R} \bo{u}
+		+ 
+		\bo{x}^\top \bo{S}
+		(\bo{A} \bo{x} + \bo{B} \bo{u}) 
+		+ 
+		(\bo{A} \bo{x} + \bo{B} \bo{u})^\top
+		\bo{S} \bo{x}
+		\right ] = 0
+		\]
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+
+
+\begin{frame}{Алгебраическое ур-е Риккати (для ЛНС), 3}
+	\begin{flushleft}
+		
+		Мы можем упростить выражение $\mathbf  x^\top \bo{Q} \bo{x} +
+		\bo{u}^\top \bo{R} \bo{u}
+		+ 
+		\bo{x}^\top \bo{S}
+		(\bo{A} \bo{x} + \bo{B} \bo{u}) 
+		+ 
+		(\bo{A} \bo{x} + \bo{B} \bo{u})^\top
+		\bo{S} \bo{x}$ следующим образом:
+		
+		
+		\[
+		\underset{\bo{u}}{\min} \ 
+		\left [ 
+		\bo{u}^\top \bo{R} \bo{u}
+		+ 
+		\bo{x}^\top (
+		\bo{Q} + \bo{S} \bo{A} + \bo{A}^\top \bo{S}
+		)\bo{x}
+		+ 
+		\bo{x}^\top \bo{S} \bo{B} \bo{u} 
+		+ \bo{u}^\top \bo{B}^\top \bo{S} \bo{x} 
+		\right ] = 0
+		\]
+		
+		
+		\bigskip
+		
+		Минимум достигается, когда функция находится в экстремуме, то есть $\frac{\partial}{\partial \bo{u}} (...) = 0$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+
+\begin{frame}{Линейный квадратичный регулятор, 1}
+	\begin{flushleft}
+		
+		
+		Приравнивая частные производные $\bo{u}^\top \bo{R} \bo{u}
+		+ 
+		\bo{x}^\top (
+		\bo{Q} + \bo{S} \bo{A} + \bo{A}^\top \bo{S}
+		)\bo{x}
+		+ 
+		\bo{x}^\top \bo{S} \bo{B} \bo{u} 
+		+ \bo{u}^\top \bo{B}^\top \bo{S} \bo{x}$ к нулю:
+		
+		
+		\begin{align}
+			2 \bo{u} ^\top \bo{R} + 
+			2 \bo{x}^\top \bo{S} \bo{B} = 0
+			\\
+			\bo{R} \bo{u} + 
+			\bo{B}^\top   \bo{S} \bo{x}= 0
+			\\
+			\boxed{
+				\bo{u} = 
+				-\bo{R}^{-1} \bo{B}^\top \bo{S} \bo{x}}
+		\end{align}
+		
+		Это и есть искомый закон управления. Мы видим, что он является \emph{пропорциональным}. Мы можем переписать его как:
+		
+		\begin{equation}
+			\bo{u} = -\bo{K} \bo{x}
+		\end{equation}
+		
+		где $\bo{K}  = \bo{R}^{-1} \bo{B}^\top \bo{S}$ - коэффициент усиления регулятора. Этот закон управления называется \emph{линейным квадратичным регулятором (LQR)}.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Линейный квадратичный регулятор, 2}
+	\begin{flushleft}
+		
+		Подставим $\bo{u} = -\bo{R}^{-1} \bo{B}^\top \bo{S} \bo{x}$ в алгебраическое уравнение Риккати $\bo{u}^\top \bo{R} \bo{u}
+		+ 
+		\bo{x}^\top (
+		\bo{Q} + \bo{S} \bo{A} + \bo{A}^\top \bo{S}
+		)\bo{x}
+		+ 
+		\bo{x}^\top \bo{S} \bo{B} \bo{u} 
+		+ \bo{u}^\top \bo{B}^\top \bo{S} \bo{x}$:
+		
+		\begin{align*}
+			\hspace*{-0.7cm}
+			\textcolor{myred}{(\bo{R}^{-1} \bo{B}^\top \bo{S} \bo{x})}^\top \bo{R} \textcolor{myred}{(\bo{R}^{-1} \bo{B}^\top \bo{S} \bo{x})}
+			+ 
+			\bo{x}^\top (
+			\bo{Q} + \bo{S} \bo{A} + \bo{A}^\top \bo{S}
+			)\bo{x}
+			- 
+			\\
+			-
+			\bo{x}^\top \bo{S} \bo{B} \textcolor{myred}{(\bo{R}^{-1} \bo{B}^\top \bo{S} \bo{x})}
+			- 
+			\textcolor{myred}{(\bo{R}^{-1} \bo{B}^\top \bo{S} \bo{x})}^\top \bo{B}^\top \bo{S} \bo{x} = 0
+			\\
+		\end{align*}
+		%
+		\begin{align*}
+			\bo{x}^\top (
+			\bo{Q} + \bo{S} \bo{A} + \bo{A}^\top \bo{S}
+			+
+			\bo{S} \bo{B} \bo{R}^{-1} \bo{R} \mathbf  R^{-1} \bo{B}^\top \bo{S} -
+			\\
+			- \bo{S} \bo{B} \bo{R}^{-1} \bo{B}^\top \bo{S} 
+			- \bo{S} \bo{B} \bo{R}^{-1} \bo{B}^\top \bo{S} 
+			)  \bo{x} 
+			= 0
+		\end{align*}
+		
+		Упрощая, получаем: 
+		
+		\begin{equation}
+			\bo{x}^\top (\bo{Q} + \bo{S} \bo{A} + \bo{A}^\top \bo{S}
+			- \bo{S} \bo{B} \bo{R}^{-1} \bo{B}^\top \bo{S}) \bo{x} = 0
+		\end{equation}
+		%
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Линейный квадратичный регулятор, 3}
+	\begin{flushleft}
+		
+		Условие $\bo{x}^\top (\bo{Q} + \bo{S} \bo{A} + \bo{A}^\top \bo{S}
+		- \bo{S} \bo{B} \bo{R}^{-1} \bo{B}^\top \bo{S}) \bo{x} = 0$ выполняется для всех $\bo{x}$ тогда и только тогда, когда:
+		
+		\begin{equation}
+			\boxed{
+				\bo{Q} - \bo{S} \bo{B} \bo{R}^{-1} \bo{B}^\top \bo{S} 
+				+ \bo{S} \bo{A} + \bo{A}^\top \bo{S} = 0}
+		\end{equation}
+		
+		Это и есть \emph{алгебраическое уравнение Риккати}.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{LQR с помощью ПО}
+	\begin{flushleft}
+		
+		Существует несколько способов решить LQR:
+		
+		\bigskip
+		
+		\begin{itemize}
+			\item В MATLAB есть функция \texttt{[K,S,P] = lqr(A,B,Q,R), где P=eig(A-B*K)}
+			\item В Python есть \texttt{S = scipy.linalg.solve\_continuous\_are(A,B,Q,R)}
+			%    \item В Drake есть функция \texttt{(K,S) = LinearQuadraticRegulator(A,B,Q,R)}
+		\end{itemize}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{LQR и размещение полюсов}
+	\begin{flushleft}
+		
+		\begin{itemize}
+			\item Размещение полюсов \textcolor{mydarkgreen}{плюсы}: позволяет точно спроектировать, как быстро ошибка управления стремится к нулю; позволяет проектировать колебания ошибки управления.
+			
+			\item Размещение полюсов \textcolor{red}{минусы}: может требовать необоснованно высоких коэффициентов усиления. Легко запросить "нереализуемую" производительность.
+			
+			\item LQR \textcolor{mydarkgreen}{плюсы}: легко получить "разумные" коэффициенты усиления.
+			
+			\item LQR \textcolor{red}{минусы}: может давать очень медленно затухающую ошибку управления с колебаниями.
+		\end{itemize}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Дискретный случай}
+	\begin{flushleft}
+		
+		Рассмотрим дискретную динамику:
+		
+		\begin{equation}
+			\bo{x}_{i+1} = \bo{A}\bo{x}_i + \bo{B}\bo{u}_i
+		\end{equation}
+		
+		с функцией стоимости:
+		
+		\begin{equation}
+			J = \sum_{i=0}^\infty (\bo{x}_i\T \bo{Q} \bo{x}_i +  \bo{u}_i\T \bo{R} \bo{u}_i)
+		\end{equation}
+		
+		Найдем оптимальную политику управления для этого случая.
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Оставшаяся стоимость, 1}
+	\begin{flushleft}
+		
+		Определим оставшуюся стоимость как оптимальную стоимость для заданных начальных условий:
+		%
+		\begin{equation}
+			V_0 = \underset{\bo{u}}{\text{min}} \sum_{i=0}^\infty (\bo{x}_i\T \bo{Q} \bo{x}_i +  \bo{u}_i\T \bo{R} \bo{u}_i)
+		\end{equation}
+		
+		Если $\bo{x}_0$, $\bo{x}_1$, $\bo{x}_2$, ... - это последовательность состояний, образующих оптимальную траекторию, определим оставшуюся стоимость, начиная с каждого из этих состояний, как:
+		%
+		\begin{equation}
+			V_i =  \underset{\bo{u}}{\text{min}} \sum_{k = i}^\infty (\bo{x}_k\T \bo{Q} \bo{x}_k +  \bo{u}_k\T \bo{R} \bo{u}_k)
+		\end{equation}
+		
+		Можно заметить, что оптимальная стоимость примет форму квадратичной функции:
+		
+		\begin{equation}
+			V_i = \bo{x}_i\T \bo{P}_i \bo{x}_i
+		\end{equation}
+		
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Оставшаяся стоимость, 2}
+	\begin{flushleft}
+		
+		Мы можем записать оставшуюся стоимость как:
+		
+		\begin{equation}
+			\label{Bellman}
+			V_i(\bo{x}_i) = \underset{\bo{u}_i}{\text{min}} 
+			\left(
+			\bo{x}_i\T \bo{Q} \bo{x}_i +  \bo{u}_i\T \bo{R} \bo{u}_i  + V_{i+1}(\bo{x}_{i+1})  
+			\right)
+		\end{equation}
+		%
+		где $V_{i+1}(\bo{x}_{i+1})$ - оптимальная оставшаяся стоимость на следующем шаге. 
+		
+		\bigskip
+		
+		Поскольку следующий шаг ближе к цели, оптимальная оставшаяся стоимость на следующем шаге как меньше, чем на текущем шаге, так и содержится в ней.
+		
+		\bigskip
+		
+		Уравнение \eqref{Bellman} называется \emph{уравнением Беллмана}.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Дискретный LQR, 1}
+	\begin{flushleft}
+		
+		Поскольку $V_i = \bo{x}_i\T \bo{P}_i \bo{x}_i$ и $V_{i+1} = \bo{x}_{i+1}\T \bo{P}_{i+1} \bo{x}_{i+1}$, мы можем переписать уравнение Беллмана как:
+		
+		\begin{equation}
+			\bo{x}_i\T \bo{P}_i \bo{x}_i = \underset{\bo{u}_i}{\text{min}} 
+			\left(
+			\bo{x}_i\T \bo{Q} \bo{x}_i +  \bo{u}_i\T \bo{R} \bo{u}_i  + \bo{x}_{i+1}\T \bo{P}_{i+1} \bo{x}_{i+1}
+			\right)
+		\end{equation}
+		
+		Чтобы найти минимум по $\bo{u}_i$, приравняем частную производную к нулю:
+		
+		\begin{align*}
+			\frac{\partial}{\partial \bo{u}_i}
+			\left( 
+			\bo{x}_i \T \bo{Q} \bo{x}_i  +  \bo{u}_i\T \bo{R}\bo{u}_i + 
+			(\bo{A}\bo{x}_i  + \bo{B}\bo{u}_i)\T \bo{P}_{i+1} (\bo{A}\bo{x}_i  + \bo{B}\bo{u}_i) 
+			\right) = 0
+			\\
+			2\bo{u}_i\T \bo{R}  + 
+			2(\bo{A}\bo{x}_i + \bo{B}\bo{u}_i)\T \bo{P}_{i+1} \bo{B} = 0
+			\\
+			\bo{R}\bo{u}_i + \bo{B}\T \bo{P}_{i+1} \bo{B} \bo{u}_i + \bo{B}\T \bo{P}_{i+1} \bo{A}\bo{x}_i  = 0
+			\\
+			(\bo{R} + \bo{B}\T \bo{P}_{i+1} \bo{B}) \bo{u}_i = -\bo{B}\T \bo{P}_{i+1} \bo{A}\bo{x}_i 
+			\\
+			\bo{u}_i = -(\bo{R} + \bo{B}\T \bo{P}_{i+1} \bo{B})^{-1} \bo{B}\T \bo{P}_{i+1} \bo{A}\bo{x}_i 
+		\end{align*}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Обратное распространение, 1}
+	\begin{flushleft}
+		
+		{\small
+		Определим $\bo{M} = (\textcolor{myblue}{\bo{R} + \bo{B}\T \bo{P}_{i+1} \bo{B}})^{-1}$ и $\bo{N} =\textcolor{mydarkgreen}{\bo{B}\T \bo{P}_{i+1} \bo{A}}$, тогда мы можем переписать закон управления:
+		%
+		\begin{equation}
+			\bo{u}_i = -\bo{M} \bo{N} \bo{x}_i
+		\end{equation}
+		
+		Мы можем подставить закон управления в уравнение Беллмана:
+		%
+		\begin{equation*}
+			\bo{x}_i\T \bo{P}_i \bo{x}_i
+			= \underset{\bo{u}}{\text{min}} 
+			(\bo{x}_i\T \bo{Q} \bo{x}_i +  \textcolor{myred}{\bo{u}_i}\T \bo{R} \textcolor{myred}{\bo{u}_i}  + 
+			(\bo{A}\bo{x}_i + \bo{B}\textcolor{myred}{\bo{u}_i})\T \bo{P}_{i+1} (\bo{A}\bo{x}_i + \bo{B}\textcolor{myred}{\bo{u}_i}) 
+			)
+		\end{equation*}
+		%
+		\begin{align*}
+			\bo{x}_i\T \bo{P}_i \bo{x}_i
+			= 
+			\bo{x}_i\T \bo{Q} \bo{x}_i +  \textcolor{myred}{\bo{x}_i\T \bo{N}\T \bo{M}} \bo{R} \textcolor{myred}{\bo{M} \bo{N} \bo{x}_i}  + 
+			\\
+			+
+			(\bo{A}\bo{x}_i - \bo{B}\textcolor{myred}{\bo{M} \bo{N} \bo{x}_i})\T \bo{P}_{i+1} (\bo{A}\bo{x}_i - \bo{B}\textcolor{myred}{\bo{M} \bo{N} \bo{x}_i}) 
+		\end{align*}
+		%
+		\begin{align*}
+			\bo{P}_i 
+			= 
+			\bo{Q} +  \bo{N}\T \bo{M}\textcolor{myblue}{ \bo{R}} \bo{M} \bo{N} + \bo{A}\T \bo{P}_{i+1} \bo{A} - 
+			\textcolor{mydarkgreen}{\bo{A}\T \bo{P}_{i+1} \bo{B}} \bo{M} \bo{N} - \\
+			\bo{N}\T  \bo{M} \textcolor{mydarkgreen}{\bo{B}\T  \bo{P}_{i+1} \bo{A}}  +
+			\bo{N}\T  \bo{M}\textcolor{myblue}{ \bo{B}\T  \bo{P}_{i+1} \bo{B}} \bo{M} \bo{N} 
+		\end{align*}
+		%
+		\begin{align*}\hspace*{-0.8cm} %\scriptstyle
+			\bo{P}_i 
+			= 
+			\bo{Q}  + \bo{A}\T \bo{P}_{i+1} \bo{A}  +  \bo{N}\T \bo{M}\textcolor{myblue}{ (\bo{R} + \bo{B}\T  \bo{P}_{i+1} \bo{B})} \bo{M} \bo{N}
+			-\bo{N}\T \bo{M} \bo{N} 
+			-\bo{N}\T  \bo{M} \bo{N}  
+		\end{align*}
+		%
+		\begin{align*}
+			\bo{P}_i = 	\bo{Q} + \bo{A}\T \bo{P}_{i+1} \bo{A} - \bo{N}\T  \bo{M} \bo{N}  
+		\end{align*}
+		
+	}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Обратное распространение, 2}
+	\begin{flushleft}
+		
+		Из $\bo{P}_i = 	\bo{Q} + \bo{A}\T \bo{P}_{i+1} \bo{A} - \textcolor{mydarkgreen}{\bo{N}}\T  \textcolor{myblue}{\bo{M}} \textcolor{mydarkgreen}{\bo{N}}  $ получаем окончательный результат:
+		
+		\begin{align*}
+			\bo{P}_i = 	\bo{Q} + \bo{A}\T \bo{P}_{i+1} \bo{A} - 
+			\textcolor{mydarkgreen}{\bo{A}\T\bo{P}_{i+1}\bo{B}}  \textcolor{myblue}{(\bo{R} + \bo{B}\T \bo{P}_{i+1} \bo{B})^{-1} } \textcolor{mydarkgreen}{\bo{B}\T \bo{P}_{i+1} \bo{A}}
+		\end{align*}
+		
+		Это уравнение можно использовать для вычисления $\bo{P}_i$ по известному $\bo{P}_{i+1}$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Further reading}
+	\begin{flushleft}
+		
+\begin{itemize}
+	\item \bref{http://underactuated.mit.edu/lqr.html}{Underactuated robotics. Linear Quadratic Regulators}.
+	
+	\item \bref{https://stanford.edu/class/ee363/lectures/dlqr.pdf}{Discrete LQR. Stanford, EE363}.
+	
+	\item \bref{https://web.stanford.edu/class/ee363/lectures/dlqr-ss.pdf}{Discrete LQR (infinite horizon). Stanford, EE363}.
+	
+	\item \bref{https://ocw.mit.edu/courses/14-451-dynamic-optimization-methods-with-applications-fall-2009/7db0775fbdf792afff92a24b8456fc85\_MIT14\_451F09\_lec10.pdf}{MIT 14.451 Lecture Notes, 10, Guido Lorenzoni}
+\end{itemize}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+\myqrframe
+
+\begin{frame}
+	\centerline{\huge Приложение A:}
+	
+	\bigskip
+	
+	\centerline{\huge о выводе уравнения }
+	\centerline{\huge Гамильтона-Якоби-Беллмана}
+\end{frame}
+
+
+\begin{frame}{Оптимальность, определения}
+	\begin{flushleft}
+		
+		Рассмотрим аддитивную стоимость $J (\bo{x}_0, \pi (\bo{x})) = \int_0^\infty g(\bo{x}, \bo{u}) dt$, где $\bo{u} = \pi (\bo{x})$ — это политика управления. Функция $g(\bo{x}, \bo{u}) \geq 0$ может интерпретироваться как скорость изменения стоимости.
+		
+		\bigskip
+		
+		Пусть $\pi^*(\bo{x})$ — оптимальная политика управления. Применяя оптимальную политику к динамике $\dot{\bo{x}} = f(\bo{x}, \bo{u})$, мы получаем оптимальную динамику:
+		%
+		\begin{equation}
+			\dot{\bo{x}} = f^*(\bo{x}) = f(\bo{x}, \pi^*(\bo{x}))
+		\end{equation}
+		
+		При заданных начальных условиях $\bo{x}_0 = \bo{z}$ мы порождаем оптимальную траекторию $\bo{x}^* = \bo{x}^*(t, \bo{z})$. Имея оптимальную траекторию и оптимальную политику управления, мы находим оптимальную стоимость:
+		%
+		\begin{equation}
+			J^*(\bo{z}) = J(\bo{z}, \pi^* (\bo{x}))
+		\end{equation}
+		
+		Эквивалентно, мы находим оптимальную мгновенную стоимость:
+		%
+		\begin{equation}
+			g^*(\bo{x}) = g(\bo{x}, \pi^* (\bo{x}))
+		\end{equation}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Понесённые затраты}
+	%\framesubtitle{}
+	\begin{flushleft}
+		
+		{\small 
+		Поскольку оптимальная стоимость зависит только от начальных условий, мы можем найти функцию $J^* = J^*(\bo{z})$, определённую на $\R^n$.
+		
+		\bigskip
+		
+		Рассмотрим траекторию $\bo{x}^* = \bo{x}^*(t, \bo{z})$ и последовательность точек на этой траектории $\bo{x}_0$, $\bo{x}_1$, $\bo{x}_2$ и т.д., соответствующих моментам времени $t_0$, $t_1$, $t_2$ и т.д. Мы можем определить понесённые затраты (понесённые при движении от начального состояния $\bo{z} = \bo{x}_0$ до данной точки) для каждой из этих точек $S_0$, $S_1$, $S_2$ и т.д. как:
+		
+		\begin{equation}
+			S_i = \int_0^{t_i} g^*(\bo{x}) dt
+		\end{equation}
+		
+		Поскольку $g^*(\bo{x}) \geq 0$, мы замечаем, что $S_0 \leq S_1 \leq S_2 \leq ...$. Двигаясь вдоль траектории $\bo{x}^*(t, \bo{z})$, мы несём монотонно возрастающие затраты. Мы можем описать это как функцию времени $S(t)$. Скорость возрастания этой функции задаётся мгновенной стоимостью $g^*(\bo{x})$.
+	}
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Оставшаяся стоимость}
+	%\framesubtitle{}
+	\begin{flushleft}
+		
+		{\small 
+		Мы знаем, что оптимальная стоимость из точки $\bo{z}$ задаётся как $J^*(\bo{z})$. Для каждой последующей точки на траектории мы можем определить \emph{оставшуюся стоимость} $V_i$ как разность между оптимальной стоимостью и понесёнными затратами:
+		
+		\begin{equation}
+			V_i = J^*(\bo{z}) - S_i
+		\end{equation}
+		
+		Для данной траектории мы можем описать оставшуюся стоимость как функцию времени $V(t) = J^*(\bo{z}) - S(t)$. Поскольку $S(t)$ монотонно возрастает, функция $V(t)$ монотонно убывает со скоростью изменения, равной $-g^*(\bo{x})$.
+		
+		\bigskip
+		
+		Обратите внимание, что оставшуюся стоимость можно найти также как:
+		
+		\begin{equation}
+			V(t) = J^*(\bo{x}^*(t))
+		\end{equation}
+		%
+		поскольку оптимальная стоимость, которую мы понесём, стартуя из точки $\bo{x}_i$, эквивалентна стоимости, которую "ещё предстоит понести", когда мы достигнем $\bo{x}_i$ из $\bo{x}_0$.
+	}
+	
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Оптимальность}
+	%\framesubtitle{}
+	\begin{flushleft}
+		
+		Исходя из этого, мы можем сделать следующее наблюдение: для оптимальной политики мы видим, что скорость изменения функции оставшейся стоимости равна $-g^*(\bo{x})$. Но эту скорость изменения можно найти, взяв производную $J^*(\bo{x})$ по направлению векторного поля $\dot{\bo{x}} = f^*(\bo{x})$:
+		
+		\begin{equation}
+			-g^*(\bo{x}) = \frac{\partial J^*}{\partial \bo{x}} f^*(\bo{x})
+		\end{equation}
+		
+		Для субоптимальных политик управления понесённые затраты будут обгонять убывание оставшейся стоимости:
+		
+		\begin{equation}
+			g(\bo{x}, \bo{u}) + \frac{\partial J^*}{\partial \bo{x}} f(\bo{x}, \bo{u}) \geq 0
+		\end{equation}
+		
+		Оптимальная политика восстанавливает искомое равенство:
+		
+		\begin{equation}
+			\underset{\bo{u}}{\min} \ 
+			\left[ 
+			g(\bo{x}, \bo{u}) + 
+			\frac{\partial J^*}{\partial \bo{x}} \bo{f} (\bo{x}, \bo{u}) 
+			\right] = 0
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+
+\end{document}

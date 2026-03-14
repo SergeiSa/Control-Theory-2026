@@ -92,6 +92,18 @@ jobs:
           name: Discrete.pdf
           path: Slides_RU/Discrete/main.pdf
 
+      - name: Save HJB_LQR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: HJB_LQR.pdf
+          path: Slides_RU/HJB_LQR/main.pdf
+
+      - name: Save Observer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Observer.pdf
+          path: Slides_RU/Observer/main.pdf
+
 
 
 
@@ -104,6 +116,8 @@ jobs:
           mv Slides_RU/Laplace/main.pdf Slides_RU/Laplace.pdf
           mv Slides_RU/Bode/main.pdf Slides_RU/Bode.pdf
           mv Slides_RU/Discrete/main.pdf Slides_RU/Discrete.pdf
+          mv Slides_RU/HJB_LQR/main.pdf Slides_RU/HJB_LQR.pdf
+          mv Slides_RU/Observer/main.pdf Slides_RU/Observer.pdf
           
           git config --global user.name 'CI PDF compiler'
           git config --global user.email '<>'
@@ -113,6 +127,8 @@ jobs:
           git add Slides_RU/Laplace.pdf
           git add Slides_RU/Bode.pdf
           git add Slides_RU/Discrete.pdf
+          git add Slides_RU/HJB_LQR.pdf
+          git add Slides_RU/Observer.pdf
 
 
           git commit -m "Update compiled PDFs"
