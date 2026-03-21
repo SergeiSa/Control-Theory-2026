@@ -1,0 +1,639 @@
+\documentclass{beamer}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\input{settings.tex}
+
+
+\title{Управляемость, наблюдаемость}
+\subtitle{Теория управления, лекция 9}
+\author{Сергей Савин}
+\centering
+\date{\mydate}
+
+
+
+\begin{document}
+\maketitle
+
+
+%\begin{frame}{Content}
+%\begin{itemize}
+%\item Cayley–Hamilton
+%\item Controllability of Discrete LTI
+%\begin{itemize}
+%    \item Controllability matrix
+%    \item Controllability criterion
+%\end{itemize}
+%\item Observability of Discrete LTI
+%\begin{itemize}
+%    \item Dual system
+%    \item Observability criterion
+%\end{itemize}
+%%\item Analytical solution to ODE
+%%\item Forced State Response
+%\item Controllability of Continuous-Time LTI
+%\end{itemize}
+%\end{frame}
+
+
+
+
+
+
+\begin{frame}{Определения}
+	\begin{flushleft}
+		
+		\begin{definition}[Управляемость]
+			Система называется управляемой на интервале времени $t_0 \leq t \leq t_f$, если существует управляющее воздействие $u(t)$, которое переводит систему из любого начального состояния $\bo{x}(t_0)$ в желаемое состояние $\bo{x}(t_f)$.
+		\end{definition}
+		
+		\begin{definition}[Наблюдаемость]
+			Система называется наблюдаемой на интервале времени $t_0 \leq t \leq t_f$, если, используя выходной сигнал $\bo{y}(t)$ на этом интервале, можно точно оценить состояние системы $\bo{x}(t_f)$ при любой начальной ошибке оценивания.
+		\end{definition}
+		
+		\begin{definition}[Наблюдаемость, альтернативное определение]
+			Система называется наблюдаемой на интервале времени $t_0 \leq t \leq t_f$, если любое начальное состояние $\bo{x}(t_0)$ однозначно определяется выходным сигналом $\bo{y}(t)$ на этом интервале.
+		\end{definition}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+
+\begin{frame}{Управляемость дискретных ЛНС}
+	\begin{flushleft}
+		
+		Рассмотрим дискретную линейную стационарную систему (ЛНС):
+		\begin{equation}
+			\bo{x}_{i+1} = \bo{A}  \bo{x}_i + \bo{B} \bo{u}_i
+		\end{equation}
+		
+		Предположим, что начальное состояние равно $\bo{x}_1$. Тогда можно вывести:
+		
+		\begin{align*}
+			\bo{x}_2 &= \bo{A} \bo{x}_1 + \bo{B} \bo{u}_1 \\
+			\bo{x}_3 &= \bo{A} \bo{x}_2 + \bo{B} \bo{u}_2 = \bo{A} (\bo{A} \bo{x}_1 + \bo{B} \bo{u}_1) + \bo{B} \bo{u}_2 \\
+			\bo{x}_4 &= \bo{A} \bo{x}_3 + \bo{B} \bo{u}_3 = \bo{A} (\bo{A} (\bo{A} \bo{x}_1 + \bo{B} \bo{u}_1) + \bo{B} \bo{u}_2) + \bo{B} \bo{u}_3 \\
+			... \\
+			\bo{x}_{n+1} &= \bo{A}^n \bo{x}_1 + \bo{A}^{n-1} \bo{B} \bo{u}_1 + ... + 
+			\bo{A}^{n - k} \bo{B} \bo{u}_{k} + ... + 
+			\bo{A} \bo{B} \bo{u}_{n-1} +
+			\bo{B} \bo{u}_n
+		\end{align*}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Матрица управляемости}
+	\begin{flushleft}
+		
+		Выражение $\bo{x}_{n+1} = \bo{A}^n \bo{x}_1 + \bo{A}^{n-1} \bo{B} \bo{u}_1 + ... 
+		+ \bo{A}^{n - k} \bo{B} \bo{u}_{k} + ... +
+		\bo{A} \bo{B} \bo{u}_{n-1} + \bo{B} \bo{u}_n$ можно переписать как:
+		
+		\begin{equation}
+			\bo{x}_{n+1} - \bo{A}^n \bo{x}_1 = 
+			\begin{bmatrix}
+				\bo{B} &
+				\bo{A} \bo{B} &
+				\bo{A}^2 \bo{B} & ... &
+				\bo{A}^{n - 1} \bo{B}
+			\end{bmatrix}    
+			\begin{bmatrix}
+				\bo{u}_{n} \\
+				\bo{u}_{n-1} \\
+				\bo{u}_{n-2} \\ ... \\
+				\bo{u}_{1}
+			\end{bmatrix}
+		\end{equation}
+		
+		Заметим, что для перехода системы из состояния $\bo{x}_1$ в $\bo{x}_{n+1}$ вектор $\bo{x}_{n+1} - \bo{A}^n \bo{x}_1$ должен принадлежать пространству столбцов матрицы $\mathcal{C} = \begin{bmatrix}
+			\bo{B} &
+			\bo{A} \bo{B} & ... &
+			\bo{A}^{n - 1} \bo{B}
+		\end{bmatrix}$.
+		
+		Поскольку $\bo{x}_{n+1}$ может быть произвольным, а $\bo{x}_1$ может быть равным нулю (среди прочих возможностей), мы должны потребовать, чтобы все векторы в $\R^n$ находились в пространстве столбцов $\mathcal{C}$, что означает, что $\mathcal{C}$ должна иметь полный строчный ранг.
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Критерий управляемости}
+	\begin{flushleft}
+		
+		\begin{block}{Управляемость}
+			Система $\bo{x}_{i+1} = \bo{A}  \bo{x}_i + \bo{B} \bo{u}_i$, $\bo{x} \in \R^n$ является \emph{управляемой}, если ее матрица управляемости $\mathcal{C} = \begin{bmatrix}
+				\bo{B} &
+				\bo{A} \bo{B} & ... &
+				\bo{A}^{n - 1} \bo{B}
+			\end{bmatrix}$ имеет полный строчный ранг ($\text{rank}(\mathcal{C}) = n$).
+		\end{block}
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Кэли–Гамильтон}
+	\begin{flushleft}
+		
+		Уравнение $\text{det}(\bo{M} - \lambda\bo{I}) = 0$ называется \emph{характеристическим уравнением} матрицы $\bo{M}$, его корни являются собственными значениями матрицы.
+		
+		\bigskip
+		
+		\begin{theorem}[Кэли–Гамильтон]
+			Матрица $\bo{M} \in \R^{n, n}$ удовлетворяет своему собственному характеристическому уравнению.
+		\end{theorem}
+		
+		Характеристическое уравнение можно записать как $\lambda^n + a_{n-1}\lambda^{n-1} + ... + a_0  = 0$, что означает возможность записи:
+		
+		\begin{equation}
+			\bo{M}^n + a_{n-1}\bo{M}^{n-1} + ... + a_1\bo{M} + a_0\bo{I}  = 0
+		\end{equation}	
+		
+		Это означает, что \textcolor{mydarkblue}{$\bo{M}^n$ является линейной комбинацией $\bo{M}^{n-1}$, $\bo{M}^{n-2}$, ..., $\bo{I}$}. См. Приложение.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Ранг матрицы управляемости}
+	\begin{flushleft}
+		
+		Что произойдет, если добавить больше столбцов в матрицу управляемости, например $\bo{A}^n \bo{B}$? Рассмотрим матрицу:
+		
+		\begin{equation}
+			\mathcal{C}_+ = \begin{bmatrix}
+				\bo{B} &
+				\bo{A} \bo{B} & ... &
+				\bo{A}^{n - 1} \bo{B} &
+				\bo{A}^n \bo{B}
+			\end{bmatrix}
+		\end{equation}
+		
+		Но из теоремы Кэли–Гамильтона мы знаем, что: 
+		
+		\begin{align}
+			\bo{A}^n = -a_{n-1}\bo{A}^{n-1} - ... - a_0\bo{I} 
+			\\
+			\bo{A}^n\bo{B} = -a_{n-1}\bo{A}^{n-1}\bo{B} - ... - a_0\bo{B}
+		\end{align}
+		
+		Это означает, что столбцы $\bo{A}^n\bo{B}$ выражаются как линейная комбинация столбцов $\mathcal{C}$, следовательно, матрица $\mathcal{C}_+$ имеет тот же ранг, что и $\mathcal{C}$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Наблюдаемость дискретных ЛНС}
+	\begin{flushleft}
+		
+		Рассмотрим дискретную линейную стационарную систему:
+		\begin{equation}
+			\begin{cases}
+				\bo{x}_{i+1} = \bo{A}  \bo{x}_i + \bo{B} \bo{u}_i \\
+				\bo{y}_i     = \bo{C}  \bo{x}_i
+			\end{cases}
+		\end{equation}
+		
+		И наблюдатель:
+		
+		\begin{equation}
+			\hat{\bo{x}}_{i+1} = \bo{A}  \hat{\bo{x}}_i + \bo{B} \bo{u}_i + 
+			\bo{L} (\bo{y}_i - \bo{C} \hat{\bo{x}}_i)
+		\end{equation}
+		
+		Напомним, что можно определить ошибку наблюдения $\bo{e}_i = \hat{\bo{x}}_i - \bo{x}_i$ и записать ее динамику:
+		
+		\begin{equation}
+			\bo{e}_{i+1} = \bo{A} \bo{e}_i - 
+			\bo{L} \bo{C} \bo{e}_i
+		\end{equation}
+		
+		Двойственная система (которая устойчива тогда и только тогда, когда устойчива исходная), имеет вид:
+		
+		\begin{equation}
+			\varepsilon_{i+1} = \bo{A}^\top \varepsilon_i - 
+			\bo{C}^\top \bo{L}^\top \varepsilon_i
+		\end{equation}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Наблюдаемость дискретных ЛНС}
+	\framesubtitle{Двойственная система}
+	\begin{flushleft}
+		
+		Динамическая система $\varepsilon_{i+1} = \bo{A}^\top \varepsilon_i - \bo{C}^\top \bo{L}^\top \varepsilon_i$ может быть представлена как:
+		
+		\begin{equation}
+			\begin{cases}
+				\varepsilon_{i+1} = \bo{A}^\top \varepsilon_i + \bo{C}^\top \bo{v}_i \\
+				\bo{v}_i = - \bo{L}^\top \varepsilon_i
+			\end{cases}
+		\end{equation}
+		
+		Матрица управляемости этой системы имеет вид:
+		
+		\begin{equation}
+			\mathcal{O}^\top = \begin{bmatrix}
+				\bo{C}^\top &
+				(\bo{A}^\top) \bo{C}^\top & ... &
+				(\bo{A}^\top)^{n - 1} \bo{C}^\top
+			\end{bmatrix}
+		\end{equation}
+		
+		Удобнее представить эту матрицу в транспонированном виде:
+		
+		\begin{equation}
+			\mathcal{O} = \begin{bmatrix}
+				\bo{C} \\
+				\bo{C}\bo{A}  \\ ... \\
+				\bo{C}\bo{A}^{n - 1}
+			\end{bmatrix}
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Критерий наблюдаемости}
+	\begin{flushleft}
+		
+		\begin{block}{Наблюдаемость}
+			Система $\bo{x}_{i+1} = \bo{A}  \bo{x}_i + \bo{B} \bo{u}_i$ и $\bo{y}_i = \bo{C}  \bo{x}_i$, $\bo{x} \in \R^n$ является \emph{наблюдаемой}, если матрица наблюдаемости $\mathcal{O} = \begin{bmatrix}
+				\bo{C} \\
+				\bo{C}\bo{A}  \\ ... \\
+				\bo{C}\bo{A}^{n - 1}
+			\end{bmatrix}$ имеет полный столбцовый ранг ($\text{rank}(\mathcal{O}) = n$).
+		\end{block}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Управляемость, непрерывное время (1)}
+	\begin{flushleft}
+		
+		Матричная экспонента $e^{\bo{A}t}$ определяется как ряд:
+		
+		\begin{equation}
+			e^{\bo{A}t} = \bo{I}+\bo{A}t+\frac{1}{2} \bo{A}\bo{A}t^2
+			+\frac{1}{6} \bo{A}\bo{A}\bo{A}t^3 + ...
+		\end{equation}
+		
+		Используя теорему Кэли–Гамильтона, можно заметить, что любые степени $\bo{A}$ выше $n$ могут быть представлены как линейная комбинация младших степеней. Это дает нам следующее выражение:
+		%
+		\begin{equation}
+			e^{\bo{A}t} = \phi_0(t)\bo{I}+\phi_1(t)\bo{A}+\phi_2(t) \bo{A}^2 + ...
+			+ \phi_{n-1}(t) \bo{A}^{n-1}
+		\end{equation}
+		%
+		Это позволяет переписать вынужденную составляющую реакции системы:
+		%
+		\begin{align*}
+			\bo{x}(t) &= e^{\bo{A}t}  \bo{x}(0) + 
+			\int_{0}^{t} e^{\bo{A}(t-\tau)} \bo{b}  u(\tau) d\tau
+			\\
+			\bo{x}(t) &= e^{\bo{A}t}  \bo{x}(0) + 
+			\int_{0}^{t} 
+			( \phi_0(t-\tau)\bo{I}+\phi_1(t-\tau)\bo{A}+ ... 
+			\\
+			&+ \phi_{n-1}(t-\tau) \bo{A}^{n-1} ) 
+			\bo{b}  u(\tau) \ d\tau
+		\end{align*}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Управляемость, непрерывное время (2)}
+	\begin{flushleft}
+		
+		\begin{align*}
+			\bo{x}(t) &= e^{\bo{A}t}  \bo{x}(0) + 
+			\int_{0}^{t} \phi_0(t-\tau)\bo{b} u(\tau) d\tau
+			\\
+			&+
+			\int_{0}^{t} \phi_1(t-\tau)\bo{A}\bo{b}  u(\tau) d\tau+ ... 
+			\int_{0}^{t} \phi_{n-1}(t-\tau) \bo{A}^{n-1} 
+			\bo{b}  u(\tau) d\tau 
+		\end{align*}
+		%
+		\begin{align*}
+			\bo{x}(t) -  e^{\bo{A}t}  \bo{x}(0) = 
+			\begin{bmatrix}
+				\bo{b} & \bo{A}\bo{b}& ... &\bo{A}^{n-1}\bo{b}
+			\end{bmatrix}
+			\begin{bmatrix}
+				\int_{0}^{t} \phi_0(t-\tau) u(\tau) d\tau \\
+				\int_{0}^{t} \phi_1(t-\tau) u(\tau) d\tau \\
+				... \\
+				\int_{0}^{t} \phi_{n-1}(t-\tau) u(\tau) d\tau \\
+			\end{bmatrix}
+		\end{align*}
+		
+		Если матрица управляемости имеет дефект ранга, то существует состояние $\bo{x}_f$, которое недостижимо из некоторых начальных условий $\bo{x}_0$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Критерий управляемости ПБХ, 1}
+	\begin{flushleft}
+		
+		Рассмотрим систему $\dot{\bo{x}}=\bo{A}\bo{x}+\bo{B}\bo{u}$. Пусть $\bo{v}$ — левый собственный вектор $\bo{A}$, то есть $\bo{v}\T \bo{A} = \lambda \bo{v}\T$. Тогда можно умножить динамику на $\bo{v}\T$ (можно \emph{спроецировать} ее на $\bo{v}$):
+		%
+		\begin{align}
+			\bo{v}\T \dot{\bo{x}}=\bo{v}\T \bo{A}\bo{x}+\bo{v}\T \bo{B}\bo{u}
+			\\
+			\bo{v}\T \dot{\bo{x}}=\lambda \bo{v}\T \bo{x}+\bo{v}\T \bo{B}\bo{u}
+		\end{align}
+		%
+		Если $\bo{v}$ ортогонален $\bo{B}$, то есть $\bo{v}\T\bo{B} = 0$, то получаем:
+		%
+		\begin{align}
+			\bo{v}\T \dot{\bo{x}}=\lambda \bo{v}\T \bo{x}
+		\end{align}
+		%
+		Определим $s = \bo{v}\T \bo{x}$, чтобы получить автономную систему:
+		%
+		\begin{align}
+			\dot{s}=\lambda s
+		\end{align}
+		
+		Это означает, что существует направление в пространстве состояний, которое невозможно контролировать. И наоборот, если существует неуправляемое направление, то оно является инвариантным подпространством и должно содержать по крайней мере один собственный вектор $\bo{v}$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Критерий управляемости ПБХ, 2}
+	\begin{flushleft}
+		
+		Это тест на управляемость Попова–Белевича–Хаутуса:
+		
+		\begin{block}{Критерий управляемости ПБХ, 1}
+			Если существует такой $\bo{v}$, что $\bo{v}\T \bo{A} = \lambda \bo{v}\T$ и $\bo{v}\T\bo{B} = 0$, то система неуправляема.
+		\end{block}
+		
+		\begin{block}{Критерий управляемости ПБХ, 2}
+			Если для любого $\lambda \in \mathbb{C}$ матрица $[ (\bo{A}-\lambda\bo{I}), \bo{B}]$ имеет полный строчный ранг, то пара $(\bo{A}, \ \bo{B})$ является управляемой.
+		\end{block}
+		
+		\begin{itemize}
+			\item Если $\lambda$ не является собственным значением $\bo{A}$, то $\text{det}(\bo{A}-\lambda\bo{I}) \neq 0$ и матрица имеет полный строчный ранг.
+			
+			\item Если $\text{det}(\bo{A}-\lambda\bo{I}) = 0$, достаточно проверить ранг матрицы $[ (\bo{A}-\lambda\bo{I}), \bo{B}]$.
+			
+			
+		\end{itemize}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Критерий управляемости ПБХ, 3}
+	\begin{flushleft}
+		
+		Обе версии теста ПБХ полезны: 
+		
+		\begin{itemize}
+			\item можно вычислить наименьшее сингулярное число матрицы $[ (\bo{A}-\lambda\bo{I}), \bo{B}]$, чтобы определить, насколько близко данное собственное значение $\lambda$ подводит нас к неуправляемости; 
+			
+			\item затем можно изучить соответствующий левый собственный вектор $\bo{v}$, чтобы выяснить, какое направление в пространстве состояний является почти (или полностью) неуправляемым.
+		\end{itemize}
+		
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Литература}
+	
+	\begin{itemize}
+		
+		
+		\item K. Ogata Modern Control Engineering (Chapter 9.6, 9.7)
+		
+		\item Dorf \& Bishop, Modern Control Systems (Chapter 11.2 Controllability and Observability)		
+		
+		\item C.-T. Chen, Linear System Theory and Design (Chapter 6)
+		
+		\item Controllability and Observability (Rutgers University) \bref{https://www.ece.rutgers.edu/~gajic/psfiles/chap5.pdf}{https://www.ece.rutgers.edu/~gajic/psfiles/chap5.pdf}
+		
+	\end{itemize}
+	
+\end{frame}
+
+\myqrframe
+
+
+\begin{frame}
+	
+	\centering{\huge Appendix A: Analytical solution (recap)}
+	
+\end{frame}
+
+
+
+\begin{frame}{Matrix exponential}
+	\begin{flushleft}
+		
+		Exponential $e^a$ is defined as a series:
+		
+		\begin{equation}
+			e^a =1+a+\frac{1}{2} a^2
+			+\frac{1}{6} a^3 + ... = \sum_{n=0}^{\infty} \frac{1}{n!} a^n
+		\end{equation}
+		
+		Matrix exponential $e^\bo{A}$ is defined as a series:
+		
+		\begin{equation}
+			e^\bo{A} = \bo{I}+\bo{A}+\frac{1}{2} \bo{A}\bo{A}
+			+\frac{1}{6} \bo{A}\bo{A}\bo{A} + ... = \sum_{n=0}^{\infty} \frac{1}{n!} \bo{A}^n
+		\end{equation}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Analytical solution to ODE}
+	\begin{flushleft}
+		
+		An ODE of the form $\dot x = a x$ has analytical solution $x(t) = e^{at} x(0)$.
+		
+		\bigskip
+		
+		An ODE of the form $\dot{\bo{x}} = \bo{A}  \bo{x}$ has analytical solution $\bo{x}(t) = e^{\bo{A}t}  \bo{x}(0)$.
+		
+		\bigskip
+		
+		Let us check that this is a solution:
+		
+		\begin{align}
+			\bo{x}(t) &= \left( \bo{I}+\bo{A}t+\frac{1}{2} \bo{A}\bo{A}t^2
+			+\frac{1}{6} \bo{A}\bo{A}\bo{A}t^3 + ... \right)  \bo{x}(0) &
+			\\
+			\dot{\bo{x}}(t) &= \left( \bo{A}+\bo{A}\bo{A}t
+			+\frac{1}{2}\bo{A}\bo{A}\bo{A}t^2 + ... \right)  \bo{x}(0) 	&		
+			\\
+			\dot{\bo{x}}(t) &= \bo{A} \left(\bo{I} +\bo{A}t
+			+\frac{1}{2}\bo{A}\bo{A}t^2 + ... \right)  \bo{x}(0) 	&		
+			\\
+			\dot{\bo{x}}(t) &= \bo{A} e^{\bo{A}t}  \bo{x}(0) 	&		 			
+			\\
+			\dot{\bo{x}}(t) &= \bo{A} \bo{x}(t)  &\ \ \qed
+		\end{align}
+		
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Forced State Response (LTI) (1)}
+	\begin{flushleft}
+		
+		An ODE of the form $\dot x = a x + bu(t)$ also has analytical solution. To find it, we first find the following derivative:
+		%
+		\begin{equation}
+			\frac{d}{dt} \left( e^{-at} x(t) \right) = e^{-at} \dot x(t) - a e^{-at} x(t)
+		\end{equation}
+		
+		Multiplying $\dot x = a x + bu(t)$ by $e^{-at}$ we see:
+		
+		\begin{align}
+			e^{-at} \dot x = e^{-at} a x + e^{-at} bu(t)
+			\\
+			e^{-at} \dot x -  e^{-at} a x= e^{-at} bu(t)
+			\\
+			\frac{d}{dt} \left( e^{-at} x(t) \right) = e^{-at} bu(t)
+			\\
+			\int_{0}^{t} \frac{d}{d\tau} \left( e^{-a\tau} x(\tau) \right) d\tau = 	\int_{0}^{t}  e^{-a\tau} bu(\tau) d\tau
+		\end{align}
+		
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Forced State Response (LTI) (2)}
+	\begin{flushleft}
+		
+		Continuing the derivation:
+		
+		\begin{align}
+			\int_{0}^{t} \frac{d}{d\tau} \left( e^{-a\tau} x(\tau) \right) d\tau = 	\int_{0}^{t}  e^{-a\tau} bu(\tau) d\tau
+			\\
+			e^{-at} x(t) - x(0) = \int_{0}^{t}  e^{-a\tau} bu(\tau) d\tau
+			\\
+			x(t) = e^{at} x(0) + e^{at} \int_{0}^{t}  e^{-a\tau} bu(\tau) d\tau
+			\\
+			x(t) = e^{at} x(0) + \int_{0}^{t}  e^{a(t-\tau)} bu(\tau) d\tau
+		\end{align}
+		
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Forced State Response (LTI) (3)}
+	\begin{flushleft}
+		
+		State-space equation $\dot{\bo{x}} = \bo{A}  \bo{x} + \bo{B}  \bo{u}(t)$ also has an analytical solution:
+		
+		\begin{equation}
+			\bo{x}(t) = e^{\bo{A}t}  \bo{x}(0) + 
+			\int_{0}^{t} e^{\bo{A}(t-\tau)} \bo{B}  \bo{u}(\tau) d\tau
+		\end{equation}
+		
+		The same can be re-written as:
+		
+		\begin{equation}
+			\bo{x}(t) = e^{\bo{A}t}  \bo{x}(0) + 
+			e^{\bo{A}t} \int_{0}^{t} e^{-\bo{A}\tau} \bo{B}  \bo{u}(\tau) d\tau
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Cayley–Hamilton illustration}
+	\begin{flushleft}
+		
+		Consider matrix $\bo{M}$ and its characteristic equation $\lambda^n + a_{n-1}\lambda^{n-1} + ... + a_0  = 0$ and a decomposition $\bo{M} = \bo{V}^{-1}\Lambda \bo{V}$. Let's prove that the following expression is zero:
+		%
+		\begin{equation}
+			\bo{E} = \bo{M}^n + a_{n-1}\bo{M}^{n-1} + ... + a_1\bo{M} + a_0\bo{I}
+		\end{equation}	
+		\begin{equation}
+		\bo{E} = \bo{V}^{-1}\Lambda^n \bo{V} + a_{n-1}\bo{V}^{-1}\Lambda^{n-1} \bo{V} + ... + a_1\bo{V}^{-1}\Lambda \bo{V} + a_0\bo{I}
+		\end{equation}	
+		\begin{equation}
+		 \bo{V}\bo{E} \bo{V}^{-1} = \Lambda^n + a_{n-1}\Lambda^{n-1}  + ... + a_1\Lambda+ a_0\bo{V}\bo{V}^{-1} 
+		\end{equation}	
+		\begin{small}
+			\begin{equation}
+				\bo{V}\bo{E} \bo{V}^{-1} = 
+				\begin{bmatrix}
+					(\lambda_1^n + a_{n-1}\lambda_1^{n-1} + ... + a_0 ) & & \\
+					& ... & \\
+					& & (\lambda_n^n + a_{n-1}\lambda_n^{n-1} + ... + a_0 )
+				\end{bmatrix}
+			\end{equation}	
+		\begin{equation}
+		\bo{V}\bo{E} \bo{V}^{-1} = 
+		\begin{bmatrix}
+			0 & & \\
+			& ... & \\
+			& & 0
+		\end{bmatrix}
+		\end{equation}	
+	\end{small}
+		\begin{equation}
+		\bo{V}\bo{E} \bo{V}^{-1} = 0
+		\end{equation}	
+		\begin{equation}
+		0 = \bo{E} = \bo{M}^n + a_{n-1}\bo{M}^{n-1} + ... + a_1\bo{M} + a_0\bo{I} \ \qed
+		\end{equation}	
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\end{document}

@@ -4,7 +4,7 @@
 
 
 \title{Controllability, Observability}
-\subtitle{Control Theory, Lecture 11}
+\subtitle{Control Theory, Lecture 9}
 \author{by Sergei Savin}
 \centering
 \date{\mydate}
@@ -15,24 +15,24 @@
 \maketitle
 
 
-\begin{frame}{Content}
-\begin{itemize}
-\item Cayley–Hamilton
-\item Controllability of Discrete LTI
-\begin{itemize}
-    \item Controllability matrix
-    \item Controllability criterion
-\end{itemize}
-\item Observability of Discrete LTI
-\begin{itemize}
-    \item Dual system
-    \item Observability criterion
-\end{itemize}
-%\item Analytical solution to ODE
-%\item Forced State Response
-\item Controllability of Continuous-Time LTI
-\end{itemize}
-\end{frame}
+%\begin{frame}{Content}
+%\begin{itemize}
+%\item Cayley–Hamilton
+%\item Controllability of Discrete LTI
+%\begin{itemize}
+%    \item Controllability matrix
+%    \item Controllability criterion
+%\end{itemize}
+%\item Observability of Discrete LTI
+%\begin{itemize}
+%    \item Dual system
+%    \item Observability criterion
+%\end{itemize}
+%%\item Analytical solution to ODE
+%%\item Forced State Response
+%\item Controllability of Continuous-Time LTI
+%\end{itemize}
+%\end{frame}
 
 
 
@@ -41,7 +41,6 @@
 
 
 \begin{frame}{Definitions}
-	% \framesubtitle{Limited control}
 	\begin{flushleft}
 		
 		\begin{definition}[Controllability]
@@ -64,7 +63,6 @@
 
 
 \begin{frame}{Controllability of Discrete LTI}
-% \framesubtitle{Definitions}
 \begin{flushleft}
 
 Consider discrete LTI:
@@ -91,7 +89,6 @@ Assume the initial state is $\bo{x}_1$. Then we can deduce that:
 
 
 \begin{frame}{Controllability matrix}
-%\framesubtitle{Controllability matrix}
 \begin{flushleft}
 
 $\bo{x}_{n+1} = \bo{A}^n \bo{x}_1 + \bo{A}^{n-1} \bo{B} \bo{u}_1 + ... 
@@ -127,7 +124,6 @@ Since $\bo{x}_{n+1}$ can be anything, and $\bo{x}_1$ might be equal to zero (amo
 
 
 \begin{frame}{Controllability criterion}
-%\framesubtitle{Controllability criterion}
 \begin{flushleft}
 
 \begin{block}{Controllability}
@@ -144,7 +140,6 @@ The system $\bo{x}_{i+1} = \bo{A}  \bo{x}_i + \bo{B} \bo{u}_i$, $\bo{x} \in \R^n
 
 
 \begin{frame}{Cayley–Hamilton}
-	% \framesubtitle{Limited control}
 	\begin{flushleft}
 		
 		Equation $\text{det}(\bo{M} - \lambda\bo{I}) = 0$ is called \emph{characteristic equation} of matrix $\bo{M}$, its roots being eigenvalues of the matrix.
@@ -169,7 +164,6 @@ The system $\bo{x}_{i+1} = \bo{A}  \bo{x}_i + \bo{B} \bo{u}_i$, $\bo{x} \in \R^n
 
 
 \begin{frame}{Controllability matrix rank}
-	% \framesubtitle{Limited control}
 	\begin{flushleft}
 		
 		What happens if we add more columns to the controllability matrix, for example $\bo{A}^n \bo{B}$? Consider the matrix:
@@ -200,7 +194,6 @@ The system $\bo{x}_{i+1} = \bo{A}  \bo{x}_i + \bo{B} \bo{u}_i$, $\bo{x} \in \R^n
 
 
 \begin{frame}{Observability of Discrete LTI}
-% \framesubtitle{Definitions}
 \begin{flushleft}
 
 Consider discrete LTI:
@@ -277,7 +270,6 @@ It is easier to represent this matrix in its transposed form:
 
 
 \begin{frame}{Observability criterion}
-%\framesubtitle{Observability criterion}
 \begin{flushleft}
 
 \begin{block}{Observability}
@@ -295,7 +287,6 @@ The system $\bo{x}_{i+1} = \bo{A}  \bo{x}_i + \bo{B} \bo{u}_i$ and $\bo{y}_i = \
 
 
 \begin{frame}{Controllability, continuous-time (1)}
-	% \framesubtitle{Limited control}
 	\begin{flushleft}
 		
 		Matrix exponential $e^{\bo{A}t}$ is defined as a series:
@@ -333,7 +324,6 @@ The system $\bo{x}_{i+1} = \bo{A}  \bo{x}_i + \bo{B} \bo{u}_i$ and $\bo{y}_i = \
 
 
 \begin{frame}{Controllability, continuous-time (2)}
-	% \framesubtitle{Limited control}
 	\begin{flushleft}
 		
 		\begin{align*}
@@ -367,13 +357,45 @@ The system $\bo{x}_{i+1} = \bo{A}  \bo{x}_i + \bo{B} \bo{u}_i$ and $\bo{y}_i = \
 
 
 
-\begin{frame}{PBH controllability criterion}
-	% \framesubtitle{Limited control}
+\begin{frame}{PBH controllability criterion, 1}
 	\begin{flushleft}
 		
-		There is an alternative way to test the controllability of a pair $(\bo{A}, \ \bo{B})$:
+		Consider a system $\dot{\bo{x}}=\bo{A}\bo{x}+\bo{B}\bo{u}$. Let $\bo{v}$ be a left-eigenvector of $\bo{A}$, meaning $\bo{v}\T \bo{A} = \lambda \bo{v}\T$. Then, we can multiply the dynamics by $\bo{v}\T$ (we can \emph{project} it onto $\bo{v}$):
+		%
+		\begin{align}
+			\bo{v}\T \dot{\bo{x}}=\bo{v}\T \bo{A}\bo{x}+\bo{v}\T \bo{B}\bo{u}
+			\\
+			\bo{v}\T \dot{\bo{x}}=\lambda \bo{v}\T \bo{x}+\bo{v}\T \bo{B}\bo{u}
+		\end{align}
+		%
+		If $\bo{v}$ is orthogonal to $\bo{B}$, meaning $\bo{v}\T\bo{B} = 0$, then we get:
+		%
+		\begin{align}
+			\bo{v}\T \dot{\bo{x}}=\lambda \bo{v}\T \bo{x}
+		\end{align}
+		%
+		Define $s = \bo{v}\T \bo{x}$ to get an autonomous system:
+		%
+		\begin{align}
+			\dot{s}=\lambda s
+		\end{align}
 		
-		\begin{block}{PBH controllability criterion}
+		This means there is a direction in the state-space which cannot be controlled. Conversely, if there exists an uncontrollable direction, then it is an invariant subspace and it should contain an least one eigenvector $\bo{v}$.
+				
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{PBH controllability criterion, 2}
+	\begin{flushleft}
+		
+		This is Popov-Belevitch-Hautus controllability test:
+		
+		\begin{block}{PBH controllability criterion, 1}
+			If there exists such $\bo{v}$ that $\bo{v}\T \bo{A} = \lambda \bo{v}\T$ and $\bo{v}\T\bo{B} = 0$, then the system is not controllable.
+		\end{block}
+		
+		\begin{block}{PBH controllability criterion, 2}
 			If for any $\lambda \in \mathbb{C}$, the matrix $[ (\bo{A}-\lambda\bo{I}), \bo{B}]$ has full row-rank, then the pair $(\bo{A}, \ \bo{B})$ is controllable.
 		\end{block}
 		
@@ -381,10 +403,27 @@ The system $\bo{x}_{i+1} = \bo{A}  \bo{x}_i + \bo{B} \bo{u}_i$ and $\bo{y}_i = \
 			\item If $\lambda$ is not an eigenvalue of $\bo{A}$, then $\text{det}(\bo{A}-\lambda\bo{I}) \neq 0$ and the matrix has full row rank.
 			
 			\item If $\text{det}(\bo{A}-\lambda\bo{I}) = 0$ it is sufficient to test the rank of $[ (\bo{A}-\lambda\bo{I}), \bo{B}]$.
-			
-			%\item If $\text{det}(\bo{A}-\lambda\bo{I}) = 0$ and $\mathcal{V} = \text{null}(\bo{A}-\lambda\bo{I})$, $\text{dim}(\mathcal{V}) = 1$ and $\bo{v} \in \mathcal{V}$ , meaning $\lambda, \ \bo{v}$ are eigenvalue and eigenvector of $\bo{A}$, then in order for the criterion to hold the columns of $\bo{B}$ should not all be orthogonal to $\bo{v}$: $\bo{v}\T \bo{B} \neq 0$.
+
 			
 		\end{itemize}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{PBH controllability criterion, 3}
+	\begin{flushleft}
+		
+		Both versions of the PBH test are useful: 
+		
+		\begin{itemize}
+			\item we can use the compute the smallest singular value of the matrix $[ (\bo{A}-\lambda\bo{I}), \bo{B}]$ to find how close a given eigenvalue $\lambda$ gets us to uncontrollability; 
+			
+			\item then we could study its associated left eigenvector $\bo{v}$ to find which direction in the state-space i snearly (or completely) uncontrollable.
+		\end{itemize}
+		
+		
 		
 	\end{flushleft}
 \end{frame}
@@ -421,7 +460,6 @@ The system $\bo{x}_{i+1} = \bo{A}  \bo{x}_i + \bo{B} \bo{u}_i$ and $\bo{y}_i = \
 
 
 \begin{frame}{Matrix exponential}
-	% \framesubtitle{Limited control}
 	\begin{flushleft}
 		
 		Exponential $e^a$ is defined as a series:
@@ -446,7 +484,6 @@ The system $\bo{x}_{i+1} = \bo{A}  \bo{x}_i + \bo{B} \bo{u}_i$ and $\bo{y}_i = \
 
 
 \begin{frame}{Analytical solution to ODE}
-	% \framesubtitle{Limited control}
 	\begin{flushleft}
 		
 		An ODE of the form $\dot x = a x$ has analytical solution $x(t) = e^{at} x(0)$.
@@ -482,7 +519,6 @@ The system $\bo{x}_{i+1} = \bo{A}  \bo{x}_i + \bo{B} \bo{u}_i$ and $\bo{y}_i = \
 
 
 \begin{frame}{Forced State Response (LTI) (1)}
-	% \framesubtitle{Limited control}
 	\begin{flushleft}
 		
 		An ODE of the form $\dot x = a x + bu(t)$ also has analytical solution. To find it, we first find the following derivative:
@@ -511,7 +547,6 @@ The system $\bo{x}_{i+1} = \bo{A}  \bo{x}_i + \bo{B} \bo{u}_i$ and $\bo{y}_i = \
 
 
 \begin{frame}{Forced State Response (LTI) (2)}
-	% \framesubtitle{Limited control}
 	\begin{flushleft}
 		
 		Continuing the derivation:
@@ -535,7 +570,6 @@ The system $\bo{x}_{i+1} = \bo{A}  \bo{x}_i + \bo{B} \bo{u}_i$ and $\bo{y}_i = \
 
 
 \begin{frame}{Forced State Response (LTI) (3)}
-	% \framesubtitle{Limited control}
 	\begin{flushleft}
 		
 		State-space equation $\dot{\bo{x}} = \bo{A}  \bo{x} + \bo{B}  \bo{u}(t)$ also has an analytical solution:
@@ -559,7 +593,6 @@ The system $\bo{x}_{i+1} = \bo{A}  \bo{x}_i + \bo{B} \bo{u}_i$ and $\bo{y}_i = \
 
 
 \begin{frame}{Cayley–Hamilton illustration}
-	% \framesubtitle{Limited control}
 	\begin{flushleft}
 		
 		Consider matrix $\bo{M}$ and its characteristic equation $\lambda^n + a_{n-1}\lambda^{n-1} + ... + a_0  = 0$ and a decomposition $\bo{M} = \bo{V}^{-1}\Lambda \bo{V}$. Let's prove that the following expression is zero:
