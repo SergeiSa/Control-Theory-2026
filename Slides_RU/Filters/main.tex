@@ -1,0 +1,393 @@
+\documentclass{beamer}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\input{settings.tex}
+
+
+\title{Динамические регуляторы, фильтры}
+\subtitle{Теория Управления, лекция 10}
+\author{Сергей Савин}
+\centering
+\date{\mydate}
+
+
+
+\begin{document}
+\maketitle
+
+\begin{frame}{Содержание}
+	\begin{itemize}
+		\item Системы - статические, динамические
+		\item Динамический контроллер
+		\item ПИД-регулятор
+		\item Фильтры
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Системы}
+	\begin{flushleft}
+		
+		Система характеризуется тем, как она связывает свой вход со своим выходом.
+		
+		\begin{itemize}
+			\item Контроллер $\bo{u} = \bo{K}\bo{x}$ — это система, которая связывает $\bo{x}$ (свой вход) с $\bo{u}$ (своим выходом).
+			
+			\item Объект управления (в пространстве состояний) 
+			$\begin{cases}
+				\dot {\bo{x}} = \bo{A} \bo{x} + \bo{B} \bo{u} \\
+				\bo{y} = \bo{C} \bo{x}
+			\end{cases}$ 
+			связывает свой вход $\bo{u}$ со своим выходом $\bo{y}$.
+			
+			\item Объект управления (в представлении Лапласа) $Y(s) = W(s)U(s)$ с передаточной функцией $W(s)$ — это система, связывающая входной сигнал $U(s)$ с выходным сигналом $Y(s)$.
+		\end{itemize}
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Линейные системы, статические}
+	\begin{flushleft}
+		
+		Для некоторых систем связь между входом и выходом является пропорциональной. Это типичный пример \emph{статической} системы.
+		
+		\bigskip
+		
+		Примеры статических систем:
+		
+		\begin{itemize}
+			\item (В пространстве состояний) контроллер $\bo{u} = \bo{K}\bo{x}$. 
+			
+			\item (В представлении Лапласа) усилительное звено $Y(s) = 10 U(s)$.
+		\end{itemize}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Линейные системы, динамические}
+	\begin{flushleft}
+		
+		С другой стороны, существуют линейные системы, в которых связь между входом и выходом зависит от производных этих сигналов. Также существуют линейные системы, в которых связь между входом и выходом зависит от внутренних состояний. Такие системы можно назвать \emph{динамическими}.
+		
+		\bigskip
+		
+		Примеры динамических систем:
+		
+		\begin{itemize}
+			\item (В пространстве состояний) объект управления $\begin{cases}
+				\dot {\bo{x}} = \bo{A} \bo{x} + \bo{B} \bo{u} \\
+				\bo{y} = \bo{C} \bo{x}
+			\end{cases}$.
+			
+			\item (В представлении Лапласа) объект управления $Y(s) = \frac{1}{s^2 + 2s + 7} U(s)$.
+			
+			\item (В форме ОДУ) объект управления $\ddot y + 5 \dot y + y = u$.
+		\end{itemize}
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Статические и динамические системы}
+	\begin{flushleft}
+		
+		Статические системы можно рассматривать как форму линейных алгебраических уравнений, в то время как динамические системы — это линейные дифференциальные уравнения.
+		
+		\bigskip
+		
+		Отличительным качеством динамических систем является наличие \emph{состояния}. Состояние можно рассматривать как внутреннюю переменную, которая изменяется во времени, влияя на связь между входом и выходом системы.
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Контроллер+Наблюдатель}
+	\begin{flushleft}
+		
+		Контроллер + наблюдатель Люенбергера также является динамической системой с входом $\bo{y}$, выходом $\bo{u}$ и состоянием $\hat{\bo{x}}$:
+		
+		\begin{equation}
+			\begin{cases}
+				\hat{\dot {\bo{x}}} = \bo{A} \hat{\bo{x}} + \bo{B} \mathbf u + \bo{L}(\mathbf y - \bo{C} \hat{\bo{x}})
+				\\
+				\bo{u} = -\bo{K} \hat{\bo{x}}
+			\end{cases}
+		\end{equation}
+		
+		Форма этой системы напоминает объект управления с уравнением выхода.
+		
+		\bigskip
+		
+		Мы можем рассматривать эту систему как \emph{динамический контроллер} (вместо того чтобы разделять её на динамический наблюдатель и статический контроллер). 
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Динамический контроллер}
+	\begin{flushleft}
+		
+		Общая форма динамического контроллера имеет вид:
+		
+		\begin{equation}
+			\begin{cases}
+				\hat{\dot {\bo{x}}} = \bo{A}_k \hat{\bo{x}} + \bo{B}_k \bo{y}
+				\\
+				\bo{u} = \bo{C}_k \hat{\bo{x}} + \bo{D}_k \bo{y}
+			\end{cases}
+		\end{equation}
+		
+		где матрицы $\bo{A}_k$, $\bo{B}_k$, $\bo{C}_k$ и $\bo{D}_k$ могут быть настроены для достижения лучших характеристик.
+		
+		\bigskip
+		
+		Наблюдатель Люенбергера + статический контроллер является частным случаем динамического контроллера.
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{ПИД-регулятор, 1}
+	\begin{flushleft}
+		
+		Одним из наиболее известных примеров динамических контроллеров является \emph{пропорционально-интегрально-дифференциальный регулятор (ПИД-регулятор)}. В скалярном случае:
+		
+		\begin{equation}
+			u(t) = k_p e(t) + k_d \frac{d}{dt} e(t) + k_i \int_{0}^{t} e(\tau) d \tau
+		\end{equation}
+		
+		Векторный случай:
+		
+		\begin{equation}
+			\bo{u}(t) = \bo{K}_p \bo{e}(t) + \bo{K}_d \frac{d}{dt} \bo{e}(t) + \bo{K}_i \int_{0}^{t} \bo{e}(\tau) d \tau
+		\end{equation}
+		
+		%		Этот контроллер работает для систем второго порядка (в $\bo{e}(t)$), где $\bo{e}$ и $\dot{\bo{e}}$ образуют состояние системы (или ошибку управления).
+		%		
+		%		\bigskip
+		
+		Этот контроллер похож на линейные контроллеры, которые мы изучали в курсе (например, LQR), но с интегральной частью, обеспечивающей \emph{робастность}: способность компенсировать статическое аддитивное возмущение в модели.
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{ПИД-регулятор, 2}
+	\begin{flushleft}
+		
+		Мы можем переписать ПИД-регулятор в пространстве Лапласа:
+		
+		\begin{equation}
+			U(s) = \left(k_p  + k_d s + k_i \frac{1}{s} \right )E(s)
+		\end{equation}
+		
+		\begin{equation}
+			U(s) =
+			\frac{k_d s^2 + k_p s + k_i }{s}E(s)
+		\end{equation}
+		
+		Не сразу очевидно, что регулятор имеет внутреннее состояние.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+%\begin{frame}{PID, 3}
+%	\begin{flushleft}
+%		
+%		To re-write it in the state-space form, we introduce input to the controller (output to the plant) $\bo{y} = \begin{bmatrix}
+%		\bo{e} \\ \dot{\bo{e}}
+%		\end{bmatrix}$. We define a state $\bo{z} = \int_{0}^{t} \bo{e}(\tau) d \tau$, giving us the following state-space form of the controller:
+%		
+%		\begin{equation}
+%			\begin{cases}
+%				\dot{ \bo{z} }  = 
+%				\begin{bmatrix}
+%					\bo{I} & 0
+%				\end{bmatrix}\bo{y}
+%				\\
+%				\bo{u} = \bo{K}_i \bo{z} + 
+%				\begin{bmatrix}
+%					 \bo{K}_p &  \bo{K}_d
+%				\end{bmatrix} \bo{y}
+%			\end{cases}
+%		\end{equation}
+%		
+%	\end{flushleft}
+%\end{frame}
+
+
+\begin{frame}{Статическое возмущение, 1}
+	\begin{flushleft}
+		
+		Рассмотрим систему со статическим возмущением $\bo{d}$:
+		
+		\begin{equation}
+			\dot {\bo{x}} = \bo{A} \bo{x} + \bo{B} \bo{u} + \bo{d}
+		\end{equation}
+		
+		Применяя стабилизирующий линейный закон управления $\bo{u} = -\bo{K}\bo{x}$, находим, что замкнутая система $\dot {\bo{x}} =( \bo{A} -  \bo{B}  \bo{K}  )\bo{x} + \bo{d}$ имеет установившееся решение $\bo{x}_s$:
+		
+		\begin{align}
+			( \bo{A} -  \bo{B}  \bo{K}  )\bo{x}_s + \bo{d} = 0
+			\\
+			\bo{x}_s = -( \bo{A} -  \bo{B}  \bo{K}  )^{-1} \bo{d}
+		\end{align}
+		
+		Даже если статическая обратная связь по состоянию обеспечивает асимптотическую устойчивость, постоянное возмущение приводит к ненулевой установившейся ошибке.
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Статическое возмущение, 2}
+	\begin{flushleft}
+		
+		Мы можем получить тот же результат, используя представление Лапласа. 
+		
+		\begin{equation}
+			\begin{cases}
+				s \bo{X} = \bo{A} \bo{X} + \bo{B} \bo{U} + \bo{D}(s) \\
+				\bo{U} = -\bo{K}\bo{X}
+			\end{cases}
+		\end{equation}
+		\begin{equation}
+			s \bo{X} -( \bo{A} - \bo{B} \bo{K})\bo{X} =\bo{D}(s)
+		\end{equation}
+		\begin{equation}
+			\bo{X} =(s \bo{I} -( \bo{A} - \bo{B} \bo{K}))^{-1} \bo{D}(s)
+		\end{equation}
+		
+		С коэффициентом передачи на постоянном токе $-( \bo{A} - \bo{B} \bo{K}))^{-1}$, как и выше.
+		
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Компенсация статического возмущения, 1}
+	\begin{flushleft}
+		
+		Если нам известно статическое возмущение $\bo{d}$, мы можем выбрать закон управления $\bo{u} = -\bo{K}\bo{x} - \bo{B}^+\bo{d}$, который скомпенсирует возмущение (если оно лежит в области значений матрицы управления $\bo{B}$).
+		
+		\bigskip
+		
+		Но если $\bo{d}$ нам неизвестно, мы можем использовать \emph{интегральную} составляющую в законе управления для компенсации возмущения:
+		
+		\begin{equation}
+			\bo{u} = -\bo{K}_p\bo{x} -\bo{K}_i \int_{0}^{t} \bo{x} d \tau
+		\end{equation}
+		
+		В области Лапласа это можно представить как:
+		
+		
+		\begin{equation}
+			\begin{cases}
+				s \bo{X} = \bo{A} \bo{X} + \bo{B} \bo{U} + \bo{D} \\
+				\bo{U} = -\bo{K}_p\bo{X} -\frac{1}{s}\bo{K}_i \bo{X}
+			\end{cases}
+		\end{equation}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Компенсация статического возмущения, 2}
+	\begin{flushleft}
+		
+		\begin{equation}
+			\begin{cases}
+				s \bo{X} = \bo{A} \bo{X} + \bo{B} \bo{U} + \bo{D} \\
+				\bo{U} = -\bo{K}_p\bo{X} -\frac{1}{s}\bo{K}_i \bo{X}
+			\end{cases}
+		\end{equation}
+		
+		Мы можем записать это в виде передаточной функции:
+		
+		\begin{equation}
+			s \bo{X} = \bo{A} \bo{X} -\bo{B}\bo{K}_p\bo{X} -\frac{1}{s}\bo{B}\bo{K}_i \bo{X} + \bo{D}
+		\end{equation}
+		\begin{equation}
+			s^2 \bo{X} = s\bo{A} \bo{X} -s\bo{B}\bo{K}_p\bo{X} -\bo{B}\bo{K}_i \bo{X} + \textcolor{mydarkred}{s} \bo{D}
+		\end{equation}
+		\begin{equation}
+			\bo{X} = \textcolor{mydarkred}{s}
+			\left(
+			s^2 \bo{I} - s(\bo{A} - \bo{B}\bo{K}_p) + \bo{B}\bo{K}_i 
+			\right)^{-1}
+			\bo{D}
+		\end{equation}
+		
+		Его коэффициент передачи на постоянном токе равен 0.
+		
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Фильтры, 1}
+	\begin{flushleft}
+		
+		Рассмотрим систему:
+		
+		\begin{equation}
+			\begin{cases}
+				\dot{ x }  = 
+				ax+bu
+				\\
+				y = c x + d \sin(wt)
+			\end{cases}
+		\end{equation}
+		
+		где $w >>1$ — частота внешнего возмущения, а $d$ — его амплитуда.
+		
+		\bigskip
+		
+		Мы можем сначала пропустить измерение $y$ через систему, которая ослабляет высокочастотную составляющую сигнала; такая система называется \emph{фильтром нижних частот}, а затем передать его через контроллер:
+		
+		\begin{equation}
+			\begin{cases}
+				\dot{ z }  = 
+				-z+y
+				\\
+				u = k z
+			\end{cases}
+		\end{equation}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Фильтры, 2}
+	\begin{flushleft}
+		
+		Фильтр $\dot{ z }  = 
+		-z+y$ имеет форму в пространстве Лапласа:
+		
+		\begin{equation}
+			Z(s) = \frac{1}{s+1} Y(s)
+		\end{equation}
+		
+		Частотная характеристика этой передаточной функции:
+		
+		\begin{equation}
+			|Z(j\omega)| = \frac{1}{\sqrt{\omega^2 + 1}}
+		\end{equation}
+		
+		С увеличением частоты сигнал ослабляется сильнее. Для частот, близких к нулю, сигнал проходит почти без изменений.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Литература}
+	
+	\begin{itemize}
+		
+		\item K. Ogata Modern Control Engineering (Chapter 8)
+		
+	\end{itemize}
+	
+\end{frame}
+
+\myqrframe
+
+\end{document}

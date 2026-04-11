@@ -29,7 +29,6 @@
 
 
 \begin{frame}{Systems}
-%\framesubtitle{How do we know the state?}
 \begin{flushleft}
 
 A system is characterized by how it relates its input to its output.
@@ -53,10 +52,9 @@ relates its input $\bo{u}$ to its output $\bo{y}$.
 
 
 \begin{frame}{Linear systems, static}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
-		For some systems, the relation between input and output is proportional. Such system we can call \emph{static}.
+		For some systems, the relation between input and output is proportional. This is an example of a emph{static} system.
 		
 		\bigskip
 		
@@ -68,15 +66,18 @@ relates its input $\bo{u}$ to its output $\bo{y}$.
 			\item (Laplace) gain function $Y(s) = 10 U(s)$.
 		\end{itemize}
 		
+		\begin{definition}
+			A system is called static (or memoryless) if the output at time $t$ depends only on the input at time $t$.
+		\end{definition}
+		
 	\end{flushleft}
 \end{frame}
 
 
 \begin{frame}{Linear systems, dynamic}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
-		Alternatively, there are linear systems for which relation between input and output depends on derivatives of the input and the output. Such system we can call \emph{dynamic}.
+		Alternatively, there are linear systems for which relation between the input and the output depends on derivatives of these signals. Similarly, there are linear systems where the relation between the input and the output  depends on the internal states. We can call such systems \emph{dynamic}.
 		
 		\bigskip
 		
@@ -99,7 +100,6 @@ relates its input $\bo{u}$ to its output $\bo{y}$.
 
 
 \begin{frame}{Static vs dynamic}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		We can think of static systems as a form of linear algebraic equations, while dynamic systems are linear differential equations.
@@ -114,7 +114,6 @@ relates its input $\bo{u}$ to its output $\bo{y}$.
 
 
 \begin{frame}{Controller+Observer}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		Controller + Luenberger observer is also a dynamic system with input $\bo{y}$, output $\bo{u}$ and state $\hat{\bo{x}}$:
@@ -127,7 +126,7 @@ relates its input $\bo{u}$ to its output $\bo{y}$.
 			\end{cases}
 		\end{equation}
 		
-		The form of this system resebles the plant with output equation.
+		The form of this system resembles a plant with output equation.
 		
 		\bigskip
 		
@@ -140,7 +139,6 @@ relates its input $\bo{u}$ to its output $\bo{y}$.
 
 
 \begin{frame}{Dynamic controller}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		A generic form of dynamic controller is:
@@ -165,10 +163,9 @@ relates its input $\bo{u}$ to its output $\bo{y}$.
 
 
 \begin{frame}{PID, 1}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
-		One of the better known examples of dynamic controlllers is a \emph{proportional-integral-derivative controller (PID)}. Scaler case:
+		One of the better known examples of dynamic controlllers is a \emph{proportional-integral-derivative controller (PID)}. In the scalar case:
 		
 		\begin{equation}
 			u(t) = k_p e(t) + k_d \frac{d}{dt} e(t) + k_i \int_{0}^{t} e(\tau) d \tau
@@ -180,11 +177,11 @@ relates its input $\bo{u}$ to its output $\bo{y}$.
 			\bo{u}(t) = \bo{K}_p \bo{e}(t) + \bo{K}_d \frac{d}{dt} \bo{e}(t) + \bo{K}_i \int_{0}^{t} \bo{e}(\tau) d \tau
 		\end{equation}
 		
-		This controller works for second-order systems (in $\bo{e}(t)$) where $\bo{e}$ and $\dot{\bo{e}}$ form the state of the system (or control error).
+%		This controller works for second-order systems (in $\bo{e}(t)$) where $\bo{e}$ and $\dot{\bo{e}}$ form the state of the system (or control error).
+%		
+%		\bigskip
 		
-		\bigskip
-		
-		This controller is equivalent to the linear controllers we studied in the course (e.g. LQR) but with integral part allowing for \emph{robustness} - the ability to compensate for static additive disturbance in the model.
+		This controller is similar to the linear controllers we studied in the course (e.g. LQR) but with the integral part allowing for \emph{robustness}: the ability to compensate for static additive disturbance in the model.
 		
 	\end{flushleft}
 \end{frame}
@@ -192,10 +189,9 @@ relates its input $\bo{u}$ to its output $\bo{y}$.
 
 
 \begin{frame}{PID, 2}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
-		We can re-write PID in Laplace space:
+		We can re-write the PID in Laplace space:
 		
 		\begin{equation}
 			U(s) = \left(k_p  + k_d s + k_i \frac{1}{s} \right )E(s)
@@ -206,7 +202,7 @@ relates its input $\bo{u}$ to its output $\bo{y}$.
 			\frac{k_d s^2 + k_p s + k_i }{s}E(s)
 		\end{equation}
 		
-		It is not instantly obvious that the controller has state.
+		It is not instantly obvious that the controller has an internal state.
 		
 	\end{flushleft}
 \end{frame}
@@ -214,36 +210,34 @@ relates its input $\bo{u}$ to its output $\bo{y}$.
 
 
 
-\begin{frame}{PID, 3}
-	%\framesubtitle{How do we know the state?}
-	\begin{flushleft}
-		
-		To re-write it in the state-space form, we introduce input to the controller (output to the plant) $\bo{y} = \begin{bmatrix}
-		\bo{e} \\ \dot{\bo{e}}
-		\end{bmatrix}$. We define a state $\bo{z} = \int_{0}^{t} \bo{e}(\tau) d \tau$, giving us the following state-space form of the controller:
-		
-		\begin{equation}
-			\begin{cases}
-				\dot{ \bo{z} }  = 
-				\begin{bmatrix}
-					\bo{I} & 0
-				\end{bmatrix}\bo{y}
-				\\
-				\bo{u} = \bo{K}_i \bo{z} + 
-				\begin{bmatrix}
-					 \bo{K}_p &  \bo{K}_d
-				\end{bmatrix} \bo{y}
-			\end{cases}
-		\end{equation}
-		
-	\end{flushleft}
-\end{frame}
+%\begin{frame}{PID, 3}
+%	\begin{flushleft}
+%		
+%		To re-write it in the state-space form, we introduce input to the controller (output to the plant) $\bo{y} = \begin{bmatrix}
+%		\bo{e} \\ \dot{\bo{e}}
+%		\end{bmatrix}$. We define a state $\bo{z} = \int_{0}^{t} \bo{e}(\tau) d \tau$, giving us the following state-space form of the controller:
+%		
+%		\begin{equation}
+%			\begin{cases}
+%				\dot{ \bo{z} }  = 
+%				\begin{bmatrix}
+%					\bo{I} & 0
+%				\end{bmatrix}\bo{y}
+%				\\
+%				\bo{u} = \bo{K}_i \bo{z} + 
+%				\begin{bmatrix}
+%					 \bo{K}_p &  \bo{K}_d
+%				\end{bmatrix} \bo{y}
+%			\end{cases}
+%		\end{equation}
+%		
+%	\end{flushleft}
+%\end{frame}
 
 
 
 
 \begin{frame}{Static disturbance, 1}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		Consider a system with a static disturbance $\bo{d}$:
@@ -260,28 +254,28 @@ relates its input $\bo{u}$ to its output $\bo{y}$.
 			\bo{x}_s = -( \bo{A} -  \bo{B}  \bo{K}  )^{-1} \bo{d}
 		\end{align}
 		
+		Even if a static state-feeback delivers assymptotic stability, a constant disturbance leads to a nonzero steady-state error.
 		
 	\end{flushleft}
 \end{frame}
 
 
 \begin{frame}{Static disturbance, 2}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
-		We can achieve the same result using Laplace representation:
+		We can achieve the same result using Laplace representation. 
 		
 		\begin{equation}
 			\begin{cases}
-				s \bo{X} = \bo{A} \bo{X} + \bo{B} \bo{U} + \bo{D} \\
+				s \bo{X} = \bo{A} \bo{X} + \bo{B} \bo{U} + \bo{D}(s) \\
 				\bo{U} = -\bo{K}\bo{X}
 			\end{cases}
 		\end{equation}
 		\begin{equation}
-			s \bo{X} -( \bo{A} - \bo{B} \bo{K})\bo{X} = \bo{D}
+			s \bo{X} -( \bo{A} - \bo{B} \bo{K})\bo{X} =\bo{D}(s)
 		\end{equation}
 		\begin{equation}
-		\bo{X} =(s \bo{I} -( \bo{A} - \bo{B} \bo{K}))^{-1} \bo{D}
+		\bo{X} =(s \bo{I} -( \bo{A} - \bo{B} \bo{K}))^{-1} \bo{D}(s)
 		\end{equation}
 		
 		With a steady-state gain $-( \bo{A} - \bo{B} \bo{K}))^{-1}$, same as above.
@@ -293,7 +287,6 @@ relates its input $\bo{u}$ to its output $\bo{y}$.
 
 
 \begin{frame}{Static disturbance compensation, 1}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		If we know static disturbance $\bo{d}$, we could chose a control law $\bo{u} = -\bo{K}\bo{x} - \bo{B}^+\bo{d}$ which will cancel the disturbance (if it lies in the range of the control matrix $\bo{B}$).
@@ -323,7 +316,6 @@ relates its input $\bo{u}$ to its output $\bo{y}$.
 
 
 \begin{frame}{Static disturbance compensation, 2}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		\begin{equation}
@@ -360,7 +352,6 @@ relates its input $\bo{u}$ to its output $\bo{y}$.
 
 
 \begin{frame}{Filters, 1}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		Consider a system:
@@ -397,7 +388,6 @@ relates its input $\bo{u}$ to its output $\bo{y}$.
 
 
 \begin{frame}{Filters, 2}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		The filter $\dot{ z }  = 
@@ -407,7 +397,7 @@ relates its input $\bo{u}$ to its output $\bo{y}$.
 			Z(s) = \frac{1}{s+1} Y(s)
 		\end{equation}
 		
-		Frequency responce of this transfer function is:
+		Frequency response of this transfer function is:
 		
 		\begin{equation}
 			W(\omega) = \frac{1}{\sqrt{\omega^2 + 1}} Y(s)

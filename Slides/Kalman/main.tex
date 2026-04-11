@@ -10,7 +10,7 @@
 
 
 \title{Kalman Filter}
-\subtitle{Control Theory, Lecture 13}
+\subtitle{Control Theory, Lecture 11}
 \author{by Sergei Savin}
 \centering
 \date{\mydate}
@@ -39,11 +39,10 @@
 
 
 
-\begin{frame}{Innner and outer products}
-	%\framesubtitle{How do we know the state?}
+\begin{frame}{Inner and outer products}
 	\begin{flushleft}
 		
-		Inner product $\bo{x}\T \bo{x}$ and outter product $\bo{x}\bo{x}\T$ are defined as:
+		Inner product $\bo{x}\T \bo{x}$ and outer product $\bo{x}\bo{x}\T$ are defined as:
 		%
 		\begin{align*}
 			\bo{x} &= 
@@ -67,10 +66,9 @@
 
 
 \begin{frame}{Random variable, 1}
-%\framesubtitle{How do we know the state?}
 \begin{flushleft}
 
-We can think of a \emph{random variable} $\bo{v}$ as a sequence of values $\bo{v}_1$, $\bo{v}_2$, $\bo{v}_3$, ... sampled from a distribution.
+A \emph{random variable} $\bo{v}$ produces values according to a probability distribution. We can observe realizations $\bo{v}_1$, $\bo{v}_2$, $\bo{v}_3$, ... sampled from the distribution.
 
 \bigskip
 
@@ -79,9 +77,6 @@ Mean $\bar{\bo{v}}$ of a random variable $\bo{v}$ is denoted as:
 \begin{equation}
 	\bar{\bo{v}} = E[\bo{v}]
 \end{equation}
-%\begin{equation}
-%	\bar{\bo{v}} = \underset{N \rightarrow \infty}{\text{lim}} \left( \frac{1}{N} \sum_{i = 1}^{N} \bo{v}_i \right)
-%\end{equation}
 
 Mean has a number of properties:
 
@@ -99,7 +94,6 @@ Mean has a number of properties:
 
 
 \begin{frame}{Random variable, 2}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		Autocovariance $\bo{V} = \textbf{cov}(\bo{v}, \bo{v})$ of a random variable $\bo{v}$ is defined as:
@@ -133,7 +127,6 @@ Mean has a number of properties:
 
 
 \begin{frame}{Random variable, 3}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		A random variable $\bo{x}$ with Gaussian distribution can be fully described via its mean $\bar{\bo{x}}$ and covariance $\bo{X}$:
@@ -150,10 +143,9 @@ Mean has a number of properties:
 
 
 \begin{frame}{Mean of a linear transform}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
-		Let $\bo{x}$ be a random variable $\bo{x} \sim \mathcal{N} (\bar{\bo{x}}, \bo{X})$.  Given a constant matrix $\bo{M}$ we can define an affine transformation of $\bo{x}$:
+		Let $\bo{x}$ be a random variable $\bo{x} \sim \mathcal{N} (\bar{\bo{x}}, \bo{X})$.  Given a constant matrix $\bo{M}$ we can define an linear transformation of $\bo{x}$:
 		
 		\begin{equation}
 			\bo{y} = \bo{M}\bo{x}
@@ -175,7 +167,6 @@ Mean has a number of properties:
 
 
 \begin{frame}{Autocovariance over linear transform}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		Assuming $\bar{\bo{x}} = E[\bo{x}] = 0$, we get $E[\bo{y}] = 0$; with that we can find autocovariance of $\bo{y}$:
@@ -256,7 +247,6 @@ Mean has a number of properties:
 
 
 \begin{frame}{State estimation error - dynamics}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		Assume the DT-LTI dynamics takes the form:
@@ -283,7 +273,6 @@ Mean has a number of properties:
 
 
 \begin{frame}{State estimation error - mean}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		Assume you could pick your initial state estimate $\bhat{x}_0$ such that your initial state estimation error $\btil{x}_0$ behaves as a random variable sampled from a  Gaussian distribution $\btil{x}_0 \sim \mathcal{N} (0, \bo{P}_0)$.
@@ -306,7 +295,6 @@ Mean has a number of properties:
 
 
 \begin{frame}{State estimation error - covariance}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		Knowing autocovariance $\bo{P}_i$ we can compute $\bo{P}_{i+1}$:
@@ -322,7 +310,7 @@ Mean has a number of properties:
 			\bo{w}_i \bo{w}_i\T]
 		\end{align*}
 		
-		We can assume that random process $\bo{w}$ is uncorrelated with $\btil{x}$, meaning that $E[\btil{x}_i \bo{w}_i\T] = E[\bo{w}_i \btil{x}_i\T] = 0$:
+		Assume that $\bo{w}$ is independent of the state (and estimation error), meaning that $E[\btil{x}_i \bo{w}_i\T] = E[\bo{w}_i \btil{x}_i\T] = 0$:
 		
 		\begin{align*}
 			\bo{P}_{i+1} 
@@ -341,7 +329,6 @@ Mean has a number of properties:
 
 
 \begin{frame}{Closed-loop observer, 1}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		Previously, we computed dynamics of mean and covariance of state estimation error for the case of open-loop observer. But, a stable observer with feedback is obviously preferable. We start by introducing a measurement model:
@@ -357,7 +344,6 @@ Mean has a number of properties:
 
 
 \begin{frame}{Closed-loop observer, 2}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		
@@ -400,7 +386,6 @@ Mean has a number of properties:
 
 
 \begin{frame}{Closed-loop observer - mean dynamics}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		We can compute estimation error mean dynamics (\emph{propagation}):
@@ -437,7 +422,6 @@ Mean has a number of properties:
 
 
 \begin{frame}{Closed-loop observer - covariance dynamics}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		We can compute autocovariance dynamics (propagation). Below is sn \emph{a priori} estimation error covariance:
@@ -470,7 +454,6 @@ Mean has a number of properties:
 
 
 \begin{frame}{Closed-loop observer - covariance dynamics}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		
@@ -502,7 +485,6 @@ Mean has a number of properties:
 
 
 \begin{frame}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		\centering{\Huge Kalman filter gain}
@@ -512,7 +494,6 @@ Mean has a number of properties:
 
 
 \begin{frame}{Preliminaries, 1}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		Before discussing how we can propose Kalman filter gain, we need two mathematical facts. First, a trace of an outer product i sinner product:
@@ -551,7 +532,6 @@ Mean has a number of properties:
 
 
 \begin{frame}{Preliminaries, 2}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		Second, derivatives of a trace:
@@ -598,7 +578,6 @@ Mean has a number of properties:
 
 
 \begin{frame}{Kalman gain, 1}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		Here we will attempt to derive optimal Kalman gain $\bo{L}_i$ for the $i$-th step, such that the following cost function is minimized:
@@ -635,7 +614,6 @@ Mean has a number of properties:
 
 
 \begin{frame}{Kalman gain, 2}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		Next, we find derivative of $J$ with respect to $\bo{L}_i$ and set it to zero:
@@ -665,7 +643,6 @@ So, the Kalman gain can be optimally chosen as $\bo{L}_i = \bo{P}_{i+1}^- \bo{H}
 
 
 \begin{frame}{Kalman gain, 3}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		There are alternative but equivalent ways to pick $\bo{L}_i$. We can do it "the same way" as we did with LQR:
@@ -681,7 +658,6 @@ So, the Kalman gain can be optimally chosen as $\bo{L}_i = \bo{P}_{i+1}^- \bo{H}
 \end{frame}
 
 \begin{frame}{Further reading}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		\begin{itemize}
@@ -697,7 +673,6 @@ So, the Kalman gain can be optimally chosen as $\bo{L}_i = \bo{P}_{i+1}^- \bo{H}
 
 
 \begin{frame}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		\centering{\Huge Appendix A}
@@ -706,7 +681,6 @@ So, the Kalman gain can be optimally chosen as $\bo{L}_i = \bo{P}_{i+1}^- \bo{H}
 \end{frame}
 
 \begin{frame}{Mean of an affine transform}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		Given a constant vector $\bo{c}$ and a constant matrix $\bo{M}$ we can define an affine transformation of $\bo{x}$:
@@ -730,7 +704,6 @@ So, the Kalman gain can be optimally chosen as $\bo{L}_i = \bo{P}_{i+1}^- \bo{H}
 
 
 \begin{frame}{Autocovariance with zero mean}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		Assuming $E[\bo{x}] = 0$, we can find covariance of $\bo{y}$:
@@ -785,7 +758,6 @@ So, the Kalman gain can be optimally chosen as $\bo{L}_i = \bo{P}_{i+1}^- \bo{H}
 \end{frame}
 
 \begin{frame}{Autocovariance over affine transform}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		Without this assumption, the covariance of $\bo{y}$ is a little more complicated:
@@ -852,7 +824,6 @@ So, the Kalman gain can be optimally chosen as $\bo{L}_i = \bo{P}_{i+1}^- \bo{H}
 
 
 \begin{frame}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		\centering{\Huge Appendix B}
@@ -861,7 +832,6 @@ So, the Kalman gain can be optimally chosen as $\bo{L}_i = \bo{P}_{i+1}^- \bo{H}
 \end{frame}
 
 \begin{frame}{Observer Gain, 1}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		Given observer gain $\bo{L}_i = \bo{P}_{i+1} \bo{H}\T \bo{R}^{-1}$ and autocovariance propagation $ \bo{P}_{i+1} = (\bo{I} - \bo{L}_i \bo{H}) \bo{P}_{i+1}^- (\bo{I} - \bo{L}_i \bo{H})\T +\bo{L}_i\bo{R}\bo{L}_i\T$, we can derive expression for $\bo{L}_i$ as a function of $\bo{P}_{i+1}^-$:
@@ -887,7 +857,6 @@ So, the Kalman gain can be optimally chosen as $\bo{L}_i = \bo{P}_{i+1}^- \bo{H}
 
 
 \begin{frame}{Observer Gain, 2}
-	%\framesubtitle{How do we know the state?}
 	\begin{flushleft}
 		
 		\begin{align}

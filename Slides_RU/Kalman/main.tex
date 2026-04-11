@@ -1,0 +1,825 @@
+\documentclass{beamer}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\input{settings.tex}
+
+\newcommand{\db}[1] {\dot{\mathbf{#1}}}
+\newcommand{\bhat}[1] {\hat{\mathbf{#1}}}
+\newcommand{\dhat}[1] {\dot{\hat{\mathbf{#1}}}}
+\newcommand{\btil}[1] {\Tilde{\mathbf{#1}}}
+\newcommand{\dtil}[1] {\dot{\Tilde{\mathbf{#1}}}}
+
+
+\title{Фильтр Кальмана}
+\subtitle{Теория Управления, лекция 11}
+\author{Сергей Савин}
+\centering
+\date{\mydate}
+
+
+
+\begin{document}
+\maketitle
+
+
+
+%\begin{frame}{Content}
+%\begin{itemize}
+%\item Random variables, mean, autocovariance
+%\item Models with uncertainty, observer
+%\begin{itemize}
+%	\item Process noise, measurement noise
+%	\item Open loop observer
+%	\item Estimation error autocovariance propagation
+%	\item Kalman filter
+%\end{itemize}
+%\item Kalman filter gain
+%\end{itemize}
+%\end{frame}
+
+
+
+\begin{frame}{Внутреннее и внешнее произведения}
+	\begin{flushleft}
+		
+		Внутреннее произведение $\bo{x}\T \bo{x}$ и внешнее произведение $\bo{x}\bo{x}\T$ определяются как:
+		%
+		\begin{align*}
+			\bo{x} &= 
+			\begin{bmatrix}
+				x_1 \\ x_2 \\ x_3
+			\end{bmatrix},& 
+			\\
+			\bo{x}\T \bo{x} &= x_1^2+x_2^2+x_3^2, 
+			\\
+			\bo{x}\bo{x}\T &= 
+			\begin{bmatrix}
+				x_1^2    & x_1 x_2 & x_1 x_3 \\ 
+				x_2 x_1 & x_2^2    & x_2 x_3 \\ 
+				x_3 x_1 & x_3 x_2 & x_3^2
+			\end{bmatrix}
+		\end{align*}	
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Случайная величина, 1}
+	\begin{flushleft}
+		
+		\emph{Случайная величина} $\bo{v}$ принимает значения в соответствии с распределением вероятностей. Мы можем наблюдать реализации $\bo{v}_1$, $\bo{v}_2$, $\bo{v}_3$, ... взятые из этого распределения.
+		
+		\bigskip
+		
+		Среднее $\bar{\bo{v}}$ случайной величины $\bo{v}$ обозначается как:
+		
+		\begin{equation}
+			\bar{\bo{v}} = E[\bo{v}]
+		\end{equation}
+		
+		Среднее обладает рядом свойств:
+		
+		\begin{align}
+			E[\bo{a}] &= \bo{a}, & \bo{a}= \text{const} \\
+			E[\bo{x}+\bo{y}] &= E[\bo{x}] + E[\bo{y}] &\\
+			E[\alpha \bo{x}] &= \alpha  E[\bo{x}]  & \alpha = \text{const} \in \R \\
+			E[\bo{A} \bo{x}] &= \bo{A}  E[\bo{x}] & \bo{A} = \text{const}
+		\end{align}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Случайная величина, 2}
+	\begin{flushleft}
+		
+		Автоковариация $\bo{V} = \textbf{cov}(\bo{v}, \bo{v})$ случайной величины $\bo{v}$ определяется как:
+		
+		\begin{equation}
+			\textbf{cov}(\bo{v}, \bo{v}) = E[(\bo{v} - E[\bo{v}])(\bo{v} - E[\bo{v}])\T]
+		\end{equation}
+		
+		Для упрощения записи в следующих разделах определим $\textbf{cov}(\bo{v}) = \textbf{cov}(\bo{v}, \bo{v})$. Для процесса с нулевым средним $E[\bo{v}] = 0$ формула упрощается:
+		
+		\begin{equation}
+			\textbf{cov}(\bo{v}) = E[\bo{v}\bo{v}\T]
+		\end{equation}
+		
+		Автоковариация обладает рядом свойств:
+		
+		\begin{align}
+			\textbf{cov}(\bo{a}) &= \bo{0}, & \bo{a}= \text{const} 
+			\\
+			\textbf{cov}(\bo{x}+\bo{a}) &= \textbf{cov}(\bo{x}), & \bo{a}= \text{const} 
+			\\
+			\textbf{cov}(\alpha \bo{x}) &= \alpha^2 \ \textbf{cov}(\bo{x}) &
+		\end{align}
+		
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Случайная величина, 3}
+	\begin{flushleft}
+		
+		Случайная величина $\bo{x}$ с гауссовским распределением может быть полностью описана своим средним $\bar{\bo{x}}$ и ковариацией $\bo{X}$:
+		
+		\begin{equation}
+			\bo{x} \sim \mathcal{N} (\bar{\bo{x}}, \bo{X})
+		\end{equation}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Среднее линейного преобразования}
+	\begin{flushleft}
+		
+		Пусть $\bo{x}$ — случайная величина $\bo{x} \sim \mathcal{N} (\bar{\bo{x}}, \bo{X})$. Для постоянной матрицы $\bo{M}$ можно определить линейное преобразование $\bo{x}$:
+		
+		\begin{equation}
+			\bo{y} = \bo{M}\bo{x}
+		\end{equation}
+		
+		Найдём среднее $\bo{y}$:
+		%
+		\begin{align}
+			E[\bo{y}] = E[\bo{M}\bo{x}] \\
+			E[\bo{y}] = \bo{M}E[\bo{x}] \\
+			E[\bo{y}] = \bo{M}\bar{\bo{x}}
+		\end{align}
+		
+		Если $\bar{\bo{x}} = E[\bo{x}] = 0$, то $\bar{\bo{y}} = E[\bo{y}] = 0$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Автоковариация при линейном преобразовании}
+	\begin{flushleft}
+		
+		Полагая $\bar{\bo{x}} = E[\bo{x}] = 0$, получаем $E[\bo{y}] = 0$; тогда можно найти автоковариацию $\bo{y}$:
+		%
+		\begin{align*}
+			\textbf{cov}(\bo{y}) &= E[(\bo{y} - E[\bo{y}])(\bo{y} - E[\bo{y}])\T] =
+			\\
+			&=E[\bo{y}\bo{y}\T] =
+			\\
+			&=E[(\bo{M}\bo{x})(\bo{M}\bo{x})\T]=
+			\\
+			&=E[\bo{M}\bo{x}\bo{x}\T \bo{M}\T]=
+			\\
+			&=\bo{M}E[\bo{x}\bo{x}\T ]\bo{M}\T=
+			\\
+			&=\bo{M}\bo{X} \bo{M}\T
+		\end{align*}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Ошибка оценивания состояния — динамика}
+	\begin{flushleft}
+		
+		Предположим, что ДТ-ЛПП динамика имеет вид:
+		
+		\begin{equation}
+			\bo{x}_{i+1} = \bo{A} \bo{x}_i + \bo{B} \bo{u}_i + \bo{w}_i,
+		\end{equation}
+		
+		где $\bo{w} \sim \mathcal{N} (0, \bo{Q})$ — \emph{шум процесса} — случайный вход с гауссовским распределением, и $\bo{Q} \succeq 0$ (то есть положительно полуопределена). Предложим наблюдатель разомкнутого контура:
+		
+		\begin{equation}
+			\bhat{x}_{i+1} = \bo{A} \bhat{x}_i + \bo{B} \bo{u}_i, 
+		\end{equation}
+		
+		где $\bhat{x}$ — оценка состояния. Найдём динамику ошибки оценивания $\btil{x} = \bo{x}_i - \bhat{x}_i$:
+		
+		\begin{equation}
+			\btil{x}_{i+1} = \bo{A} \btil{x}_i + \bo{w}_i
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Ошибка оценивания состояния — среднее}
+	\begin{flushleft}
+		
+		Предположим, что можно выбрать начальную оценку состояния $\bhat{x}_0$ так, чтобы начальная ошибка оценивания $\btil{x}_0$ вела себя как случайная величина, взятая из гауссовского распределения $\btil{x}_0 \sim \mathcal{N} (0, \bo{P}_0)$.
+		
+		\bigskip
+		
+		Зная среднее $E[\btil{x}_i]$, можно вычислить $E[\btil{x}_{i+1}]$:
+		
+		\begin{equation}
+			E[\btil{x}_{i+1}] = E[\bo{A} \btil{x}_i + \bo{w}_i] = 
+			\bo{A} E[\btil{x}_i]
+		\end{equation}		
+		
+		Поскольку $E[\btil{x}_0] = 0$, можно заключить, что $E[\btil{x}_i] = 0, \ \forall i$.
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Ошибка оценивания состояния — ковариация}
+	\begin{flushleft}
+		
+		Зная автоковариацию $\bo{P}_i$, можно вычислить $\bo{P}_{i+1}$:
+		
+		\begin{align*}
+			\bo{P}_{i+1} &= E[\btil{x}_{i+1}\btil{x}_{i+1}\T] = 
+			E[(\bo{A} \btil{x}_i + \bo{w}_i) (\bo{A} \btil{x}_i + \bo{w}_i)\T] = 
+			\\
+			&=
+			E[\bo{A} \btil{x}_i \btil{x}_i\T \bo{A}\T +
+			\bo{A} \btil{x}_i \bo{w}_i\T + 
+			\bo{w}_i \btil{x}_i\T \bo{A}\T +
+			\bo{w}_i \bo{w}_i\T]
+		\end{align*}
+		
+		Предположим, что $\bo{w}$ не зависит от состояния (и ошибки оценивания), то есть $E[\btil{x}_i \bo{w}_i\T] = E[\bo{w}_i \btil{x}_i\T] = 0$:
+		
+		\begin{align*}
+			\bo{P}_{i+1} 
+			&=
+			E[\bo{A} \btil{x}_i \btil{x}_i\T \bo{A}\T +
+			\bo{w}_i \bo{w}_i\T] 
+			= 
+			\bo{A} \bo{P}_i \bo{A}\T +
+			\bo{Q}
+		\end{align*}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Наблюдатель с обратной связью, 1}
+	\begin{flushleft}
+		
+		Ранее мы вычислили динамику среднего и ковариации ошибки оценивания состояния для случая наблюдателя разомкнутого контура. Однако устойчивый наблюдатель с обратной связью, очевидно, предпочтительнее. Начнём с введения модели измерений:
+		
+		\begin{equation}
+			\bo{y}_i = \bo{H} \bo{x}_i + \bo{v}_i
+		\end{equation}
+		
+		где $\bo{H}$ — матрица измерений, $\bo{y}_i$ — измеренный выход, а $\bo{v}_i$ — шум измерений, взятый из гауссовского распределения $\bo{v}_i \sim \mathcal{N} (0, \bo{R})$, где $\bo{R} \succ 0$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Наблюдатель с обратной связью, 2}
+	\begin{flushleft}
+		
+		
+		Предложим следующую модификацию наблюдателя:
+		
+		\begin{equation}
+			\label{eq:observer}
+			\begin{cases}
+				\bhat{x}_{i+1}^- = \bo{A} \bhat{x}_i + \bo{B} \bo{u}_i, \\
+				\bhat{x}_{i+1} = \bhat{x}_{i+1}^- + \bo{L}_i (\bo{y}_i - \bo{H} \bhat{x}_{i+1}^-)
+			\end{cases}
+		\end{equation}
+		
+		где $\bhat{x}_{i+1}^-$ — \emph{априорная} оценка. \textcolor{mylightgray}{Последнее уравнение можно переписать как 
+			$\bhat{x}_{i+1} = \bhat{x}_{i+1}^- + \bo{L}_i (\bo{H} \bo{x}_i - \bo{H} \bhat{x}_{i+1}^- + \bo{v}_i)$.} 
+		
+		\bigskip
+		
+		Перепишем всё в терминах ошибки оценивания состояния, определив $\btil{x}_{i+1}^- = \bo{x}_{i+1} - \bhat{x}_{i+1}^-$. Для последнего уравнения в \eqref{eq:observer} вычтем $\bo{x}_{i+1}$ из обеих частей:
+		%
+		\begin{equation}
+			\bhat{x}_{i+1}-\bo{x}_{i+1} = \bhat{x}_{i+1}^- - \bo{x}_{i+1} + 
+			\bo{L}_i (\bo{H} \bo{x}_i - \bo{H} \bhat{x}_{i+1}^- + \bo{v}_i) 
+		\end{equation}				
+		%
+		и изменим знак:
+		
+		\begin{equation}
+			\begin{cases}
+				\btil{x}_{i+1}^- = \bo{A} \btil{x}_i + \bo{w}_i, \\
+				\btil{x}_{i+1} = (\bo{I} - \bo{L}_i \bo{H}) \btil{x}_{i+1}^- + \bo{L}_i\bo{v}_i
+			\end{cases}
+		\end{equation}		
+		
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Наблюдатель с обратной связью — динамика среднего}
+	\begin{flushleft}
+		
+		Вычислим динамику среднего ошибки оценивания (\emph{распространение}):
+		%
+		\begin{align*}
+			E[\btil{x}_{i+1}^-] = 
+			E[\bo{A} \btil{x}_i + \bo{w}_i] = 
+			E[\bo{A} \btil{x}_i] + E[\bo{w}_i]  =
+			\bo{A}E[\btil{x}_i].
+		\end{align*}	
+		%
+		\begin{align*}
+			E[\btil{x}_{i+1}] = 
+			E[(\bo{I} - \bo{L}_i \bo{H}) \btil{x}_{i+1}^- + \bo{L}_i\bo{v}_i] =\\
+			=E[(\bo{I} - \bo{L}_i \bo{H}) \btil{x}_{i+1}^-]
+			= 
+			(\bo{I} - \bo{L}_i \bo{H}) E[\btil{x}_{i+1}^-]
+		\end{align*}				
+		
+		Итак, получаем следующую динамику среднего:
+		
+		\begin{equation}
+			\begin{cases}
+				E[\btil{x}_{i+1}^-] = \bo{A} E[\btil{x}_i], \\
+				E[\btil{x}_{i+1}] = (\bo{I} - \bo{L}_i \bo{H}) E[\btil{x}_{i+1}^-]
+			\end{cases}
+		\end{equation}		
+		
+		Поскольку $E[\btil{x}_0] = 0$, то $E[\btil{x}_1^-] = 0$, и тогда $E[\btil{x}_1] = 0$, и то же самое для $E[\btil{x}_i] = 0$, $E[\btil{x}_i^-] = 0$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Наблюдатель с обратной связью — динамика ковариации}
+	\begin{flushleft}
+		
+		Вычислим динамику автоковариации (распространение). Ниже приведена ковариация \emph{априорной} ошибки оценивания:
+		%
+		\begin{align*}
+			\bo{P}_{i+1}^- 
+			&= E[\btil{x}_{i+1}^- (\btil{x}_{i+1}^-)\T] = \\
+			&= E[ (\bo{A} \btil{x}_i + \bo{w}_i) (\bo{A} \btil{x}_i + \bo{w}_i)\T] = 
+			\\
+			&= E[ \bo{A} \btil{x}_i \btil{x}_i\T   \bo{A}\T
+			+ 
+			\bo{A} \btil{x}_i \bo{w}_i\T 
+			+
+			\bo{w}_i\btil{x}_i \T\bo{A}\T
+			+
+			\bo{w}_i\bo{w}_i\T ]=\\
+			&= \bo{A} \bo{P}_i \bo{A}\T +\bo{Q}.
+		\end{align*}		
+		
+		\bigskip
+		
+		\textcolor{mydarkgray}{Напоминание: $E[\bo{w}_i \bo{w}_i\T] = \bo{Q}$, поскольку $\bo{w} \sim \mathcal{N} (0, \bo{Q})$, $E[\btil{x}_i \bo{w}_i\T] = 0$, так как переменные независимы, и $E[\btil{x}_i \btil{x}_i\T] = \bo{P}_i$ по определению.}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+
+\begin{frame}{Наблюдатель с обратной связью — динамика ковариации}
+	\begin{flushleft}
+		
+		
+		После этого найдём ковариацию \emph{апостериорной} ошибки оценивания:
+		%
+		\begin{align*}
+			E[\btil{x}_{i+1} \btil{x}_{i+1}\T] 
+			=
+			E[ (\bo{I} - \bo{L}_i \bo{H}) \btil{x}_{i+1}^- (\btil{x}_{i+1}^-)\T (\bo{I} - \bo{L}_i \bo{H})\T + \\
+			+(\bo{I} - \bo{L}_i \bo{H}) \btil{x}_{i+1}^- \bo{v}_i\T +
+			\bo{v}_i (\btil{x}_{i+1}^-)\T (\bo{I} - \bo{L}_i \bo{H})\T +
+			\bo{L}_i \bo{v}_i \bo{v}_i\T \bo{L}_i\T]
+		\end{align*}
+		
+		Предполагая, что $\btil{x}_{i+1}^-$ и $\bo{v}_i$ некоррелированы, получаем $E[(\bo{I} - \bo{L}_i \bo{H}) \btil{x}_{i+1}^- \bo{v}_i\T] = 0$ и $E[\bo{v}_i (\btil{x}_{i+1}^-)\T (\bo{I} - \bo{L}_i \bo{H})\T] = 0$. Упрощаем:
+		%
+		\begin{align*}
+			E[\btil{x}_{i+1} \btil{x}_{i+1}\T] 
+			&=
+			(\bo{I} - \bo{L}_i \bo{H}) \bo{P}_{i+1}^- (\bo{I} - \bo{L}_i \bo{H})\T +\bo{L}_i\bo{R}\bo{L}_i\T = \bo{P}_{i+1}
+		\end{align*}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+
+
+\begin{frame}
+	\begin{flushleft}
+		
+		\centering{\Huge Коэффициент усиления фильтра Калмана}
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Предварительные сведения, 1}
+	\begin{flushleft}
+		
+		Прежде чем обсуждать, как можно предложить коэффициент усиления Калмана, нам потребуются два математических факта. Во-первых, след внешнего произведения есть внутреннее произведение:
+		
+		\begin{equation}
+			\bo{x}\T \bo{x} = \text{tr}(\bo{x}\bo{x}\T)
+		\end{equation}
+		%
+		где $\text{tr}(\cdot)$ — операция взятия следа.
+		
+		\bigskip
+		
+		Пример:
+		%
+		\begin{align*}
+			\bo{x} = 
+			\begin{bmatrix}
+				x_1 \\ x_2 \\ x_3
+			\end{bmatrix},& 
+			\ \ \ 
+			\bo{x}\T \bo{x} = x_1^2+x_2^2+x_3^2, 
+			\\
+			\bo{x}\bo{x}\T = 
+			\begin{bmatrix}
+				x_1^2    & x_1 x_2 & x_1 x_3 \\ 
+				x_2 x_1 & x_2^2    & x_2 x_3 \\ 
+				x_3 x_1 & x_3 x_2 & x_3^2
+			\end{bmatrix},& 
+			\ \ \
+			\text{tr}(\bo{x}\bo{x}\T)  = x_1^2+x_2^2+x_3^2.
+		\end{align*}	
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Предварительные сведения, 2}
+	\begin{flushleft}
+		
+		Во-вторых, производные следа:
+		%
+		\begin{align}
+			\frac{\partial ( \text{tr}(\bo{A} \bo{X}) )}{\partial \bo{X}} = 
+			\frac{\partial ( \text{tr}(\bo{X}\bo{A}) )}{\partial \bo{X}} 
+			&= 
+			\bo{A}
+			\\
+			\frac{\partial ( \text{tr}(\bo{A} \bo{X}\T) )}{\partial \bo{X}} = 
+			\frac{\partial ( \text{tr}(\bo{X}\T\bo{A}) )}{\partial \bo{X}} 
+			&= 
+			\bo{A}\T	
+			\\
+			\frac{\partial ( \text{tr}(\bo{A} \bo{X}) )}{\partial \bo{X}\T} = 
+			\frac{\partial ( \text{tr}(\bo{X}\bo{A}) )}{\partial \bo{X}\T} 
+			&= 
+			\bo{A}\T		
+		\end{align}
+		
+		\begin{align}
+			\frac{\partial ( \text{tr}(\bo{X}\T \bo{A} \bo{X}) )}{\partial \bo{X}} 
+			&=
+			\bo{X}\T (\bo{A} + \bo{A}\T)
+			\\
+			\frac{\partial ( \text{tr}(\bo{X} \bo{A} \bo{X}\T) )}{\partial \bo{X}} 
+			&=
+			(\bo{A} + \bo{A}\T) \bo{X}\T
+			\\
+			\frac{\partial ( \text{tr}(\bo{X}\T \bo{A} \bo{X}) )}{\partial \bo{X}\T} 
+			&=
+			(\bo{A} + \bo{A}\T) \bo{X}
+			\\
+			\frac{\partial ( \text{tr}(\bo{X} \bo{A} \bo{X}\T) )}{\partial \bo{X}\T} 
+			&=
+			\bo{X}(\bo{A} + \bo{A}\T)
+		\end{align}
+		
+		
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Коэффициент усиления Калмана, 1}
+	\begin{flushleft}
+		
+		Здесь мы попытаемся вывести оптимальный коэффициент усиления Калмана $\bo{L}_i$ для $i$-го шага, минимизирующий следующую функцию стоимости:
+		
+		\begin{equation}
+			J = E \left[ \sum \Tilde x_{i+1}^2  \right]
+		\end{equation}
+		%
+		то есть мы минимизируем среднее значение квадрата ошибки оценивания. Также мы знаем, что пока ошибка оценивания на $(i+1)$-м шаге имеет нулевое среднее (как случайная величина), ковариация имеет вид: $\bo{P}_{i+1} = E [ \btil{x}_{i+1} \btil{x}_{i+1}\T ]$. Её след даёт функцию стоимости $J$:
+		
+		
+		
+		\begin{align*}
+			J = E \left[ \text{tr}(\textcolor{mygray}{
+				\btil{x}_{i+1} \btil{x}_{i+1}\T})  \right] =
+			\text{tr} (E \left[ \textcolor{mygray}{
+				\btil{x}_{i+1} \btil{x}_{i+1}\T}  \right]) = 
+			\text{tr} (\bo{P}_{i+1} ) =
+			\\
+			= \text{tr}(
+			(\bo{I} - \bo{L}_i \bo{H}) \bo{P}_{i+1}^- (\bo{I} - \bo{L}_i \bo{H})\T +\bo{L}_i\bo{R}\bo{L}_i\T
+			) = \\
+			\text{tr}(
+			\bo{P}_{i+1}^- - \bo{L}_i \bo{H} \bo{P}_{i+1}^- 
+			- \bo{P}_{i+1}^- \bo{H}\T \bo{L}_i\T
+			+ \bo{L}_i (\bo{H}\bo{P}_{i+1}^- \bo{H}\T + \bo{R}) \bo{L}_i\T
+			)
+		\end{align*}		
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Коэффициент усиления Калмана, 2}
+	\begin{flushleft}
+		
+		Далее найдём производную $J$ по $\bo{L}_i$ и приравняем её к нулю:
+		
+		\begin{align*}
+			\frac{\partial J}{\partial \bo{L}_i} 
+			= 
+			-\bo{H} \bo{P}_{i+1}^- -(\bo{P}_{i+1}^- \bo{H}\T)\T + 
+			2(\bo{H}\bo{P}_{i+1}^- \bo{H}\T + \bo{R}) \bo{L}_i\T = 0
+			\\
+			-2 \bo{H} \bo{P}_{i+1}^- + 2(\bo{H}\bo{P}_{i+1}^- \bo{H}\T + \bo{R}) \bo{L}_i\T = 0
+			\\
+			\bo{L}_i (\bo{H}\bo{P}_{i+1}^- \bo{H}\T + \bo{R}) = \bo{P}_{i+1}^- \bo{H}\T
+			\\
+			\bo{L}_i = \bo{P}_{i+1}^- \bo{H}\T (\bo{H}\bo{P}_{i+1}^- \bo{H}\T + \bo{R})^{-1}
+		\end{align*}		
+		
+		
+		Итак, коэффициент усиления Калмана может быть оптимально выбран как $\bo{L}_i = \bo{P}_{i+1}^- \bo{H}\T (\bo{H}\bo{P}_{i+1}^- \bo{H}\T + \bo{R})^{-1}$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+
+
+\begin{frame}{Коэффициент усиления Калмана, 3}
+	\begin{flushleft}
+		
+		Существуют альтернативные, но эквивалентные способы выбора $\bo{L}_i$. Можно сделать это «тем же способом», что и в LQR:
+		
+		\begin{equation}
+			\bo{L}_i = \bo{P}_{i+1} \bo{H}\T \bo{R}^{-1}
+		\end{equation}
+		
+		Эквивалентность этой формулы предыдущей будет показана в Приложении B.
+		
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Литература}
+	\begin{flushleft}
+		
+		\begin{itemize}
+			\item Simon, D., 2006. Optimal state estimation: Kalman, H infinity, and nonlinear approaches. John Wiley \& Sons.
+		\end{itemize}
+		
+	\end{flushleft}
+\end{frame}
+
+
+\myqrframe
+
+
+
+\begin{frame}
+	\begin{flushleft}
+		
+		\centering{\Huge Appendix A}
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Mean of an affine transform}
+	\begin{flushleft}
+		
+		Given a constant vector $\bo{c}$ and a constant matrix $\bo{M}$ we can define an affine transformation of $\bo{x}$:
+		
+		\begin{equation}
+			\bo{y} = \bo{M}\bo{x} + \bo{c}
+		\end{equation}
+		
+		We can find mean of $\bo{y}$:
+		%
+		\begin{align}
+			E[\bo{y}] = E[\bo{M}\bo{x} + \bo{c}] \\
+			E[\bo{y}] = \bo{M}E[\bo{x}] + \bo{c} \\
+			E[\bo{y}] = \bo{M}\bar{\bo{x}} + \bo{c}
+		\end{align}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Autocovariance with zero mean}
+	\begin{flushleft}
+		
+		Assuming $E[\bo{x}] = 0$, we can find covariance of $\bo{y}$:
+		%
+		\begin{align*}
+			\textbf{cov}(\bo{y}) = E[(\bo{y} - E[\bo{y}])(\bo{y} - E[\bo{y}])\T] =
+			\\
+			= E[\bo{y}\bo{y}\T
+			+ E[\bo{y}]E[\bo{y}]\T
+			- \bo{y}E[\bo{y}]\T
+			- E[\bo{y}]\bo{y}\T] =
+			\\
+			=
+			E[\bo{y}\bo{y}\T
+			+ \bar{\bo{y}}\bar{\bo{y}}\T
+			- \bo{y}\bar{\bo{y}}\T
+			- \bar{\bo{y}}\bo{y}]\T]=
+			\\
+			=
+			E[\bo{y}\bo{y}\T]
+			+ \bar{\bo{y}}\bar{\bo{y}}\T
+			- E[\bo{y}]\bar{\bo{y}}\T
+			- \bar{\bo{y}}E[\bo{y}]\T=
+			\\
+			=
+			E[\bo{y}\bo{y}\T]
+			+ \bar{\bo{y}}\bar{\bo{y}}\T
+			- \bar{\bo{y}}\bar{\bo{y}}\T
+			- \bar{\bo{y}}\bar{\bo{y}}\T
+			\\
+			=
+			E[(\bo{M}\bo{x} + \bo{c})(\bo{M}\bo{x} + \bo{c})\T]
+			- \bo{c}\bo{c}\T
+			\\
+			=
+			E[\bo{M}\bo{x}\bo{x}\T \bo{M}\T+
+			\bo{c}\bo{c}\T+
+			\bo{M}\bo{x}\bo{c}\T+
+			\bo{c}\bo{x}\T \bo{M}\T]
+			- \bo{c}\bo{c}\T=
+			\\
+			=
+			\bo{M}\bo{X} \bo{M}\T+
+			\bo{M}\bar{\bo{x}}\bo{c}\T+
+			\bo{c}\bar{\bo{x}}\T \bo{M}\T=
+			\\
+			=
+			\bo{M}\bo{X} \bo{M}\T
+		\end{align*}
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Autocovariance over affine transform}
+	\begin{flushleft}
+		
+		Without this assumption, the covariance of $\bo{y}$ is a little more complicated:
+		%
+		\begin{align*}
+			\textbf{cov}(\bo{y}) = E[(\bo{y} - E[\bo{y}])(\bo{y} - E[\bo{y}])\T] =
+			\\
+			= E[\bo{y}\bo{y}\T
+			+ E[\bo{y}]E[\bo{y}]\T
+			- \bo{y}E[\bo{y}]\T
+			- E[\bo{y}]\bo{y}\T] =
+			\\
+			=
+			E[\bo{y}\bo{y}\T
+			+ \bar{\bo{y}}\bar{\bo{y}}\T
+			- \bo{y}\bar{\bo{y}}\T
+			- \bar{\bo{y}}\bo{y}]\T]=
+			\\
+			=
+			E[\bo{y}\bo{y}\T]
+			+ \bar{\bo{y}}\bar{\bo{y}}\T
+			- E[\bo{y}]\bar{\bo{y}}\T
+			- \bar{\bo{y}}E[\bo{y}]\T=
+			\\
+			=
+			E[\bo{y}\bo{y}\T]
+			+ \bar{\bo{y}}\bar{\bo{y}}\T
+			- \bar{\bo{y}}\bar{\bo{y}}\T
+			- \bar{\bo{y}}\bar{\bo{y}}\T
+			\\
+			=
+			E[(\bo{M}\bo{x} + \bo{c})(\bo{M}\bo{x} + \bo{c})\T]
+			- (\bo{M}\bar{\bo{x}} + \bo{c})(\bo{M}\bar{\bo{x}} + \bo{c})\T
+			\\
+			=
+			E[\bo{M}\bo{x}\bo{x}\T \bo{M}\T+
+			\bo{c}\bo{c}\T+
+			\bo{M}\bo{x}\bo{c}\T+
+			\bo{c}\bo{x}\T \bo{M}\T]
+			-\\
+			- (\bo{M}\bar{\bo{x}}\bar{\bo{x}}\T\bo{M}\T +
+			\bo{M}\bar{\bo{x}}\bo{c}\T+
+			\bo{c}\bar{\bo{x}}\T\bo{M}\T+
+			\bo{c}\bo{c}\T)=
+			\\
+			=
+			\bo{M}\bo{X} \bo{M}\T+
+			\bo{c}\bo{c}\T+
+			\bo{M}\bar{\bo{x}}\bo{c}\T+
+			\bo{c}\bar{\bo{x}}\T \bo{M}\T
+			-\\
+			- (\bo{M}\bar{\bo{x}}\bar{\bo{x}}\T\bo{M}\T +
+			\bo{M}\bar{\bo{x}}\bo{c}\T+
+			\bo{c}\bar{\bo{x}}\T\bo{M}\T+
+			\bo{c}\bo{c}\T)=
+			\\
+			=
+			\bo{M}\bo{X} \bo{M}\T
+			- \bo{M}\bar{\bo{x}}\bar{\bo{x}}\T\bo{M}\T
+		\end{align*}
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}
+	\begin{flushleft}
+		
+		\centering{\Huge Appendix B}
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Observer Gain, 1}
+	\begin{flushleft}
+		
+		Given observer gain $\bo{L}_i = \bo{P}_{i+1} \bo{H}\T \bo{R}^{-1}$ and autocovariance propagation $ \bo{P}_{i+1} = (\bo{I} - \bo{L}_i \bo{H}) \bo{P}_{i+1}^- (\bo{I} - \bo{L}_i \bo{H})\T +\bo{L}_i\bo{R}\bo{L}_i\T$, we can derive expression for $\bo{L}_i$ as a function of $\bo{P}_{i+1}^-$:
+		%
+		\begin{align}
+			\bo{L}_i \bo{R} = \bo{P}_{i+1} \bo{H}\T 
+			\\
+			\bo{L}_i \bo{R}\bo{L}_i\T = \bo{P}_{i+1} \bo{H}\T \bo{L}_i\T
+			\\
+			\bo{P}_{i+1} = (\bo{I} - \bo{L}_i \bo{H}) \bo{P}_{i+1}^- (\bo{I} - \bo{L}_i \bo{H})\T +\bo{P}_{i+1} \bo{H}\T \bo{L}_i\T
+			\\
+			\bo{P}_{i+1}(\bo{I}- \bo{H}\T \bo{L}_i\T) = (\bo{I} - \bo{L}_i \bo{H}) \bo{P}_{i+1}^- (\bo{I} - \bo{L}_i \bo{H})\T
+		\end{align}
+		
+		Assuming that $\text{det}(\bo{I}- \bo{L}_i \bo{H} )\T \neq 0$, we can multiply on the right by $(\bo{I}- \bo{L}_i \bo{H} )^{-\top}$:
+		%
+		\begin{align}
+	\bo{P}_{i+1} = (\bo{I} - \bo{L}_i \bo{H}) \bo{P}_{i+1}^- 
+		\end{align}		
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Observer Gain, 2}
+	\begin{flushleft}
+		
+		\begin{align}
+			\bo{P}_{i+1} &= (\bo{I} - \bo{L}_i \bo{H}) \bo{P}_{i+1}^- 
+			\\
+			\bo{P}_{i+1}\bo{H}\T\bo{R}^{-1} &= (\bo{I} - \bo{L}_i \bo{H}) \bo{P}_{i+1}^- \bo{H}\T\bo{R}^{-1}
+			\\
+			\bo{L}_i &= (\bo{I} - \bo{L}_i \bo{H}) \bo{P}_{i+1}^- \bo{H}\T\bo{R}^{-1}
+			\\
+			\bo{L}_i\bo{R} &= (\bo{I} - \bo{L}_i \bo{H}) \bo{P}_{i+1}^- \bo{H}\T
+			\\
+			\bo{L}_i\bo{R} + \bo{L}_i \bo{H}\bo{P}_{i+1}^- \bo{H}\T &= \bo{P}_{i+1}^- \bo{H}\T 
+			\\
+			\bo{L}_i (\bo{R} + \bo{H}\bo{P}_{i+1}^- \bo{H}\T) &= \bo{P}_{i+1}^- \bo{H}\T 
+			\\
+			\bo{L}_i &= \bo{P}_{i+1}^- \bo{H}\T (\bo{R} + \bo{H}\bo{P}_{i+1}^- \bo{H}\T)^{-1}.  \ \ \ \qed
+		\end{align}		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\end{document}
