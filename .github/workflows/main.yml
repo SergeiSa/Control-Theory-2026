@@ -89,6 +89,12 @@ jobs:
           root_file: main.tex
           working_directory: Slides_RU/LyapunovTheory/
 
+      - name: Compile LaTeX document H_inf
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: main.tex
+          working_directory: Slides_RU/H_inf/
+
 
 
 
@@ -164,6 +170,12 @@ jobs:
           name: LyapunovTheory.pdf
           path: Slides_RU/LyapunovTheory/main.pdf
 
+      - name: Save H_inf artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: H_inf.pdf
+          path: Slides_RU/H_inf/main.pdf
+
 
 
 
@@ -182,6 +194,7 @@ jobs:
           mv Slides_RU/Filters/main.pdf Slides_RU/Filters.pdf
           mv Slides_RU/Kalman/main.pdf Slides_RU/Kalman.pdf
           mv Slides_RU/LyapunovTheory/main.pdf Slides_RU/LyapunovTheory.pdf
+          mv Slides_RU/H_inf/main.pdf Slides_RU/H_inf.pdf
           
           git config --global user.name 'CI PDF compiler'
           git config --global user.email '<>'
@@ -197,6 +210,7 @@ jobs:
           git add Slides_RU/Filters.pdf
           git add Slides_RU/Kalman.pdf
           git add Slides_RU/LyapunovTheory.pdf
+          git add Slides_RU/H_inf.pdf
 
 
           git commit -m "Update compiled PDFs"

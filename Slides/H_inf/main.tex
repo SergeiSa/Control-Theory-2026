@@ -4,7 +4,7 @@
 
 
 \title{H-infinity control}
-\subtitle{Control Theory, Lecture ??}
+\subtitle{Control Theory, Lecture 13}
 \author{by Sergei Savin}
 \centering
 \date{\mydate}
@@ -42,13 +42,13 @@
 			\end{cases}
 			\end{equation}
 			
-			Its trasnfer function is $G(s) = \bo{C} (s\bo{I} - \bo{A})^{-1} \bo{B}$. The frequency responce at $\omega = \omega_0$ is:
+			Its transfer function is $G(s) = \bo{C} (s\bo{I} - \bo{A})^{-1} \bo{B}$. The frequency response at $\omega = \omega_0$ is:
 			
 			\begin{equation}
 				G(j\omega_0) = \bo{C} (j\omega_0\bo{I} - \bo{A})^{-1} \bo{B}
 			\end{equation}
 			
-			The spectral norm of the frequency responce matrix (its largest singular value) represents the largest input amplification that is possible at the frequency $ \omega_0$:
+			The spectral norm of the frequency response matrix (its largest singular value) represents the largest input amplification that is possible at the frequency $ \omega_0$:
 			
 			\begin{equation}
 				||G(j\omega_0)||_2 =\ \bar{\sigma} (G(j \omega_0))
@@ -93,7 +93,7 @@
 		The following conditions are equibalent (by definition of H-inf and singular values):
 		
 		\begin{equation}
-			||G||_\infty < \gamma \ \Longleftrightarrow \ G(j\omega)\T G(j\omega) \prec \gamma^2 I, \ \forall \omega
+			||G||_\infty < \gamma \ \Longleftrightarrow \ G(j\omega)^* G(j\omega) \prec \gamma^2 I, \ \forall \omega
 		\end{equation}
 		
 		KYP (Kalman–Yakubovich–Popov) lemma:
@@ -101,6 +101,8 @@
 		\begin{equation}
 			||G||_\infty < \gamma \ \Longleftrightarrow \ \int_0^\infty \left(\bo{y}\T \bo{y} - \gamma^2 \bo{w}\T \bo{w} \right) dt \leq 0
 		\end{equation}
+		
+		\textcolor{mygray}{(assuming $\bo{x}(0) = 0$).}
 			
 		\end{flushleft}
 	\end{frame}
@@ -117,7 +119,7 @@
 				\dot V(\bo{x}) + \bo{y}\T \bo{y} - \gamma^2 \bo{w}\T \bo{w} \leq 0
 			\end{equation}
 			
-			The quantity $\bo{y}\T \bo{y} - \gamma^2 \bo{w}\T \bo{w} $ is called \emph{supply rate}.
+			The term $\bo{y}\T \bo{y} - \gamma^2 \bo{w}\T \bo{w} $ is called the \emph{supply rate}.
 			
 		\end{flushleft}
 	\end{frame}
@@ -129,13 +131,13 @@
 			Integrate the criterion from $t=0$ to $t = T$:
 			
 			\begin{equation}
-				V(\bo{x}(T)) - V(\bo{x}(0)) + \int_{0}^{T} \bo{y}\T \bo{y} - \gamma^2 \bo{w}\T \bo{w} \leq 0
+				V(\bo{x}(T)) - V(\bo{x}(0)) + \int_{0}^{T}( \bo{y}\T \bo{y} - \gamma^2 \bo{w}\T \bo{w}) dt \leq 0
 			\end{equation}
 			
-			Assume zero initial conditions (we consider pure input-output behaviour), so $V(\bo{x}(0)) = 0$ and remember that $V > 0$:
+			Assume zero initial conditions (we consider pure input-output behaviour), so $V(\bo{x}(0)) = 0$ and remember that $V$ is positive-definite:
 			
 			\begin{equation}
-				\int_{0}^{T} \bo{y}\T \bo{y} - \gamma^2 \bo{w}\T \bo{w}  \leq  -V(\bo{x}(T)) \leq 0
+				\int_{0}^{T} (\bo{y}\T \bo{y} - \gamma^2 \bo{w}\T \bo{w})dt  \leq  -V(\bo{x}(T)) \leq 0
 			\end{equation}
 			
 			Since this is true for all $T$, taking $T \rightarrow \infty$ recovers the earlier time-domain KYP criterion.
@@ -149,7 +151,7 @@
 	\begin{frame}{Derivation of LMI conditions, 1}
 		\begin{flushleft}
 			
-			Consider a storage function takes form $V( \bo{x}) =  \bo{x}\T  \bo{P}  \bo{x}$, where $ \bo{P} \succ 0$. Then the criterion takes the form:
+			Consider a storage function of the form $V( \bo{x}) =  \bo{x}\T  \bo{P}  \bo{x}$, where $ \bo{P} \succ 0$. Then the criterion becomes:
 			
 			\begin{align}
 				\dot{\bo{x}}\T  \bo{P}  \bo{x} + \bo{x}\T  \bo{P}  \dot{\bo{x}} + \bo{y}\T \bo{y} - \gamma^2 \bo{w}\T \bo{w} \leq 0
@@ -260,8 +262,8 @@
 			\prec 0
 		\end{align}
 		
-		Apply Schur and define $\bo{L} = \bo{K}\bo{Q}$ to get the LMI:
-		
+		Apply the Schur complement to linearize the quadratic term and define $\bo{L} = \bo{K}\bo{Q}$ to get the LMI:
+		%
 		\begin{align}
 			\begin{bmatrix}
 				\bo{Q}\bo{A}\T + \bo{A}\bo{Q} + \bo{L}\T \bo{B}_1\T +\bo{B}_1 \bo{L} & \bo{B}_2 & \bo{Q}\bo{C}\T \\
@@ -276,6 +278,29 @@
 \end{frame}
 	
 	
+	\begin{frame}[fragile]{H-infinity control design: CVXPY example}
+		\begin{flushleft}
+			{\small
+			\begin{verbatim}
+import cvxpy as cp
+
+n,m,p = A.shape[0],B1.shape[1],B2.shape[1]
+eps = 1e-6*np.eye(n)
+Q = cp.Variable((n,n), PSD=True)
+L = cp.Variable((m,n))
+g = cp.Variable(nonneg=True)
+M = cp.bmat([
+[Q@A.T + A@Q + L.T@B1.T + B1@L,  B2,      Q@C.T],
+[B2.T,                          -g*np.eye(p), 0],
+[C@Q,              0,      -g*np.eye(C.shape[0])]
+])
+prob = cp.Problem(cp.Minimize(g), [Q >> eps, M << 0])
+prob.solve()
+
+K = L.value @ np.linalg.pinv(Q.value)
+			\end{verbatim}}
+		\end{flushleft}
+	\end{frame}
 	
 	
 	
