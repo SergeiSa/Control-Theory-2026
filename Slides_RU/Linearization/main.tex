@@ -1,0 +1,349 @@
+\documentclass{beamer}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\input{settings.tex}
+
+
+\title{Линеаризация}
+\subtitle{Теория Управления, лекция 14}
+\author{Сергей Савин}
+\centering
+\date{\mydate}
+
+
+
+\begin{document}
+\maketitle
+
+
+%\begin{frame}{Content}
+%\begin{itemize}
+%	\item Taylor expansion
+%	\item Linearization
+%	\item Linearization of Manipulator equations
+%\end{itemize}
+%\end{frame}
+
+
+
+
+
+\begin{frame}{Разложение Тейлора вокруг узла, 1}
+	\begin{flushleft}
+		
+		Рассмотрим нелинейную динамическую систему:
+		%
+		\begin{equation}
+			\dot{\bo{x}} = \bo{f}(\bo{x}, \bo{u})
+		\end{equation}
+		
+		Если $\bo{x}_0$ и $\bo{u}_0$ представляют собой \emph{узел}, т.е. $\bo{f}(\bo{x}_0, \bo{u}_0) = 0$, $\bo{x}_0 = \text{const}$, $\bo{u}_0 = \text{const}$, мы можем рассмотреть разложение Тейлора вокруг этого узла:
+		
+		\begin{equation}
+			\bo{f}(\bo{x}, \bo{u}) 	\sim 
+			\frac{\partial \bo{f}}{\partial \bo{x}} (\bo{x} - \bo{x}_0) + 
+			\frac{\partial \bo{f}}{\partial \bo{u}} (\bo{u} - \bo{u}_0) + \text{Ч.В.П.}
+		\end{equation}
+		
+		Где $\bo{x}_0$ и $\bo{u}_0$ — точка разложения. Определим новые переменные $\bo{e}$ и $\bo{v}$ как расстояние от точки разложения:
+		%
+		\begin{align}
+			\bo{e} = \bo{x} - \bo{x}_0, &\ \ \ 
+			\dot{\bo{e}} = \dot{\bo{x}}, &\ 
+			\bo{v} = \bo{u} - \bo{u}_0.
+		\end{align}
+		
+		С этим мы можем переписать разложение Тейлора:
+		%
+		\begin{align}
+			\dot{\bo{e}} = \frac{\partial \bo{f}}{\partial \bo{x}} \bo{e} + 
+			\frac{\partial \bo{f}}{\partial \bo{u}} \bo{v} + \text{Ч.В.П.}
+		\end{align}		
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Разложение Тейлора вокруг узла, 2}
+	\begin{flushleft}
+		
+		\textcolor{mygray}{
+			\begin{align}
+				\dot{\bo{e}} = \frac{\partial \bo{f}}{\partial \bo{x}} \bo{e} + 
+				\frac{\partial \bo{f}}{\partial \bo{u}} \bo{v} + \text{Ч.В.П.}
+		\end{align}		}
+		
+		Мы можем ввести обозначения:
+		
+		\begin{align}
+			\bo{A} = \frac{\partial \bo{f}}{\partial \bo{x}},  \ \ \
+			\bo{B} = \frac{\partial \bo{f}}{\partial \bo{u}}.
+		\end{align}
+		
+		Если мы отбросим члены высшего порядка из разложения Тейлора, мы получим \emph{линеаризацию} динамики системы:
+		
+		\begin{align}
+			\dot{\bo{e}} = \bo{A} \bo{e} + \bo{B} \bo{v}
+		\end{align}	
+		
+		В этом контексте $\bo{x}_0$ и $\bo{u}_0$ — это \emph{точка линеаризации}.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Разложение Тейлора вдоль траектории}
+	\begin{flushleft}
+		
+		Рассмотрим нелинейную динамическую систему:
+		%
+		\begin{equation}
+			\dot{\bo{x}} = \bo{f}(\bo{x}, \bo{u})
+		\end{equation}
+		
+		и траекторию $\dot{\bo{x}}_0 = \bo{f}(\bo{x}_0, \bo{u}_0)$. Мы можем рассмотреть разложение Тейлора вдоль этой траектории:
+		
+		\begin{equation}
+			\bo{f}(\bo{x}, \bo{u}) 	\sim \bo{f}(\bo{x}_0, \bo{u}_0) +
+			\frac{\partial \bo{f}}{\partial \bo{x}} (\bo{x} - \bo{x}_0) + 
+			\frac{\partial \bo{f}}{\partial \bo{u}} (\bo{u} - \bo{u}_0) + \text{Ч.В.П.}
+		\end{equation}
+		
+		Поскольку $\dot{\bo{e}} = \dot{\bo{x}} - \dot{\bo{x}}_0$, мы переписываем:
+		%
+		\begin{align}
+			\dot{\bo{e}} \sim 
+			\bo{A} \bo{e} + 
+			\bo{B} \bo{v} + \text{Ч.В.П.}
+		\end{align}		
+		
+		Как и прежде, отбрасываем члены высшего порядка и получаем линеаризацию:
+		
+		\begin{align}
+			\dot{\bo{e}} = 
+			\bo{A} \bo{e} + 
+			\bo{B} \bo{v}
+		\end{align}		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Аффинное разложение}
+	\begin{flushleft}
+		
+		Если мы хотим сохранить наши исходные переменные, мы всё ещё можем использовать разложение Тейлора:
+		
+		\begin{equation}
+			\bo{f}(\bo{x}, \bo{u}) 	\sim \bo{f}(\bo{x}_0, \bo{u}_0) +
+			\bo{A} (\bo{x} - \bo{x}_0) + 
+			\bo{B} (\bo{u} - \bo{u}_0)
+		\end{equation}
+		
+		Обозначая $ \bo{f}(\bo{x}_0, \bo{u}_0) - \bo{A}\bo{x}_0 - \bo{B} \bo{u}_0 = \bo{c}$ и отбрасывая Ч.В.П., мы аппроксимируем систему как аффинную:
+		
+		\begin{equation}
+			\dot{\bo{x}} = \bo{A} \bo{x} + 
+			\bo{B} \bo{u} + \bo{c}
+		\end{equation}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Линеаризация уравнения манипулятора, 1}
+	\begin{flushleft}
+		
+		Рассмотрим уравнение манипулятора:
+		
+		\begin{equation}
+			\bo{H} \ddot{\bo{q}} + \bo{C} \dot{\bo{q}} + \bo{g} = \tau
+		\end{equation}
+		
+		Мы попытаемся его линеаризовать.
+		
+		\bigskip
+		
+		Начнём с предложения следующих новых переменных:
+		%
+		\begin{align}
+			\bo{x} = 
+			\begin{bmatrix}
+				\bo{q} - \bo{q}_0 \\ 
+				\dot{\bo{q}} - \dot{\bo{q}}_0
+			\end{bmatrix},&  
+			\ \ \
+			\bo{u} = \tau - \tau_0
+		\end{align}
+		
+		где $\tau_0$ выбрано таким, что $\bo{C}(\dot{\bo{q}}_0, \bo{q}_0) \dot{\bo{q}}_0 + \bo{g}(\bo{q}_0) = \tau_0$.
+		
+		\bigskip
+		
+		Определяя селекторные матрицы $\bo{S}_q = [ \bo{I} \ \ 0 ]$ и $\bo{S}_v = [ 0  \ \ \bo{I} ]$, мы можем выразить преобразование из состояния в обобщённые координаты и скорости:
+		%
+		\begin{align}
+			\bo{q}(\bo{x}) = \bo{S}_q \bo{x} + \bo{q}_0, &  
+			\ \ \
+			\dot{\bo{q}}(\bo{x}) = \bo{S}_v \bo{x} + \dot{\bo{q}}_0
+		\end{align}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Линеаризация уравнения манипулятора, 2}
+	\begin{flushleft}
+		
+		Введём функцию $\phi(\dot{\bo{q}}, \bo{q}, \tau) = \ddot{\bo{q}}$, выраженную как:
+		
+		\begin{equation}
+			\phi(\dot{\bo{q}}, \bo{q}, \tau) 
+			=
+			\bo{H}^{-1} (\tau - \bo{C} \dot{\bo{q}} - \bo{g} ) 
+		\end{equation}
+		
+		Далее запишем нашу динамику как ОДУ первого порядка:
+		
+		\begin{equation}
+			\frac{d}{dt} 
+			\left(
+			\begin{bmatrix}
+				\bo{q} \\ \dot{\bo{q}} 
+			\end{bmatrix}
+			\right)
+			=
+			\begin{bmatrix}
+				\dot{\bo{q}}  \\ 
+				\phi(\dot{\bo{q}}, \bo{q}, \tau) 
+			\end{bmatrix}
+		\end{equation}
+		
+		\begin{equation}
+			\dot{\bo{x}} 
+			=
+			\varphi(\bo{x}, \bo{u})
+			=
+			\begin{bmatrix}
+				\dot{\bo{q}}(\bo{x})  \\ 
+				\phi(\bo{x}, \bo{u}) 
+			\end{bmatrix}
+		\end{equation}
+		
+		После этого мы можем найти матрицы $\bo{A}$ и $\bo{B}$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Линеаризация уравнения манипулятора, 3}
+	\begin{flushleft}
+		
+		В этом случае матрицы состояния $\bo{A}$ и $\bo{B}$ становятся:
+		
+		\begin{equation}
+			\bo{A} = 
+			\begin{bmatrix}
+				\frac{\partial \dot{\bo{q}}}{\partial \bo{q}}  & 
+				\frac{\partial \dot{\bo{q}}}{\partial \dot{\bo{q}}}
+				\\
+				\frac{\partial \phi}{\partial \bo{q}}  & 
+				\frac{\partial \phi}{\partial \dot{\bo{q}}}
+			\end{bmatrix}
+			=
+			\begin{bmatrix}
+				0 & \bo{I}
+				\\
+				\frac{\partial \phi}{\partial \bo{q}}  & 
+				\frac{\partial \phi}{\partial \dot{\bo{q}}}
+			\end{bmatrix}
+		\end{equation}
+		
+		\begin{equation}
+			\bo{B} = 
+			\begin{bmatrix}
+				\frac{\partial \dot{\bo{q}}}{\partial \tau} 
+				\\
+				\frac{\partial \phi}{\partial \tau} 
+			\end{bmatrix}
+			=
+			\begin{bmatrix}
+				0
+				\\
+				\bo{H}^{-1}
+			\end{bmatrix}
+		\end{equation}
+		
+		Таким образом, наша задача — найти следующие якобианы: $\frac{\partial \phi}{\partial \bo{q}}$ и $\frac{\partial \phi}{\partial \dot{\bo{q}}}$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Линеаризация уравнения манипулятора, 4}
+	\begin{flushleft}
+		
+		Найдём $\frac{\partial \phi}{\partial \bo{q}}$:
+		
+		\begin{align}
+			\frac{\partial \phi}{\partial \bo{q}}
+			&=
+			\frac{\partial }{\partial \bo{q}} \left(\bo{H}^{-1} (\tau - \bo{C} \dot{\bo{q}} - \bo{g} ) \right)
+			= \\
+			&=
+			\frac{\partial \bo{H}^{-1}}{\partial \bo{q}} (\tau - \bo{C} \dot{\bo{q}} - \bo{g} )
+			+
+			\bo{H}^{-1} \frac{\partial }{\partial \bo{q}} \left( \tau - \bo{C} \dot{\bo{q}} - \bo{g} \right)
+		\end{align}
+		
+		Если вычислить $\frac{\partial \phi}{\partial \bo{q}}$ в точке $\bo{q} = \bo{q}_0$, $\dot{\bo{q}} = \dot{\bo{q}}_0$, $\tau = \tau_0$, мы можем использовать тот факт, что $\bo{C}(\dot{\bo{q}}_0, \bo{q}_0) \dot{\bo{q}}_0 + \bo{g}(\bo{q}_0) = \tau_0$, чтобы избежать вычисления производной $\frac{\partial \bo{H}^{-1}}{\partial \bo{q}}$:
+		
+		\begin{align}
+			\frac{\partial \phi}{\partial \bo{q}}
+			&=
+			\bo{H}^{-1} \left( - \frac{\partial \bo{C}\dot{\bo{q}}}{\partial \bo{q}}  - \frac{\partial \bo{g}}{\partial \bo{q}} \right)
+		\end{align}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Линеаризация уравнения манипулятора, 5}
+	\begin{flushleft}
+		
+		Найдём $\frac{\partial \phi}{\partial \dot{\bo{q}}}$:
+		%
+		\begin{align}
+			\frac{\partial \phi}{\partial \dot{\bo{q}}}
+			&=
+			\frac{\partial }{\partial \dot{\bo{q}}} \left(\bo{H}^{-1} (\tau - \bo{C} \dot{\bo{q}} - \bo{g} ) \right)
+			= \\
+			&=
+			-\bo{H}^{-1}\frac{\partial \bo{C} \dot{\bo{q}}}{\partial \dot{\bo{q}}}
+		\end{align}
+		
+		Таким образом, мы выразили все якобианы. Остальное совпадает с общим случаем, который мы рассматривали в первых слайдах.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+
+\myqrframe
+
+\end{document}
