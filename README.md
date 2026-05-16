@@ -8,6 +8,16 @@ This repository contains regularly updated course materials. You can use lecture
 * Lecture 2 - https://github.com/SergeiSa/Control-Theory-2026/blob/main/Slides_RU/Stability.pdf
 * Lecture 3 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides_RU/Control.pdf
 * Lecture 4 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides_RU/Laplace.pdf
+* Lecture 5 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides_RU/Bode.pdf
+* Lecture 6 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides_RU/Discrete.pdf
+* Lecture 7 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides_RU/HJB_LQR.pdf
+* Lecture 8 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides_RU/Observer.pdf
+* Lecture 9 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides_RU/Controllability.pdf
+* Lecture 10 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides_RU/Filters.pdf
+* Lecture 11 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides_RU/Kalman.pdf
+* Lecture 12 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides_RU/LyapunovTheory.pdf
+* Lecture 13 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides_RU/H_inf.pdf
+* Lecture 14 - https://github.com/SergeiSa/Control-Theory-2026/tree/main/Slides_RU/Linearization.pdf
 
 # Lecture slides (English)
 
