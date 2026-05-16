@@ -95,6 +95,12 @@ jobs:
           root_file: main.tex
           working_directory: Slides_RU/H_inf/
 
+      - name: Compile LaTeX document Linearization
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: main.tex
+          working_directory: Slides_RU/Linearization/
+
 
 
 
@@ -176,6 +182,12 @@ jobs:
           name: H_inf.pdf
           path: Slides_RU/H_inf/main.pdf
 
+      - name: Save Linearization artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Linearization.pdf
+          path: Slides_RU/Linearization/main.pdf
+
 
 
 
@@ -195,6 +207,7 @@ jobs:
           mv Slides_RU/Kalman/main.pdf Slides_RU/Kalman.pdf
           mv Slides_RU/LyapunovTheory/main.pdf Slides_RU/LyapunovTheory.pdf
           mv Slides_RU/H_inf/main.pdf Slides_RU/H_inf.pdf
+          mv Slides_RU/Linearization/main.pdf Slides_RU/Linearization.pdf
           
           git config --global user.name 'CI PDF compiler'
           git config --global user.email '<>'
@@ -211,6 +224,7 @@ jobs:
           git add Slides_RU/Kalman.pdf
           git add Slides_RU/LyapunovTheory.pdf
           git add Slides_RU/H_inf.pdf
+          git add Slides_RU/Linearization.pdf
 
 
           git commit -m "Update compiled PDFs"
